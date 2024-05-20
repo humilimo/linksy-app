@@ -1,3 +1,8 @@
+Feature: Pesquisa em Conversas
+As a Usuário
+I want to Pesquisar alguma mensagem de texto que enviei ou recebi dentro do sistema
+So that Encontrar a mensagem de texto que estou procurando
+
 Scenario:Pesquisar uma mensagem de texto que não foi enviada em nenhuma conversa globalmente
 Given Estou logado como o usuário de username "Biel"
 And Estou na página "Lista de Conversas"

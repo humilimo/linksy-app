@@ -1,3 +1,8 @@
+Feature: Lista de Conversas
+As a Usuário do sistema
+I want to Ver uma lista das minhas conversas no sistema
+So that Eu possa acessar interações recentes rapidamente.
+
 Scenario: Visualizar lista de conversas
 Given Estou logado como o usuário de username "Biel" 
 And Estou na página "Lista de Conversas"

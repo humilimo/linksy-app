@@ -1,3 +1,8 @@
+Feature: Conversas em Grupo
+As a Usuário do sistema
+I want to Conseguir criar, adicionar e remover membros, configurar, enviar mensagens e sair de um grupo
+So that Eu possa interagir com mais de um usuário em uma mesma página de conversa
+
 # GUI Scenarios
 
     Scenario: Criar um novo grupo

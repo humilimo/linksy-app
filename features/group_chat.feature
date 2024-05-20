@@ -138,4 +138,3 @@
     And O grupo "Projeto ESS" está cadastrado no sistema com o usuário "man2" como ‘admin’ e os usuários "gvab", "crc" e "lfoc" como ‘membro’
     When O usuário "man2" requisita ao sistema a quantidade e a lista de usuários no grupo "Projeto ESS"
     Then O sistema retorna "4" usuários e uma lista com os membros  "man2", "gvab", "crc" e "lfoc"
-    

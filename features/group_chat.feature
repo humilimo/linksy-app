@@ -62,7 +62,7 @@ So that Eu possa interagir com mais de um usuário em uma mesma página de conve
     Given Estou logado como o usuário de username "man2" 
     And Estou na Página "Configurações do Grupo" do grupo "Projeto ESS"
     And Eu e o usuário "crc" temos o cargo de "admin" do grupo "Projeto ESS"
-    And "lfoc" é um membro do grupo "Projeto ESS"
+    And "lfoc" temos o cargo de "membro" do grupo "Projeto ESS"
     When Clico em "Gerenciar Admins do Grupo"
     And Eu altero o cargo do usuário "crc" para "membro"
     And Eu altero o cargo do usuário "lfoc" para "admin"
@@ -112,7 +112,7 @@ So that Eu possa interagir com mais de um usuário em uma mesma página de conve
     Scenario: Adicionar Usuários em um grupo
     Given Os usuários "man2" e "gvab" estão cadastrados no sistema
     And O grupo "Projeto ESS" está cadastrado no sistema
-    And o usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
+    And O usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
     And O usuário "gvab" está na "Lista de Amigos" de "man2"
     When O usuário "man2" seleciona o usuário "gvab" para adicionar ao grupo
     Then O sistema adiciona o usuário "gvab" ao grupo "Projeto ESS"
@@ -121,25 +121,28 @@ So that Eu possa interagir com mais de um usuário em uma mesma página de conve
     Scenario: Remover Usuário de um grupo
     Given Os usuários "man2" e "gvab" estão cadastrados no sistema
     And O grupo "Projeto ESS" está cadastrado no sistema 
-    And o usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
-    And o usuário "gvab" está no grupo "Projeto ESS" e tem o cargo de "membro" do grupo "Projeto ESS"
+    And O usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
+    And O usuário "gvab" está no grupo "Projeto ESS" e tem o cargo de "membro" do grupo "Projeto ESS"
     When O usuário "man2" seleciona o usuário "gvab" para remover do grupo
     Then O sistema remove o usuário "gvab" do grupo "Projeto ESS"
     And O sistema deleta todo o conteúdo do grupo "Projeto ESS" para o usuário "gvab"
 
     Scenario: Sair de um grupo
     Given Os usuários "man2" e "crc" estão cadastrados no sistema
-    And O grupo "Projeto ESS" está cadastrado no sistema com o usuário "man2" como ‘admin’ e o usuário "crc" como ‘membro’
+    And O grupo "Projeto ESS" está cadastrado no sistema 
+    And O usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
+    And O usuário "crc" está no grupo "Projeto ESS" e tem o cargo de "membro" do grupo "Projeto ESS"
     When O usuário "crc" sai do grupo "Projeto ESS"
     Then O sistema remove o usuário "crc" do grupo "Projeto ESS"
-    And O sistema deleta todo o conteúdo do grupo "Projeto ESS" para o usuário "crc"
 
     Scenario: Deletar um grupo inteiramente
     Given Os usuários "man2", "lfoc" e "crc" estão cadastrados no sistema
-    And O grupo "Projeto ESS" está cadastrado no sistema com o usuário "man2" como ‘admin’ e os usuários "lfoc" e "crc" como ‘membro’
+    And O grupo "Projeto ESS" está cadastrado no sistema
+    And O usuário "man2" está no grupo "Projeto ESS" e tem o cargo de "admin" do grupo "Projeto ESS"
+    And Os usuários "lfoc" e "crc" estão no grupo "Projeto ESS" e têm o cargo de "membro" do grupo "Projeto ESS"
     When O usuário "man2" deleta o grupo
-    Then O grupo "Projeto ESS" não está mais cadastrado no sistema 
-    And O sistema deleta todo o conteúdo do grupo "Projeto ESS" para os usuários "man2", "lfoc" e "crc"
+    Then O sistema remove os usuários "man2", "lfoc" e "crc" do grupo "Projeto ESS"
+    And O grupo "Projeto ESS" não está mais cadastrado no sistema 
 
     Scenario: Visualizar quantos e quais usuários tem no grupo
     Given Os usuários "man2", "gvab", "crc" e "lfoc" estão cadastrados no sistema

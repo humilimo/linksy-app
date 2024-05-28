@@ -49,3 +49,6 @@ Then é exibida uma pergunta para que eu escolha entre excluir para mim ou todos
 And eu seleciono excluir para todos
 And o campo da mensagem é excluído para mim e para biscoito
 And é exibida um campo de mensagem excluída para mim e para biscoito
+
+
+commit2

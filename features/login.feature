@@ -30,4 +30,6 @@ And preencher o campo password com a suposta senha
 Then recebo uma mensagem de usuário inexistente
 And sou direcionada para a página de cadastro
 
-uma alteracao qualquer 
+uma alteracao qualquer  1
+
+outra mundanca qualquer  2

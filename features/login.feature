@@ -29,3 +29,5 @@ When  preencher o campo username com meu suposto id
 And preencher o campo password com a suposta senha
 Then recebo uma mensagem de usuário inexistente
 And sou direcionada para a página de cadastro
+
+uma alteracao qualquer 

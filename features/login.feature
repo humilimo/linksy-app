@@ -35,3 +35,5 @@ uma alteracao qualquer  1
 outra mundanca qualquer  2
 
 commit3
+
+adicionando novo cenario:

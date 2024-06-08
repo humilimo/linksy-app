@@ -79,7 +79,7 @@ So that Eu possa interagir com mais de um usuário em uma mesma página de conve
     When Clico em "Adicionar Usuários"
     And Seleciono da minha "Lista de Amigos" o usuários de username "gvab"
     Then Eu sou redirecionado para a Página "Conversa" do grupo "Projeto ESS"
-    And Eu vejo uma mensagem dizendo que o usuário "gvab" foi adicionado ao grupO
+    And Eu vejo uma mensagem dizendo que o usuário "gvab" foi adicionado ao grupo
 
     Scenario: Remover Usuário de um grupo
     Given Estou logado como o usuário de username "man2" 

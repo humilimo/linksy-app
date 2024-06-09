@@ -3,14 +3,14 @@ import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
-@Controller('conversation')
+@Controller(':loggedId/conversation')
 
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Post()
-  create(@Body() createConversationDto: CreateConversationDto) {
-    return this.conversationService.create(createConversationDto);
+  create(@Param('loggedId') loggedId: number, @Body() createConversationDto: CreateConversationDto) {
+    return this.conversationService.create(loggedId, createConversationDto);
   }
 
   @Get()

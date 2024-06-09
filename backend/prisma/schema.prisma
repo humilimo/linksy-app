@@ -1,0 +1,83 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id    Int       @id @default(autoincrement())
+  name  String
+  username String @unique 
+  email String    @unique 
+  password String 
+  bio String?
+  picture String?
+
+  conversations UserConversation[]
+  friends       Friend[] @relation("friends")
+  friendOf     Friend[] @relation("friendOf")
+}
+
+model Message {
+  id                 Int      @id @default(autoincrement())
+  content            String 
+  createdAt          DateTime @default(now())
+  senderId           Int
+  conversationId     Int
+
+  erasedMessages     ErasedMessages[]
+  userConversation UserConversation @relation(fields: [senderId, conversationId], references: [userId, conversationId])
+}
+
+model Conversation {
+  id                  Int       @id @default(autoincrement())
+  name                String?
+  picture             String?
+  hasManyUsers        Boolean @default(false)
+  createdAt           DateTime  @default(now())
+
+  userConversations UserConversation[]
+}
+
+model UserConversation {
+  userId         Int
+  conversationId Int
+  owner          Boolean      @default(false)
+
+  user           User         @relation(fields: [userId], references: [id])
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  Message        Message[]
+  erasedMessages ErasedMessages[]
+
+ @@id([userId, conversationId])
+}
+
+model Friend {
+  requesterId Int
+  receiverId  Int
+
+  requester   User @relation("friends", fields: [requesterId], references: [id])
+  receiver    User @relation("friendOf", fields: [receiverId], references: [id]) 
+
+ @@id([requesterId, receiverId])
+}
+
+model ErasedMessages {
+  erasedById         Int
+  conversationId     Int
+  messageId          Int
+
+  userConversation   UserConversation @relation(fields: [erasedById, conversationId], references: [userId, conversationId])
+  message Message                     @relation(fields: [messageId], references: [id])
+
+  @@id([erasedById, conversationId, messageId])
+}

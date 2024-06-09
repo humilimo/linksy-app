@@ -6,4 +6,5 @@ export class CreateConversationDto implements Prisma.ConversationCreateInput {
   picture: string
   @IsNotEmpty()
   hasManyUsers: boolean
+  ids?: number[]
 }

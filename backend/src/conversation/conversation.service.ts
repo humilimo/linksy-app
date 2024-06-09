@@ -24,7 +24,7 @@ export class ConversationService {
       });
 
       // Create userConversation records
-      const usersConversation = [];
+      var usersConversation = [];
       for (const id of ids) {
         const userConversation = await this.userConversationService.create({
           userId: id,

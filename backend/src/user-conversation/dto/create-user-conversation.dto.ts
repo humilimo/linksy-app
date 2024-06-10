@@ -7,4 +7,5 @@ export class CreateUserConversationDto {
     @IsNotEmpty()
     conversationId: number
     owner: boolean | false
+    leftConversation: boolean | false
 }

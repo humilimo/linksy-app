@@ -30,7 +30,8 @@ export class ConversationService {
         const userConversation = await this.userConversationService.create({
           userId: id,
           conversationId: conversation['id'],
-          owner: (loggedId == id) ? true : false
+          owner: (loggedId == id) ? true : false,
+          leftConversation: false
         });
         usersConversation.push(userConversation);
       }
@@ -41,7 +42,6 @@ export class ConversationService {
         };
 
     } catch (error) {
-      // Handle error appropriately
       console.error('Error creating conversation or user conversations:', error);
       throw new Error('Failed to create conversation');
     }

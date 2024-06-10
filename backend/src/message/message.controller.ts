@@ -2,14 +2,20 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { HttpStatus, HttpException } from '@nestjs/common';
+import { ForbiddenException } from './exceptions/forbidden.exception';
 
 @Controller('user/:loggedId/conversation')
 export class MessageController {
   constructor(private readonly messageService: MessageService) {}
 
   @Post(':sendToId')
-  create(@Param('loggedId') loggedId: string, @Param('sendToId') sendToId : string, @Body() createMessageDto: CreateMessageDto) {
-    return this.messageService.sendMessage(createMessageDto, +loggedId, +sendToId);
+  async create(@Param('loggedId') loggedId: string, @Param('sendToId') sendToId : string, @Body() createMessageDto: CreateMessageDto) {
+    try { 
+      return await this.messageService.sendMessage(createMessageDto, +loggedId, +sendToId);
+    } catch (error) {
+      throw new ForbiddenException();
+    }
   }
 
   @Patch('editar/:id')

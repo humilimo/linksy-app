@@ -4,13 +4,14 @@ import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { PrismaService } from '../prisma.service';
 import { MessageService } from '../message/message.service';
-
+import { UserConversationService } from '../user-conversation/user-conversation.service';
 
 @Injectable()
 export class ConversationService {
   constructor(
     private prisma: PrismaService, 
-    private messageService: MessageService
+    private userConversationService: UserConversationService,
+    private messageService: MessageService,
   ) {}
 
   async create(loggedId: number, createConversationDto: CreateConversationDto) {
@@ -99,11 +100,8 @@ export class ConversationService {
 }
 
   async findOne(loggedId: number, conversationId: number) {
-    var conversation: Conversation = await this.prisma.conversation.findUnique({
-      where: {
-         id: conversationId
-      },
-    });
+    var userConversation = await this.userConversationService.findOne(loggedId, conversationId);
+    var conversation = userConversation.conversation;
     var messagesFromConversation = await this.messageService.findAllMessagesFromConversation(loggedId, conversationId);
     var conversationAndMessages = {
       conversation: conversation,

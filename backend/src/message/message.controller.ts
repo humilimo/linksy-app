@@ -9,7 +9,7 @@ export class MessageController {
 
   @Post(':sendToId')
   create(@Param('loggedId') loggedId: string, @Param('sendToId') sendToId : string, @Body() createMessageDto: CreateMessageDto) {
-    return this.messageService.sendMessage(createMessageDto);
+    return this.messageService.sendMessage(createMessageDto, +loggedId, +sendToId);
   }
 
   @Patch('editar/:id')

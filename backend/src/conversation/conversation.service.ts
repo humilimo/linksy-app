@@ -97,12 +97,14 @@ export class ConversationService {
     return recentConversations;
 }
 
-  async findOne(loggedId: number, conversationId: number, ) {
+  async findOne(loggedId: number, conversationId: number) {
     var conversation: Conversation = await this.prisma.conversation.findUnique({
-      where: { id: conversationId },
+      where: {
+         id: conversationId
+      },
     });
-    var messagesFromConversation: Message[] = await this.messageService.findAllMessagesFromConversation(loggedId, conversationId);
-    var conversationAndMessages: {conversation: Conversation, messages: Message[]} = {
+    var messagesFromConversation = await this.messageService.findAllMessagesFromConversation(loggedId, conversationId);
+    var conversationAndMessages = {
       conversation: conversation,
       messages: messagesFromConversation
     }

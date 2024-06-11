@@ -58,15 +58,20 @@ export class ConversationService {
   async getRecentConversations(loggedId: number) {
     var conversationsOfLoggedUser = await this.prisma.userConversation.findMany({
       select:{
-        conversationId: true
+        conversationId: true,
+        favorited: true
       },
       where:{                                                                       
         userId: loggedId
       },
-    })                                                                                                                          
+    })          
+    
+    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
 
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);   //Salvando os Ids das conversas que o usuário logado está
-  
+    var favoritedConversationsIdsOfLoggedUser = conversationsOfLoggedUser
+      .filter(conversation => conversation.favorited === true)
+      .map(conversation => conversation.conversationId);
+    
     var recentMessagesByDate = await this.prisma.message.findMany({ 
       select: {
         conversationId: true,
@@ -77,19 +82,25 @@ export class ConversationService {
       },
       where:{
         conversationId:{
-          in: conversationIdsOfLoggedUser,                  //Seleciono apenas as mensagens mais recentes das conversas que o usuário logado está
+          in: conversationIdsOfLoggedUser,                  
         },
       },
       distinct: ['conversationId'],
     });
 
-    var conversationIds = recentMessagesByDate.map(conversation=> conversation.conversationId);   // Vetor que tem o ID das conversas mais recentes na ordem correta                                        
-    var recentConversations = [];
+    var recentConversationsIdsOfLoggedUser = recentMessagesByDate.map(conversation=> conversation.conversationId);        
+    
+    var nonFavoritedRecentConversationsIds = recentConversationsIdsOfLoggedUser.filter(
+      conversationId => !favoritedConversationsIdsOfLoggedUser.includes(conversationId)  
+    );
 
-    for (var conversationId of conversationIds) {
+    var recentConversationsIds = favoritedConversationsIdsOfLoggedUser.concat(nonFavoritedRecentConversationsIds);
+
+    var recentConversations = [];
+    for (var conversationId of recentConversationsIds) {
       var conversation = await this.prisma.conversation.findUnique({                    
         where: {
-          id: conversationId                                                //Cada elemento é um indice, vou de um em um construindo a lista de conversas recentes
+          id: conversationId                                                
         }
       });
 

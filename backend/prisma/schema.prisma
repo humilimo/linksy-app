@@ -53,9 +53,11 @@ model UserConversation {
   conversationId   Int
   owner            Boolean      @default(false)
   leftConversation Boolean      @default(false)
+  favorited        Boolean      @default(false)
 
   user             User         @relation(fields: [userId], references: [id])
   conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
   Message          Message[]
   erasedMessages   ErasedMessages[]
 

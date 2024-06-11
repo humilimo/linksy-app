@@ -9,8 +9,8 @@ export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Post()
-  create(@Param('loggedId') loggedId: number, @Body() createConversationDto: CreateConversationDto) {
-    return this.conversationService.create(loggedId, createConversationDto);
+  create(@Param('loggedId') loggedId: string, @Body() createConversationDto: CreateConversationDto) {
+    return this.conversationService.create(+loggedId, createConversationDto);
   }
 
   @Get()
@@ -28,8 +28,13 @@ export class ConversationController {
     return this.conversationService.update(+id, updateConversationDto);
   }
 
-  @Delete(':id')
+  @Delete(':id/apagar')
   remove(@Param('id') id: string) {
     return this.conversationService.remove(+id);
+  }
+
+  @Delete(':id/apagar_tudo')
+    removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
+    return this.conversationService.removeAll(+loggedId, +conversationId);
   }
 }

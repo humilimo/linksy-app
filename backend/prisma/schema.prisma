@@ -35,7 +35,7 @@ model Message {
   conversationId     Int
 
   erasedMessages     ErasedMessages[]
-  userConversation UserConversation @relation(fields: [senderId, conversationId], references: [userId, conversationId])
+  userConversation UserConversation @relation(fields: [senderId, conversationId], references: [userId, conversationId], onDelete: Cascade)
 }
 
 model Conversation {
@@ -49,14 +49,17 @@ model Conversation {
 }
 
 model UserConversation {
-  userId         Int
-  conversationId Int
-  owner          Boolean      @default(false)
+  userId           Int
+  conversationId   Int
+  owner            Boolean      @default(false)
+  leftConversation Boolean      @default(false)
+  favorited        Boolean      @default(false)
 
-  user           User         @relation(fields: [userId], references: [id])
-  conversation   Conversation @relation(fields: [conversationId], references: [id])
-  Message        Message[]
-  erasedMessages ErasedMessages[]
+  user             User         @relation(fields: [userId], references: [id])
+  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  
+  Message          Message[]
+  erasedMessages   ErasedMessages[]
 
  @@id([userId, conversationId])
 }
@@ -76,7 +79,7 @@ model ErasedMessages {
   conversationId     Int
   messageId          Int
 
-  userConversation   UserConversation @relation(fields: [erasedById, conversationId], references: [userId, conversationId])
+  userConversation   UserConversation @relation(fields: [erasedById, conversationId], references: [userId, conversationId], onDelete: Cascade)
   message Message                     @relation(fields: [messageId], references: [id])
 
   @@id([erasedById, conversationId, messageId])

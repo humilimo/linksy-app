@@ -3,14 +3,14 @@ import { ConversationService } from './conversation.service';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 
-@Controller(':loggedId/conversation')
+@Controller('user/:loggedId/conversation')
 
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Post()
-  create(@Param('loggedId') loggedId: number, @Body() createConversationDto: CreateConversationDto) {
-    return this.conversationService.create(loggedId, createConversationDto);
+  create(@Param('loggedId') loggedId: string, @Body() createConversationDto: CreateConversationDto) {
+    return this.conversationService.create(+loggedId, createConversationDto);
   }
 
   @Get()
@@ -19,8 +19,8 @@ export class ConversationController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.conversationService.findOne(+id);
+  findOne(@Param('loggedId') loggedId: string, @Param('id') id: string) {
+    return this.conversationService.findOne(+loggedId, +id);
   }
 
   @Patch(':id')
@@ -28,8 +28,13 @@ export class ConversationController {
     return this.conversationService.update(+id, updateConversationDto);
   }
 
-  @Delete(':id')
+  @Delete(':id/apagar')
   remove(@Param('id') id: string) {
     return this.conversationService.remove(+id);
+  }
+
+  @Delete(':id/apagar_tudo')
+    removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
+    return this.conversationService.removeAll(+loggedId, +conversationId);
   }
 }

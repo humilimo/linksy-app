@@ -17,8 +17,20 @@ export class UserConversationService {
     return `This action returns all userConversation`;
   }
 
-  async findOne(id: number) {
-    return `This action returns a #${id} userConversation`;
+  async findOne(userId: number, conversationId: number) {
+    return await this.prisma.userConversation.findUnique(
+      {
+        where:{
+          userId_conversationId: {
+            userId: userId,
+            conversationId: conversationId
+          }
+        },
+        include: {
+          conversation: true
+        }
+      }
+    );
   }
 
   async update(id: number, updateUserConversationDto: UpdateUserConversationDto) {

@@ -23,6 +23,11 @@ export class ConversationController {
     return this.conversationService.findOne(+loggedId, +id);
   }
 
+  @Get(':id/perfil')
+  findConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
+    return this.conversationService.findConversationInfo(+loggedId, +conversationId)
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateConversationDto: UpdateConversationDto) {
     return this.conversationService.update(+id, updateConversationDto);

@@ -121,6 +121,51 @@ export class ConversationService {
     return conversationAndMessages
   }
 
+  async findConversationInfo(loggedId: number, conversationId: number){
+    const conversation_UserConversationInfo = await this.prisma.conversation.findUnique({
+      where: {
+        id: conversationId,
+        userConversations :{
+          some: {
+            userId: loggedId,
+          }
+        }
+      },
+      include: {
+        userConversations: {
+          select:{
+            user:{
+              select:{
+                id: true,
+                name: true,
+                username: true,
+                email: true,
+                picture: true,
+                bio: true
+              },
+            }
+          }
+        }
+      }
+    });
+
+    const { userConversations, ...conversationWithoutParticipants } = conversation_UserConversationInfo;
+
+    const participants = userConversations.map(uc => uc.user);
+    
+    const conversationInfo = {
+      conversation: conversationWithoutParticipants,
+      participants: participants,
+    };
+
+    if (conversationInfo.conversation.hasManyUsers){
+      return conversationInfo;
+    }
+    else{
+      return conversationInfo.participants.find(user => user.id != loggedId);
+    }
+  }
+
   async update(id: number, updateConversationDto: UpdateConversationDto) {
     return this.prisma.conversation.update({
       where: { id },

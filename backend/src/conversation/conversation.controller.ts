@@ -34,7 +34,7 @@ export class ConversationController {
   }
 
   @Delete(':id/apagar_tudo')
-    removeAll(@Param('id') id: string) {
-    return this.conversationService.removeAll(+id);
+    removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
+    return this.conversationService.removeAll(+loggedId, +conversationId);
   }
 }

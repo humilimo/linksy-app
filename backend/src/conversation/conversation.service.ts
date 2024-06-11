@@ -125,10 +125,21 @@ export class ConversationService {
     });
   }
 
-  async removeAll(id: number) {
+  async removeAll(loggedId:number, conversationId: number) {
+    const userConversation = await this.prisma.userConversation.findUnique({
+      where: {
+        userId_conversationId: {
+          userId: loggedId,
+          conversationId: conversationId
+        },
+        owner: true
+      },
+    });
+
     return this.prisma.conversation.delete({
-      where: { id },
+      where: {
+        id: userConversation['conversationId']
+      },
     });
   }
-
 }

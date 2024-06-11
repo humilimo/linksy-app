@@ -3,50 +3,51 @@ import { Conversation, Message } from '@prisma/client';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { PrismaService } from '../prisma.service';
-import { UserConversationService } from '../user-conversation/user-conversation.service';
 import { MessageService } from '../message/message.service';
-// import { CreateUserConversationDto } from '../user-conversation/dto/create-user-conversation.dto';
 
 
 @Injectable()
 export class ConversationService {
   constructor(
     private prisma: PrismaService, 
-    private userConversationService: UserConversationService,
     private messageService: MessageService
   ) {}
-  
-  async create(loggedId: number, createConversationDto: CreateConversationDto) {
-    var ids = createConversationDto['ids'];
-    delete createConversationDto['ids'];
 
-    try {
-      // await connection.transaction();
-      // Create the conversation
-      const conversation = await this.prisma.conversation.create({
-        data: createConversationDto,
+  async create(loggedId: number, createConversationDto: CreateConversationDto) {
+    const { ids, ...conversationData } = createConversationDto;
+    return this.prisma.$transaction(async (p) => {
+      // Create conversation
+      const conversation = await p.conversation.create({
+        data: conversationData,
       });
 
-      // Create userConversation records
-      var usersConversation = [];
-      for (const id of ids) {
-        const userConversation = await this.userConversationService.create({
-          userId: id,
-          conversationId: conversation['id'],
-          owner: (loggedId == id) ? true : false
-        });
-        usersConversation.push(userConversation);
-      }
+      // Create owner userConversation
+      const ownerUserConversation = await p.userConversation.create({
+        data: {
+          userId: loggedId,
+          conversationId: conversation.id,
+          owner: true
+        }
+      });
 
-      return{
-        conversation: conversation,
-        usersConversation: usersConversation
-        };
-
-    } catch (error) {
-      console.error('Error creating conversation or user conversations:', error);
-      throw new Error('Failed to create conversation');
-    }
+      // Create members userConversation
+      const membersUserConversation = await Promise.all(ids.map(id => 
+        p.userConversation.create({ 
+          data: {
+            userId: id,
+            conversationId: conversation.id,
+            owner: false
+          } 
+        })
+      ));
+      
+      const usersConversation = [ownerUserConversation, ...membersUserConversation];
+  
+      return {
+        conversation,
+        usersConversation
+      };
+    });
   }
 
   async findAll(loggedId: number) {

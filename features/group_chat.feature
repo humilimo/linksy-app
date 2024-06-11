@@ -18,11 +18,16 @@ So that Eu possa interagir com mais de um usuário em uma mesma página de conve
     And Vejo mensagens dizendo que o grupo "Projeto ESS - Grupo 6" foi criado e que os usuários "crc" e "lfoc" foram adicionados
     And Vejo no topo da tela o nome e a imagem do grupo "Projeto ESS - Grupo 6"
 
-    Scenario: Abrir Configurações do Grupo
-    Given Estou logado como o usuário de username "man2" 
-    And Estou na Página "Conversa" do grupo "Projeto ESS - Grupo 6"
+    Scenario: Abrir Perfil do Grupo
+    Given Estou logado como o usuário de username "man2"
+    And Estou na Página "Conversa" do grupo de nome "Projeto ESS - Grupo 6"
+    And os usuários "crc" e "lfoc" são participantes do grupo
+    And a descrição do grupo é "isso não é um grupo"
     When Clico em "Configurações"
-    Then Eu sou redirecionado para a Página "Configurações do Grupo" do grupo "Projeto ESS - Grupo 6"
+    Then Eu sou redirecionado para a Página "Perfil do Grupo" do grupo "Projeto ESS - Grupo 6"
+    And o nome do grupo "Projeto ESS - Grupo 6" é exibido na tela
+    And a descrição do grupo "Projeto ESS - Grupo 6" é exibida na tela
+    And a lista de participantes contém os usuários "man2", "crc" e "lfoc"
 
     Scenario: Alterar Nome do Grupo
     Given Estou logado como o usuário de username "man2" 

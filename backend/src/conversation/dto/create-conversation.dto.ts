@@ -4,6 +4,6 @@ import { IsEmail, IsNotEmpty, Length, MinLength, MaxLength, IsString} from 'clas
 export class CreateConversationDto implements Prisma.ConversationCreateInput {
   name: string
   picture: string
-  hasManyUsers: boolean
+  isGroup: boolean
   ids?: number[]
 }

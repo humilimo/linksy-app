@@ -29,7 +29,7 @@ export class ConversationService {
           userId: loggedId,
           conversationId: conversation.id,
           // owner: false, se for uma conversa simples
-          owner: conversation.hasManyUsers
+          owner: conversation.isGroup
         }
       });
 
@@ -136,7 +136,7 @@ export class ConversationService {
     });
     
     // Group Conversation
-    if (conversationInfo.hasManyUsers){
+    if (conversationInfo.isGroup){
       const participantsInfo = await this.prisma.userConversation.findMany({
         where:{
           conversationId: conversationId,

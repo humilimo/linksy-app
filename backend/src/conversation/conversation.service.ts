@@ -122,7 +122,7 @@ export class ConversationService {
   }
 
   async findConversationInfo(loggedId: number, conversationId: number){
-    const conversation_UserConversationInfo = await this.prisma.conversation.findUnique({
+    const conversationInfo = await this.prisma.conversation.findUnique({
       where: {
         id: conversationId,
         userConversations :{
@@ -130,39 +130,57 @@ export class ConversationService {
             userId: loggedId,
           }
         }
-      },
-      include: {
-        userConversations: {
-          select:{
-            user:{
-              select:{
-                id: true,
-                name: true,
-                username: true,
-                email: true,
-                picture: true,
-                bio: true
-              },
+      }
+    });
+    
+    // Group Conversation
+    if (conversationInfo.hasManyUsers){
+      const participantsInfo = await this.prisma.userConversation.findMany({
+        where:{
+          conversationId: conversationId,
+        },
+        select:{
+          user:{
+            select:{
+              id: true,
+              name: true,
+              username: true,
+              picture: true,
+            },
+          }
+        }
+      });
+
+      const allConversationInfo = {
+        conversation: conversationInfo,
+        participants: participantsInfo.map(p => p.user),
+      };
+
+      return allConversationInfo;
+    }
+
+    // Single Conversation (DM)
+    else{ 
+      return await this.prisma.user.findFirst({
+        select:{
+          id: true,
+          name: true,
+          username: true,
+          email: true,
+          picture: true,
+          bio: true  
+        },
+        where: {
+          id :{
+            not: loggedId
+          },
+          conversations: {
+            some: {
+              conversationId: conversationId
             }
           }
         }
-      }
-    });
-
-    const { userConversations, ...conversationWithoutParticipants } = conversation_UserConversationInfo;
-
-    const participants = userConversations.map(uc => uc.user);
-    
-    const conversationInfo = {
-      conversation: conversationWithoutParticipants,
-      participants: participants,
-    };
-
-    if (conversationInfo.conversation.hasManyUsers){
-      return conversationInfo;
-    }
-    else{
-      return conversationInfo.participants.find(user => user.id != loggedId);
+      });
     }
   }
 

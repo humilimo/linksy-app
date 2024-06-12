@@ -9,8 +9,8 @@ export class ConversationController {
   constructor(private readonly conversationService: ConversationService) {}
 
   @Post()
-  create(@Param('loggedId') loggedId: string, @Body() createConversationDto: CreateConversationDto) {
-    return this.conversationService.create(+loggedId, createConversationDto);
+  createConversation(@Param('loggedId') loggedId: string, @Body() createConversationDto: CreateConversationDto) {
+    return this.conversationService.createConversation(+loggedId, createConversationDto);
   }
 
   @Get()

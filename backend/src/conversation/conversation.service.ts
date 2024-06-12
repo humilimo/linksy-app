@@ -14,8 +14,9 @@ export class ConversationService {
     private messageService: MessageService,
   ) {}
 
-  async create(loggedId: number, createConversationDto: CreateConversationDto) {
+  async createConversation(loggedId: number, createConversationDto: CreateConversationDto) {
     const { ids, ...conversationData } = createConversationDto;
+
     return this.prisma.$transaction(async (p) => {
       // Create conversation
       const conversation = await p.conversation.create({
@@ -27,7 +28,8 @@ export class ConversationService {
         data: {
           userId: loggedId,
           conversationId: conversation.id,
-          owner: true
+          // owner: false, se for uma conversa simples
+          owner: conversation.hasManyUsers
         }
       });
 

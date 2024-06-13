@@ -27,6 +27,7 @@ export class UserConversationService {
     });
     
     if (isOwner.owner == true) {
+      //gets all users usernames to be added
       let ids = await Promise.all(createUserConversationDto.ids.map(id => this.prisma.user.findUnique({
         where:{
           id: id
@@ -38,6 +39,7 @@ export class UserConversationService {
       })));
 
       return ids.map(id => this.prisma.$transaction([
+        //add each user
         this.prisma.userConversation.upsert({
           where:{
             userId_conversationId:{
@@ -53,6 +55,7 @@ export class UserConversationService {
             conversationId: conversationId
           },
         }),
+        //send a message in conversation that indicates the user has been added
         this.prisma.message.create({
           data: {
             content: "'" + id.username + "' foi adicionado ao grupo.",

@@ -3,7 +3,7 @@ import { UserConversationService } from './user-conversation.service';
 import { CreateUserConversationDto } from './dto/create-user-conversation.dto';
 import { UpdateUserConversationDto } from './dto/update-user-conversation.dto';
 
-@Controller('user-conversation')
+@Controller('user/:loggedId/conversation/:conversationId')
 export class UserConversationController {
   constructor(private readonly userConversationService: UserConversationService) {}
 
@@ -27,9 +27,9 @@ export class UserConversationController {
   //   return this.userConversationService.findOne(+id);
   // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserConversationDto: UpdateUserConversationDto) {
-    return this.userConversationService.update(+id, updateUserConversationDto);
+  @Patch()
+  update(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() updateUserConversationDto: UpdateUserConversationDto) {
+    return this.userConversationService.update(+loggedId, +conversationId, updateUserConversationDto);
   }
 
   @Delete(':id')

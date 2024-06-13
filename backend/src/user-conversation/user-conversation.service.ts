@@ -8,8 +8,15 @@ export class UserConversationService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserConversationDto: CreateUserConversationDto) {
-    return this.prisma.userConversation.create({
-      data: createUserConversationDto
+    return await this.prisma.userConversation.create({
+      data: createUserConversationDto,
+      include:{
+        user: {
+          select:{
+            username: true
+          }
+        }
+      }
     });
   }
 
@@ -87,8 +94,16 @@ export class UserConversationService {
     );
   }
 
-  async update(id: number, updateUserConversationDto: UpdateUserConversationDto) {
-    return `This action updates a #${id} userConversation`;
+  async update(userId: number, conversationId: number, updateUserConversationDto: UpdateUserConversationDto) {
+    return this.prisma.userConversation.update({
+      where:{
+        userId_conversationId: {
+          userId: userId,
+          conversationId: conversationId
+        } 
+      },
+      data: updateUserConversationDto,
+    });
   }
 
   async remove(id: number) {

@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, Length, MinLength, MaxLength, IsString, IsOptional
 
 export class CreateUserConversationDto {
     @IsNotEmpty()
-    userId: number
+    ids: number[]
     @IsNotEmpty()
     conversationId: number
     owner: boolean | false

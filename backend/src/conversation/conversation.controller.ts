@@ -14,8 +14,8 @@ export class ConversationController {
   }
 
   @Get()
-  findAll(@Param('loggedId') loggedId: string) {
-    return this.conversationService.findAll(+loggedId);
+  getRecentConversations(@Param('loggedId') loggedId: string) {
+    return this.conversationService.getRecentConversations(+loggedId);
   }
 
   @Get(':id')

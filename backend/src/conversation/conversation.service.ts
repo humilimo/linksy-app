@@ -41,17 +41,10 @@ export class ConversationService {
         })
       ))).map(uc => uc.user);
 
-      // Find ghost-user
-      const ghostUser = await p.user.findUnique({
-        where:{
-          username: 'linksy'
-        }
-      })
-
       // Create  ghost-user in userConversation
       const ghostUserConversation = await p.userConversation.create({
         data: {
-          userId: ghostUser.id,
+          userId: 0, //ghost-user Id
           conversationId: conversation.id,
           owner: false
         }
@@ -62,7 +55,7 @@ export class ConversationService {
         const createMessage = await p.message.create({ 
           data:{
             content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' criou o grupo '" + conversation.name + "'.",
-            senderId: ghostUser.id,
+            senderId: 0, //ghost-user Id
             conversationId: conversation.id
           }
         })
@@ -72,20 +65,23 @@ export class ConversationService {
           p.message.create({ 
             data:{
               content: "'" + uc.username + "' foi adicionado ao grupo.",
-              senderId: ghostUser.id,
+              senderId: 0, //ghost-user Id
               conversationId: conversation.id
             }
           })
         ));
 
-        return [createMessage, ...addMessage];
+        return {
+          createMessage: createMessage,
+          addMessage: addMessage
+        };
       }
       else{
         // create the 'begin conversation' message from system
         const beginMessage = await p.message.create({ 
           data:{
             content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' iniciou uma comversa com '" + usersConversation.find(uc => uc.id != loggedId).username + "'.",
-            senderId: ghostUser.id,
+            senderId: 0, //ghost-user Id
             conversationId: conversation.id
           }
         });
@@ -93,10 +89,6 @@ export class ConversationService {
         return beginMessage;
       }
     });
-  }
-
-  async findAll(loggedId: number) {
-    return this.getRecentConversations(loggedId);
   }
 
   async getRecentConversations(loggedId: number) {
@@ -182,6 +174,9 @@ export class ConversationService {
       const participantsInfo = await this.prisma.userConversation.findMany({
         where:{
           conversationId: conversationId,
+          userId: {
+            not: 0 //ghost-user Id
+          }
         },
         select:{
           user:{
@@ -195,17 +190,15 @@ export class ConversationService {
         }
       });
 
-      const allConversationInfo = {
+      return {
         conversation: conversationInfo,
         participants: participantsInfo.map(p => p.user),
-      };
-
-      return allConversationInfo;
+      }
     }
 
     // Single Conversation (DM)
     else{ 
-      return await this.prisma.user.findFirst({
+      const user = await this.prisma.user.findFirst({
         select:{
           id: true,
           name: true,
@@ -216,7 +209,7 @@ export class ConversationService {
         },
         where: {
           id :{
-            not: loggedId
+            notIn: [loggedId, 0],  //loggedId and ghost-user Id
           },
           conversations: {
             some: {
@@ -225,6 +218,8 @@ export class ConversationService {
           }
         }
       });
+
+      return {user: user}
     }
   }
 
@@ -253,10 +248,12 @@ export class ConversationService {
       },
     });
 
-    return this.prisma.conversation.delete({
+    const conversation = await this.prisma.conversation.delete({
       where: {
         id: userConversation['conversationId']
       },
     });
+
+    return {destroyMessage: "Grupo '" + conversation.name + "' deletado completamente."}
   }
 }

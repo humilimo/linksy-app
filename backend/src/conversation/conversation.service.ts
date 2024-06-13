@@ -94,7 +94,7 @@ export class ConversationService {
       this.userConversationService.create({
         userId: id,
         conversationId: conversation.id,
-        owner: false
+        owner: (id == loggedId) && conversationData.isGroup
       })
     ));
 
@@ -201,6 +201,17 @@ export class ConversationService {
     
     // Group Conversation
     if (conversationInfo.isGroup){
+      const isOwner = (await this.prisma.userConversation.findUnique({
+        where: { 
+          userId_conversationId: {
+            userId: loggedId,
+            conversationId: conversationId
+          }
+        },
+        select: {
+          owner: true
+        }
+      })).owner;
       const participantsInfo = await this.prisma.userConversation.findMany({
         where:{
           conversationId: conversationId,
@@ -221,6 +232,7 @@ export class ConversationService {
       });
 
       return {
+        owner: isOwner,
         conversation: conversationInfo,
         participants: participantsInfo.map(p => p.user),
       }

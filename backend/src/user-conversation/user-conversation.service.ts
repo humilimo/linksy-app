@@ -13,6 +13,57 @@ export class UserConversationService {
     });
   }
 
+  async addUser(loggedId: number, conversationId: number, createUserConversationDto: CreateUserConversationDto) {
+    let isOwner = await this.prisma.userConversation.findUnique({
+      select:{
+        owner: true
+      },
+      where:{
+        userId_conversationId:{
+          conversationId: conversationId,
+          userId: loggedId
+        }
+      }
+    });
+    
+    if (isOwner.owner == true) {
+      let ids = await Promise.all(createUserConversationDto.ids.map(id => this.prisma.user.findUnique({
+        where:{
+          id: id
+        },
+        select:{
+          id: true,
+          username: true
+        }
+      })));
+
+      return ids.map(id => this.prisma.$transaction([
+        this.prisma.userConversation.upsert({
+          where:{
+            userId_conversationId:{
+              conversationId: conversationId,
+              userId: loggedId
+            }
+          },
+          update:{
+            leftConversation: false
+          },
+          create:{
+            userId: id.id,
+            conversationId: conversationId
+          },
+        }),
+        this.prisma.message.create({
+          data: {
+            content: "'" + id.username + "' foi adicionado ao grupo.",
+            senderId: 0,
+            conversationId: conversationId
+          }
+        })
+      ]));
+    }
+  }
+
   async findAll() {
     return `This action returns all userConversation`;
   }

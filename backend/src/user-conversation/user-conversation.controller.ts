@@ -12,6 +12,11 @@ export class UserConversationController {
     return this.userConversationService.create(createUserConversationDto);
   }
 
+  @Post('adicionar')
+  addUser(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() createUserConversationDto: CreateUserConversationDto) {
+    return this.userConversationService.addUser(+loggedId, +conversationId, createUserConversationDto);
+  }
+  
   @Get()
   findAll() {
     return this.userConversationService.findAll();

@@ -16,45 +16,79 @@ export class ConversationService {
 
   async createConversation(loggedId: number, createConversationDto: CreateConversationDto) {
     const { ids, ...conversationData } = createConversationDto;
-
     return this.prisma.$transaction(async (p) => {
       // Create conversation
       const conversation = await p.conversation.create({
         data: conversationData,
       });
 
-      // Create owner userConversation
-      const ownerUserConversation = await p.userConversation.create({
-        data: {
-          userId: loggedId,
-          conversationId: conversation.id,
-          // owner: false, se for uma conversa simples
-          owner: conversation.isGroup
-        }
-      });
-
-      // Create members userConversation
-      const membersUserConversation = await Promise.all(ids.map(id => 
+      // Create participants
+      var usersConversation = (await Promise.all([loggedId, ...ids].map(id => 
         p.userConversation.create({ 
           data: {
             userId: id,
             conversationId: conversation.id,
-            owner: false
-          } 
+            owner: (id == loggedId) && conversation.isGroup
+          },
+          select:{
+            user: {
+              select:{
+                id: true,
+                username: true
+              }
+            }
+          }
         })
-      ));
-      
-      const usersConversation = [ownerUserConversation, ...membersUserConversation];
-  
-      return {
-        conversation,
-        usersConversation
-      };
-    });
-  }
+      ))).map(uc => uc.user);
 
-  async findAll(loggedId: number) {
-    return this.getRecentConversations(loggedId);
+      // Create  ghost-user in userConversation
+      const ghostUserConversation = await p.userConversation.create({
+        data: {
+          userId: 0, //ghost-user Id
+          conversationId: conversation.id,
+          owner: false
+        }
+      });
+
+      if(conversation.isGroup){
+        // Create the 'create group' message from system
+        const createMessage = await p.message.create({ 
+          data:{
+            content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' criou o grupo '" + conversation.name + "'.",
+            senderId: 0, //ghost-user Id
+            conversationId: conversation.id
+          }
+        })
+
+        // Create the 'add participant' message from system
+        const addMessage = await Promise.all(usersConversation.filter(uc => uc.id != loggedId).map(uc => 
+          p.message.create({ 
+            data:{
+              content: "'" + uc.username + "' foi adicionado ao grupo.",
+              senderId: 0, //ghost-user Id
+              conversationId: conversation.id
+            }
+          })
+        ));
+
+        return {
+          createMessage: createMessage,
+          addMessage: addMessage
+        };
+      }
+      else{
+        // create the 'begin conversation' message from system
+        const beginMessage = await p.message.create({ 
+          data:{
+            content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' iniciou uma comversa com '" + usersConversation.find(uc => uc.id != loggedId).username + "'.",
+            senderId: 0, //ghost-user Id
+            conversationId: conversation.id
+          }
+        });
+
+        return beginMessage;
+      }
+    });
   }
 
   async getRecentConversations(loggedId: number) {
@@ -149,6 +183,9 @@ export class ConversationService {
       const participantsInfo = await this.prisma.userConversation.findMany({
         where:{
           conversationId: conversationId,
+          userId: {
+            not: 0 //ghost-user Id
+          }
         },
         select:{
           user:{
@@ -162,17 +199,15 @@ export class ConversationService {
         }
       });
 
-      const allConversationInfo = {
+      return {
         conversation: conversationInfo,
         participants: participantsInfo.map(p => p.user),
-      };
-
-      return allConversationInfo;
+      }
     }
 
     // Single Conversation (DM)
     else{ 
-      return await this.prisma.user.findFirst({
+      const user = await this.prisma.user.findFirst({
         select:{
           id: true,
           name: true,
@@ -183,7 +218,7 @@ export class ConversationService {
         },
         where: {
           id :{
-            not: loggedId
+            notIn: [loggedId, 0],  //loggedId and ghost-user Id
           },
           conversations: {
             some: {
@@ -192,6 +227,8 @@ export class ConversationService {
           }
         }
       });
+
+      return {user: user}
     }
   }
 
@@ -220,10 +257,12 @@ export class ConversationService {
       },
     });
 
-    return this.prisma.conversation.delete({
+    const conversation = await this.prisma.conversation.delete({
       where: {
         id: userConversation['conversationId']
       },
     });
+
+    return {destroyMessage: "Grupo '" + conversation.name + "' deletado completamente."}
   }
 }

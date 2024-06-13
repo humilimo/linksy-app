@@ -14,36 +14,36 @@ datasource db {
 }
 
 model User {
-  id    Int       @id @default(autoincrement())
-  name  String
-  username String @unique 
-  email String    @unique 
-  password String 
-  bio String?
-  picture String?
+  id            Int                @id @default(autoincrement())
+  name          String
+  username      String             @unique 
+  email         String             @unique 
+  password      String 
+  bio           String?
+  picture       String?
 
   conversations UserConversation[]
-  friends       Friend[] @relation("friends")
-  friendOf     Friend[] @relation("friendOf")
+  friends       Friend[]           @relation("friends")
+  friendOf      Friend[]           @relation("friendOf")
 }
 
 model Message {
-  id                 Int      @id @default(autoincrement())
-  content            String 
-  createdAt          DateTime @default(now())
-  senderId           Int
-  conversationId     Int
+  id               Int              @id @default(autoincrement())
+  content          String 
+  createdAt        DateTime         @default(now())
+  senderId         Int
+  conversationId   Int
 
-  erasedMessages     ErasedMessages[]
+  erasedMessages   ErasedMessages[]
   userConversation UserConversation @relation(fields: [senderId, conversationId], references: [userId, conversationId], onDelete: Cascade)
 }
 
 model Conversation {
-  id                  Int       @id @default(autoincrement())
-  name                String?
-  picture             String?
-  hasManyUsers        Boolean @default(false)
-  createdAt           DateTime  @default(now())
+  id                Int                @id @default(autoincrement())
+  name              String?         
+  picture           String?         
+  isGroup           Boolean            @default(false)
+  createdAt         DateTime           @default(now())
 
   userConversations UserConversation[]
 }
@@ -51,12 +51,12 @@ model Conversation {
 model UserConversation {
   userId           Int
   conversationId   Int
-  owner            Boolean      @default(false)
-  leftConversation Boolean      @default(false)
-  favorited        Boolean      @default(false)
-
-  user             User         @relation(fields: [userId], references: [id])
-  conversation     Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  owner            Boolean          @default(false)
+  leftConversation Boolean          @default(false)
+  favorited        Boolean          @default(false)
+    
+  user             User             @relation(fields: [userId], references: [id])
+  conversation     Conversation     @relation(fields: [conversationId], references: [id], onDelete: Cascade)
   
   Message          Message[]
   erasedMessages   ErasedMessages[]
@@ -80,7 +80,7 @@ model ErasedMessages {
   messageId          Int
 
   userConversation   UserConversation @relation(fields: [erasedById, conversationId], references: [userId, conversationId], onDelete: Cascade)
-  message Message                     @relation(fields: [messageId], references: [id])
+  message            Message          @relation(fields: [messageId], references: [id])
 
   @@id([erasedById, conversationId, messageId])
 }

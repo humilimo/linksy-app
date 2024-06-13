@@ -16,40 +16,82 @@ export class ConversationService {
 
   async createConversation(loggedId: number, createConversationDto: CreateConversationDto) {
     const { ids, ...conversationData } = createConversationDto;
-
     return this.prisma.$transaction(async (p) => {
       // Create conversation
       const conversation = await p.conversation.create({
         data: conversationData,
       });
 
-      // Create owner userConversation
-      const ownerUserConversation = await p.userConversation.create({
-        data: {
-          userId: loggedId,
-          conversationId: conversation.id,
-          // owner: false, se for uma conversa simples
-          owner: conversation.isGroup
-        }
-      });
-
-      // Create members userConversation
-      const membersUserConversation = await Promise.all(ids.map(id => 
+      // Create participants
+      var usersConversation = (await Promise.all([loggedId, ...ids].map(id => 
         p.userConversation.create({ 
           data: {
             userId: id,
             conversationId: conversation.id,
-            owner: false
-          } 
+            owner: (id == loggedId) && conversation.isGroup
+          },
+          select:{
+            user: {
+              select:{
+                id: true,
+                username: true
+              }
+            }
+          }
         })
-      ));
-      
-      const usersConversation = [ownerUserConversation, ...membersUserConversation];
-  
-      return {
-        conversation,
-        usersConversation
-      };
+      ))).map(uc => uc.user);
+
+      // Find ghost-user
+      const ghostUser = await p.user.findUnique({
+        where:{
+          username: 'linksy'
+        }
+      })
+
+      // Create  ghost-user in userConversation
+      const ghostUserConversation = await p.userConversation.create({
+        data: {
+          userId: ghostUser.id,
+          conversationId: conversation.id,
+          owner: false
+        }
+      });
+
+      if(conversation.isGroup){
+        // Create the 'create group' message from system
+        const createMessage = await p.message.create({ 
+          data:{
+            content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' criou o grupo '" + conversation.name + "'.",
+            senderId: ghostUser.id,
+            conversationId: conversation.id
+          }
+        })
+
+        // Create the 'add participant' message from system
+        const addMessage = await Promise.all(usersConversation.filter(uc => uc.id != loggedId).map(uc => 
+          p.message.create({ 
+            data:{
+              content: "'" + uc.username + "' foi adicionado ao grupo.",
+              senderId: ghostUser.id,
+              conversationId: conversation.id
+            }
+          })
+        ));
+
+        return [createMessage, ...addMessage];
+      }
+      else{
+        // create the 'begin conversation' message from system
+        const beginMessage = await p.message.create({ 
+          data:{
+            content: "'" + usersConversation.find(uc => uc.id == loggedId).username + "' iniciou uma comversa com '" + usersConversation.find(uc => uc.id != loggedId).username + "'.",
+            senderId: ghostUser.id,
+            conversationId: conversation.id
+          }
+        });
+
+        return beginMessage;
+      }
     });
   }
 

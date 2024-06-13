@@ -56,40 +56,17 @@ export class ConversationService {
   }
 
   async getRecentConversations(loggedId: number) {
-    var conversationsOfLoggedUser = await this.prisma.userConversation.findMany({
-      select:{
-        conversationId: true,
-        favorited: true
-      },
-      where:{                                                                       
-        userId: loggedId
-      },
-    })          
-    
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
 
+    var conversationsOfLoggedUser = await this.getConversationsIdsofLoggedUser(loggedId);
+
+    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
     var favoritedConversationsIdsOfLoggedUser = conversationsOfLoggedUser
       .filter(conversation => conversation.favorited === true)
       .map(conversation => conversation.conversationId);
     
-    var recentMessagesByDate = await this.prisma.message.findMany({ 
-      select: {
-        conversationId: true,
-        createdAt: true,
-      },
-      orderBy: {
-        id: 'desc',
-      },
-      where:{
-        conversationId:{
-          in: conversationIdsOfLoggedUser,                  
-        },
-      },
-      distinct: ['conversationId'],
-    });
+    var recentMessagesByDate = await this.getRecentMessagesByDate(conversationIdsOfLoggedUser);
 
     var recentConversationsIdsOfLoggedUser = recentMessagesByDate.map(conversation=> conversation.conversationId);        
-    
     var nonFavoritedRecentConversationsIds = recentConversationsIdsOfLoggedUser.filter(
       conversationId => !favoritedConversationsIdsOfLoggedUser.includes(conversationId)  
     );
@@ -109,6 +86,38 @@ export class ConversationService {
   
     return recentConversations;
 }
+  async getConversationsIdsofLoggedUser(loggedId: number)
+  {
+      var ids = await this.prisma.userConversation.findMany({
+      select:{
+        conversationId: true,
+        favorited: true
+      },
+      where:{                                                                       
+        userId: loggedId
+      },
+    })
+      return ids;
+  }
+
+  async getRecentMessagesByDate(conversationIdsOfLoggedUser :number[]){
+    var recentMessagesByDate = await this.prisma.message.findMany({ 
+      select: {
+        conversationId: true,
+        createdAt: true,
+      },
+      orderBy: {
+        id: 'desc',
+      },
+      where:{
+        conversationId:{
+          in: conversationIdsOfLoggedUser,                  
+        },
+      },
+      distinct: ['conversationId'],
+    });
+    return recentMessagesByDate;
+  }
 
   async findOne(loggedId: number, conversationId: number) {
     var userConversation = await this.userConversationService.findOne(loggedId, conversationId);

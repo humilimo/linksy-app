@@ -68,7 +68,7 @@ export class ConversationService {
       const loggedUser = (await this.prisma.user.findUnique({where:{id: loggedId}})).username;
       const otherUser = (await this.prisma.user.findUnique({where:{id: ids[0]}})).username;
       
-      return {re_enterMessage: "'" + loggedUser + "' voltou à conversa com '" + otherUser + "'."};
+      return {returnMessage: "'" + loggedUser + "' voltou à conversa com '" + otherUser + "'."};
     }
 
     // add conversation

@@ -10,7 +10,10 @@ export class ConversationController {
 
   @Post()
   createConversation(@Param('loggedId') loggedId: string, @Body() createConversationDto: CreateConversationDto) {
-    return this.conversationService.createConversation(+loggedId, createConversationDto);
+    if (createConversationDto.isGroup)
+      return this.conversationService.createGroupConversation(+loggedId, createConversationDto);
+    else
+      return this.conversationService.createSimpleConversation(+loggedId, createConversationDto);
   }
 
   @Get()

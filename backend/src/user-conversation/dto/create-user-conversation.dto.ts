@@ -2,9 +2,7 @@ import { Prisma } from "@prisma/client";
 import { IsEmail, IsNotEmpty, Length, MinLength, MaxLength, IsString, IsOptional } from 'class-validator';
 
 export class CreateUserConversationDto {
-    @IsNotEmpty()
-    ids: number[]
-    @IsNotEmpty()
+    userId: number
     conversationId: number
-    owner: boolean | false
+    owner: boolean
 }

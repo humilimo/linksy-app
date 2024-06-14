@@ -28,8 +28,8 @@ export class ConversationController {
   }
 
   @Get(':id/perfil')
-  findConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
-    return this.conversationService.findConversationInfo(+loggedId, +conversationId)
+  getConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
+    return this.conversationService.getConversationInfo(+loggedId, +conversationId)
   }
 
   @Patch(':id')

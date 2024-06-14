@@ -75,7 +75,7 @@ export class UserConversationService {
             conversationId: conversationId
           }
         })
-      ])))).map(pair => pair[1]);
+      ])))).map(pair => pair[1].content);
       return messages;
     }
   }
@@ -159,6 +159,9 @@ export class UserConversationService {
         } 
       },
       data: updateUserConversationDto,
+      include:{
+        user: true
+      }
     });
   }
 

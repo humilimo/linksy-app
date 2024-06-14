@@ -13,8 +13,8 @@ export class UserConversationController {
   }
 
   @Post('adicionar')
-  addUser(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() createUserConversationDto: CreateUserConversationDto) {
-    return this.userConversationService.addUser(+loggedId, +conversationId, createUserConversationDto);
+  addUsers(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() ids: {ids: number[]}) {
+    return this.userConversationService.addUsers(+loggedId, +conversationId, ids);
   }
   
   @Get()

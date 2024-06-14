@@ -9,7 +9,11 @@ export class UserConversationService {
 
   async create(createUserConversationDto: CreateUserConversationDto) {
     return await this.prisma.userConversation.create({
-      data: createUserConversationDto,
+      data: {
+        userId: createUserConversationDto.userId,
+        conversationId: createUserConversationDto.conversationId,
+        owner: createUserConversationDto.owner,
+      },
       include:{
         user: {
           select:{
@@ -20,7 +24,7 @@ export class UserConversationService {
     });
   }
 
-  async addUser(loggedId: number, conversationId: number, createUserConversationDto: CreateUserConversationDto) {
+  async addUsers(loggedId: number, conversationId: number, ids: {ids: number[]}) {
     let isOwner = await this.prisma.userConversation.findUnique({
       select:{
         owner: true
@@ -35,7 +39,7 @@ export class UserConversationService {
     
     if (isOwner.owner == true) {
       //gets all users usernames to be added
-      let ids = await Promise.all(createUserConversationDto.ids.map(id => this.prisma.user.findUnique({
+      let users = await Promise.all(ids.ids.map(id => this.prisma.user.findUnique({
         where:{
           id: id
         },
@@ -45,32 +49,34 @@ export class UserConversationService {
         }
       })));
 
-      return ids.map(id => this.prisma.$transaction([
+      const messages = (await Promise.all(users.map(user => this.prisma.$transaction([
         //add each user
         this.prisma.userConversation.upsert({
           where:{
             userId_conversationId:{
-              conversationId: conversationId,
-              userId: loggedId
+              userId: user.id,
+              conversationId: conversationId
             }
           },
           update:{
             leftConversation: false
           },
           create:{
-            userId: id.id,
+            userId: user.id,
             conversationId: conversationId
-          },
+          }
         }),
         //send a message in conversation that indicates the user has been added
+                
         this.prisma.message.create({
           data: {
-            content: "'" + id.username + "' foi adicionado ao grupo.",
+            content: "'" + user.username + "' foi adicionado ao grupo.",
             senderId: 0,
             conversationId: conversationId
           }
         })
-      ]));
+      ])))).map(pair => pair[1]);
+      return messages;
     }
   }
 

@@ -16,6 +16,16 @@ export class UserConversationController {
   addUsers(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() ids: {ids: number[]}) {
     return this.userConversationService.addUsers(+loggedId, +conversationId, ids);
   }
+
+  @Patch('remover/:deleteId')
+  deleteUser(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Param('deleteId') deleteId: string) {
+    return this.userConversationService.deleteUser(+loggedId, +conversationId, +deleteId);
+  }
+
+  @Patch('sair')
+  leaveConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Param('deleteId') deleteId: string) {
+    return this.userConversationService.deleteUser(+loggedId, +conversationId, +loggedId);
+  }
   
   @Get()
   findAll() {

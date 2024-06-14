@@ -5,7 +5,7 @@ Feature: Create Conversation
     And existe um user com id 2, username "lfoc"
     When uma requisição "POST" for enviada para "user/1/conversation"
     And o corpo da requisição é um JSON com isGroup true, name "grupo ess", picture "" e ids [2]
-    Then o status da resposta deve ser "200"
+    Then o status da resposta deve ser "201"
     And o JSON da resposta deve conter createMessage "'man2' criou o grupo 'grupo ess'."
     And o JSON da resposta deve conter addMessages ["'lfoc' foi adicionado ao grupo."]
   
@@ -14,7 +14,7 @@ Feature: Create Conversation
     And existe um user com id 2, username "lfoc"
     When uma requisição "POST" for enviada para "user/1/conversation"
     And o corpo da requisição é um JSON com isGroup false e ids [2]
-    Then o status da resposta deve ser "200"
+    Then o status da resposta deve ser "201"
     And o JSON da resposta deve conter beginMessage "'man2' iniciou uma conversa com 'lfoc'."
 
   Scenario: Retornar para uma Conversa Simples
@@ -25,5 +25,5 @@ Feature: Create Conversation
     And existe uma userConversation com userId 2, conversationId 123 e owner false
     When uma requisição "POST" for enviada para "user/1/conversation"
     And o corpo da requisição é um JSON com isGroup false e ids [2]
-    Then o status da resposta deve ser "200"
+    Then o status da resposta deve ser "201"
     And o JSON da resposta deve conter returnMessage "'man2' voltou à conversa com 'lfoc'."

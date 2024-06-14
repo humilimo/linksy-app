@@ -165,4 +165,32 @@ export class UserConversationService {
   async remove(id: number) {
     return `This action removes a #${id} userConversation`;
   }
+
+  async favoriteConversation(loggedId: number, conversationId: number) {
+    return this.prisma.userConversation.update({
+      where: {
+        userId_conversationId:{
+          userId: loggedId,
+          conversationId: conversationId
+        }
+      },
+      data: {
+        favorited:true,
+      }
+  });
+}
+async desfavoriteConversation(loggedId: number, conversationId: number) {
+  return this.prisma.userConversation.update({
+    where: {
+      userId_conversationId:{
+        userId: loggedId,
+        conversationId: conversationId
+      }
+    },
+    data: {
+      favorited:false,
+    }
+});
+}
+
 }

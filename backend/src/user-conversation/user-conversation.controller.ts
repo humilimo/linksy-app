@@ -27,6 +27,16 @@ export class UserConversationController {
     return this.userConversationService.deleteUser(+loggedId, +conversationId, +loggedId);
   }
   
+  @Patch('favoritar')
+  favoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
+    return this.userConversationService.favoriteConversation(+loggedId, +conversationId);
+  }
+
+  @Patch('desfavoritar')
+    desfavoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
+    return this.userConversationService.desfavoriteConversation(+loggedId, +conversationId);
+  }
+
   @Get()
   findAll() {
     return this.userConversationService.findAll();

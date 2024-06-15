@@ -93,7 +93,7 @@ export class UserConversationService {
       }
     });
     
-    if (isOwner.owner == true || loggedId == deleteId) {
+    if ((loggedId != deleteId && isOwner.owner == true) || (loggedId == deleteId && isOwner.owner == false)) {
       //gets user's username do be deleted
       let userToDelete = await this.prisma.user.findUnique({
         where:{
@@ -105,13 +105,13 @@ export class UserConversationService {
         }
       });
 
-      return this.prisma.$transaction([
-        //delete each user
+      let message = (await Promise.all(await this.prisma.$transaction([
+        //delete user from group
         this.prisma.userConversation.update({
           where:{
             userId_conversationId:{
               conversationId: conversationId,
-              userId: loggedId
+              userId: deleteId
             }
           },
           data:{
@@ -121,12 +121,13 @@ export class UserConversationService {
         //send a message in conversation that indicates the user has been deleted
         this.prisma.message.create({
           data: {
-            content: "'" + userToDelete.username + "' foi removido do grupo.",
+            content: (isOwner.owner == true)?("'" + userToDelete.username + "' foi removido do grupo."):("'" + userToDelete.username + "' saiu do grupo."),
             senderId: 0,
             conversationId: conversationId
           }
         })
-      ]);
+      ])))[1];
+      return message;
     }
   }
 

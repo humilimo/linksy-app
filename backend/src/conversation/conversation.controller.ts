@@ -32,6 +32,12 @@ export class ConversationController {
     return this.conversationService.getConversationInfo(+loggedId, +conversationId)
   }
 
+  @Patch(':id')
+  updateGroupName(@Param('loggedId') loggedId: string, @Param('id') id: string, @Body() name: {name: string}) {
+    return this.conversationService.updateGroupName(+loggedId, +id, name);
+  }
+
+
   @Delete(':id/apagar_tudo')
     removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
     return this.conversationService.removeAll(+loggedId, +conversationId);

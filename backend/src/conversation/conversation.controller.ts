@@ -32,16 +32,6 @@ export class ConversationController {
     return this.conversationService.getConversationInfo(+loggedId, +conversationId)
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConversationDto: UpdateConversationDto) {
-    return this.conversationService.update(+id, updateConversationDto);
-  }
-
-  @Delete(':id/apagar')
-  remove(@Param('id') id: string) {
-    return this.conversationService.remove(+id);
-  }
-
   @Delete(':id/apagar_tudo')
     removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
     return this.conversationService.removeAll(+loggedId, +conversationId);

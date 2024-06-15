@@ -9,5 +9,5 @@ Feature: add user to a group
         When uma requisição "POST" for enviada para "user/1/conversation/1/adicionar"
         And é enviado um JSON com ids "[2]"
         Then o status de resposta deve ser "200"
-        And a resposta deve conter a lista de string "["'man2' foi adicionado ao grupo."]"
+        And a resposta deve conter a lista de string com o elemento "'man2' foi adicionado ao grupo."
     

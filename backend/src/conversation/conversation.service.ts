@@ -1,17 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { Conversation, Message } from '@prisma/client';
+import { Injectable,forwardRef,Inject } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { PrismaService } from '../prisma.service';
 import { MessageService } from '../message/message.service';
 import { UserConversationService } from '../user-conversation/user-conversation.service';
-import { SearchMessageDto } from '../message/dto/search-message.dto';
 
 @Injectable()
 export class ConversationService {
   constructor(
     private prisma: PrismaService, 
     private userConversationService: UserConversationService,
+    @Inject(forwardRef(() => MessageService))
     private messageService: MessageService,
   ) {}
 

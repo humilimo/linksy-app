@@ -38,11 +38,11 @@ export class ConversationService {
       });
       
       // Create the 'create group' message from system
-      const createMessage = await this.messageService.sendMessage(
+      const createMessage = (await this.messageService.sendMessage(
         {content: "'" + owner.user.username + "' criou o grupo '" + conversation.name + "'."},
         0, //ghost-user Id
         conversation.id
-      );
+      )).content;
 
       return {
         conversation: conversation,
@@ -63,9 +63,12 @@ export class ConversationService {
     const conversationId = await this.checkIfSimpleConversationExists(loggedId, ids[0]);
     
     if (conversationId){
-      await this.userConversationService.update(loggedId, conversationId, {leftConversation: false});
+      await this.userConversationService.returnToConversation(loggedId, conversationId);
       
-      return {re_enterMessage: "Usuário de id '" + loggedId + "' voltou à conversa."};
+      const loggedUser = (await this.prisma.user.findUnique({where:{id: loggedId}})).username;
+      const otherUser = (await this.prisma.user.findUnique({where:{id: ids[0]}})).username;
+      
+      return {returnMessage: "'" + loggedUser + "' voltou à conversa com '" + otherUser + "'."};
     }
 
     // add conversation
@@ -95,13 +98,13 @@ export class ConversationService {
     });
     
     // Create the 'begin conversation' message from system
-    const beginMessage = this.messageService.sendMessage(
+    const beginMessage = (await this.messageService.sendMessage(
       {content: "'" + loggedUser.user.username + "' iniciou uma conversa com '" + otherUser.user.username + "'."},
       0, //ghost-user Id
       conversation.id
-    );
+    )).content;
 
-    return beginMessage;
+    return {beginMessage};
   }
 
   async checkIfSimpleConversationExists(loggedId: number, otherId: number){
@@ -112,7 +115,6 @@ export class ConversationService {
       },
       where: {
         userId: loggedId,
-        leftConversation: true,
         conversation: {
           isGroup: false
         }
@@ -218,7 +220,7 @@ export class ConversationService {
     return conversationAndMessages
   }
 
-  async findConversationInfo(loggedId: number, conversationId: number){
+  async getConversationInfo(loggedId: number, conversationId: number){
     const conversationInfo = await this.prisma.conversation.findUnique({
       where: {
         id: conversationId,
@@ -292,24 +294,10 @@ export class ConversationService {
         }
       });
 
-      return {user: user}
+      return user
     }
   }
-
-  async update(id: number, updateConversationDto: UpdateConversationDto) {
-    return this.prisma.conversation.update({
-      where: { id },
-      data: updateConversationDto,
-    });
-  }
-
-  async remove(id: number) {
-    return "Apagar para uma pessoa especifica aqui";
-    return this.prisma.conversation.delete({
-      where: { id },
-    });
-  }
-
+  
   async removeAll(loggedId:number, conversationId: number) {
     const userConversation = await this.prisma.userConversation.findUnique({
       where: {

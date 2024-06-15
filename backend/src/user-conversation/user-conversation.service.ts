@@ -8,7 +8,7 @@ export class UserConversationService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserConversationDto: CreateUserConversationDto) {
-    return await this.prisma.userConversation.create({
+    return this.prisma.userConversation.create({
       data: {
         userId: createUserConversationDto.userId,
         conversationId: createUserConversationDto.conversationId,
@@ -75,7 +75,7 @@ export class UserConversationService {
             conversationId: conversationId
           }
         })
-      ])))).map(pair => pair[1]);
+      ])))).map(pair => pair[1].content);
       return messages;
     }
   }
@@ -129,10 +129,6 @@ export class UserConversationService {
       ]);
     }
   }
-  
-  async findAll() {
-    return `This action returns all userConversation`;
-  }
 
   async findOne(userId: number, conversationId: number) {
     return await this.prisma.userConversation.findUnique(
@@ -150,22 +146,21 @@ export class UserConversationService {
     );
   }
 
-  async update(userId: number, conversationId: number, updateUserConversationDto: UpdateUserConversationDto) {
+  async returnToConversation(userId: number, conversationId: number) {
     return this.prisma.userConversation.update({
       where:{
         userId_conversationId: {
           userId: userId,
           conversationId: conversationId
-        } 
+        },
+        leftConversation: true
       },
-      data: updateUserConversationDto,
+      data:{
+        leftConversation: false
+      }
     });
   }
-
-  async remove(id: number) {
-    return `This action removes a #${id} userConversation`;
-  }
-
+  
   async toggleFavorite(loggedId: number, conversationId: number) {
     var requestedConversation = await this.prisma.userConversation.findUnique({
       where: {

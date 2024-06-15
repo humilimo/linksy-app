@@ -28,18 +28,8 @@ export class ConversationController {
   }
 
   @Get(':id/perfil')
-  findConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
-    return this.conversationService.findConversationInfo(+loggedId, +conversationId)
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateConversationDto: UpdateConversationDto) {
-    return this.conversationService.update(+id, updateConversationDto);
-  }
-
-  @Delete(':id/apagar')
-  remove(@Param('id') id: string) {
-    return this.conversationService.remove(+id);
+  getConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
+    return this.conversationService.getConversationInfo(+loggedId, +conversationId)
   }
 
   @Delete(':id/apagar_tudo')

@@ -13,13 +13,34 @@ export class UserService {
     });
   }
 
-  async findAll() {
-    return this.prisma.user.findMany();
-  }
-
   async findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        picture: true,
+        bio: true,
+       }
+    });
+  }
+
+  async findFriend(loggedId: number, id: number) {
+    return this.prisma.user.findUnique({
+      where: { 
+        id: id,
+        friendOf:{
+          some: {requesterId: loggedId}
+        }
+      },
+      select: {
+        id: true,
+        name: true,
+        username: true,
+        picture: true,
+        bio: true,
+       }
     });
   }
 

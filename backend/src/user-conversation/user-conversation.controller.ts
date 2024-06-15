@@ -7,11 +7,6 @@ import { UpdateUserConversationDto } from './dto/update-user-conversation.dto';
 export class UserConversationController {
   constructor(private readonly userConversationService: UserConversationService) {}
 
-  @Post()
-  create(@Body() createUserConversationDto: CreateUserConversationDto) {
-    return this.userConversationService.create(createUserConversationDto);
-  }
-
   @Post('adicionar')
   addUsers(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() ids: {ids: number[]}) {
     return this.userConversationService.addUsers(+loggedId, +conversationId, ids);
@@ -30,25 +25,5 @@ export class UserConversationController {
   @Patch('favoritar')
   favoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
     return this.userConversationService.toggleFavorite(+loggedId, +conversationId);
-  }
-
-  @Get()
-  findAll() {
-    return this.userConversationService.findAll();
-  }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.userConversationService.findOne(+id);
-  // }
-
-  @Patch()
-  update(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string, @Body() updateUserConversationDto: UpdateUserConversationDto) {
-    return this.userConversationService.update(+loggedId, +conversationId, updateUserConversationDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userConversationService.remove(+id);
   }
 }

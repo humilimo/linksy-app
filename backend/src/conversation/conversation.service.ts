@@ -63,7 +63,7 @@ export class ConversationService {
     const conversationId = await this.checkIfSimpleConversationExists(loggedId, ids[0]);
     
     if (conversationId){
-      const userConversation = await this.userConversationService.update(loggedId, conversationId, {leftConversation: false});
+      await this.userConversationService.returnToConversation(loggedId, conversationId);
       
       const loggedUser = (await this.prisma.user.findUnique({where:{id: loggedId}})).username;
       const otherUser = (await this.prisma.user.findUnique({where:{id: ids[0]}})).username;
@@ -115,7 +115,6 @@ export class ConversationService {
       },
       where: {
         userId: loggedId,
-        leftConversation: true,
         conversation: {
           isGroup: false
         }

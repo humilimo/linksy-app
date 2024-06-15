@@ -297,7 +297,43 @@ export class ConversationService {
       return user
     }
   }
-  
+
+  async updateGroupName(loggedId: number, conversationId: number, name: {name: string}) {
+    let user = await this.prisma.userConversation.findUnique({
+      select:{
+        owner: true,
+        user: true
+      },
+      where:{
+        userId_conversationId:{
+          conversationId: conversationId,
+          userId: loggedId
+        }
+      }
+    });
+    if (user.owner == true) {
+      let message = (await this.prisma.$transaction([
+        this.prisma.conversation.update({
+          where: {
+            id: conversationId
+          },
+          data: {
+            name: name.name
+          },
+        }),
+        this.prisma.message.create({
+          data: {
+            content: "'" + user.user.username + "' alterou o nome do grupo para '" + name.name + "'.",
+            senderId: 0,
+            conversationId: conversationId
+          }
+        })
+      ]))[1];
+      return {newNameMessage: message.content}
+    }
+
+  }
+
   async removeAll(loggedId:number, conversationId: number) {
     const userConversation = await this.prisma.userConversation.findUnique({
       where: {

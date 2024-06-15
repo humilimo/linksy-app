@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
+import { SearchMessageDto } from './dto/search-message.dto';
 import { HttpStatus, HttpException } from '@nestjs/common';
 import { ForbiddenException } from './exceptions/forbidden.exception';
 
@@ -17,6 +18,16 @@ export class MessageController {
       throw new ForbiddenException();
     }
   }
+
+  @Get(':id/search')
+  searchMessageInUniqueConversation(@Param('loggedId') loggedId: string,@Param('id') conversationId: string,@Body() searchMessageDto: SearchMessageDto) {
+    return this.messageService.searchMessageInUniqueConversation(+loggedId,+conversationId,searchMessageDto);
+  }
+
+  @Get('search')
+  searchMessageInAllConversations(@Param('loggedId') loggedId: string,@Body() searchMessageDto: SearchMessageDto) {
+    return this.messageService.searchMessageInAllConversations(+loggedId,searchMessageDto);
+  }  
 
   @Patch('editar/:id')
   update(@Param('id') id: string, @Body() updateMessageDto: UpdateMessageDto) {

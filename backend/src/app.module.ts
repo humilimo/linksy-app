@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaService } from './prisma.service';
@@ -13,8 +13,8 @@ import { FriendModule } from './friend/friend.module'
 @Module({
   imports: [
     UserModule,
-    MessageModule,
-    ConversationModule,
+    forwardRef(() => MessageModule), 
+    forwardRef(() => ConversationModule), 
     UserConversationModule,
     ErasedMessageModule,
     FriendModule,

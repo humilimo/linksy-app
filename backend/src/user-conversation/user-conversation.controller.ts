@@ -27,6 +27,11 @@ export class UserConversationController {
     return this.userConversationService.deleteUser(+loggedId, +conversationId, +loggedId);
   }
   
+  @Patch('favoritar')
+  favoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
+    return this.userConversationService.toggleFavorite(+loggedId, +conversationId);
+  }
+
   @Get()
   findAll() {
     return this.userConversationService.findAll();

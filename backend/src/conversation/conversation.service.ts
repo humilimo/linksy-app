@@ -1,17 +1,16 @@
-import { Injectable } from '@nestjs/common';
-import { Conversation, Message } from '@prisma/client';
+import { Injectable,forwardRef,Inject } from '@nestjs/common';
 import { CreateConversationDto } from './dto/create-conversation.dto';
 import { UpdateConversationDto } from './dto/update-conversation.dto';
 import { PrismaService } from '../prisma.service';
 import { MessageService } from '../message/message.service';
 import { UserConversationService } from '../user-conversation/user-conversation.service';
-import { SearchMessageDto } from '../message/dto/search-message.dto';
 
 @Injectable()
 export class ConversationService {
   constructor(
     private prisma: PrismaService, 
     private userConversationService: UserConversationService,
+    @Inject(forwardRef(() => MessageService))
     private messageService: MessageService,
   ) {}
 
@@ -206,65 +205,6 @@ export class ConversationService {
       distinct: ['conversationId'],
     });
     return recentMessagesByDate;
-  }
-
-  async searchMessageInUniqueConversation(loggedId: number,conversationId: number,searchMessageDto: SearchMessageDto)
-  {
-    var targetWord = searchMessageDto.targetWord;
-
-    var conversationsOfLoggedUser = await this.getConversationsOfLoggedUser(loggedId);
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
-
-    if(conversationIdsOfLoggedUser.includes(conversationId)){
-      var messages = this.prisma.message.findMany({
-        select:{
-          content:true,
-          createdAt:true,
-          senderId:true,
-        },
-        where:{
-          conversationId:{
-            in: conversationIdsOfLoggedUser,
-          },
-          content:{
-            contains: targetWord,
-          },
-        },
-      })
-      return messages;
-    }
-    else
-      return [];
-  } 
-
-  async searchMessageInAllConversations(loggedId: number,searchMessageDto: SearchMessageDto)
-  {
-    var targetWord = searchMessageDto.targetWord;
-
-    var conversationsOfLoggedUser = await this.getConversationsOfLoggedUser(loggedId);
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
-    
-    var messages = this.prisma.message.findMany({
-      select:
-      {
-        content:true,
-        createdAt:true,
-        conversationId:true,
-        senderId:true,
-      },
-      where:{
-        conversationId:{
-          in: conversationIdsOfLoggedUser
-        },
-        content:{
-          contains: targetWord,
-        },
-      },
-      orderBy:{
-        id: 'desc'
-      },
-    })
-    return messages;
   }
 
   async findOne(loggedId: number, conversationId: number) {

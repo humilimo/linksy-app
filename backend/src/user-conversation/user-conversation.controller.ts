@@ -29,12 +29,7 @@ export class UserConversationController {
   
   @Patch('favoritar')
   favoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
-    return this.userConversationService.favoriteConversation(+loggedId, +conversationId);
-  }
-
-  @Patch('desfavoritar')
-    desfavoriteConversation(@Param('loggedId') loggedId: string, @Param('conversationId') conversationId: string,) {
-    return this.userConversationService.desfavoriteConversation(+loggedId, +conversationId);
+    return this.userConversationService.toggleFavorite(+loggedId, +conversationId);
   }
 
   @Get()

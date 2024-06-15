@@ -166,31 +166,31 @@ export class UserConversationService {
     return `This action removes a #${id} userConversation`;
   }
 
-  async favoriteConversation(loggedId: number, conversationId: number) {
+  async toggleFavorite(loggedId: number, conversationId: number) {
+    var requestedConversation = await this.prisma.userConversation.findUnique({
+      where: {
+        userId_conversationId: {
+          userId: loggedId,
+          conversationId: conversationId,
+        },
+      },
+      select: {
+        favorited: true,
+      },
+    });
+
+    var newFavoritedValue = !requestedConversation.favorited;
+
     return this.prisma.userConversation.update({
       where: {
-        userId_conversationId:{
+        userId_conversationId: {
           userId: loggedId,
-          conversationId: conversationId
-        }
+          conversationId: conversationId,
+        },
       },
       data: {
-        favorited:true,
-      }
-  });
-}
-async desfavoriteConversation(loggedId: number, conversationId: number) {
-  return this.prisma.userConversation.update({
-    where: {
-      userId_conversationId:{
-        userId: loggedId,
-        conversationId: conversationId
-      }
-    },
-    data: {
-      favorited:false,
-    }
-});
-}
-
+        favorited: newFavoritedValue,
+      },
+    });
+  }
 }

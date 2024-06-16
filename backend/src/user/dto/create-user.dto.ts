@@ -13,6 +13,6 @@ export class CreateUserDto implements Prisma.UserCreateInput {
     @IsNotEmpty()
     @MinLength(8)
     password: string;
-    bio: string;
-    picture: string;
+    bio?: string;
+    picture?: string;
 }

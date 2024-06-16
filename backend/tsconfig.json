@@ -16,7 +16,11 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false
+    "noFallthroughCasesInSwitch": false,
+    "types": ["node", "@types/jest"],
   },
-  "exclude": ["tests", "./dist/**/*"]
+  "exclude": [
+    "./dist/**/*",
+    "node_modules"
+  ],
 }

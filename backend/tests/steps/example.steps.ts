@@ -4,7 +4,7 @@ import { PrismaService } from '../../src/prisma.service';
 import { Test, TestingModule } from '@nestjs/testing';
 import { loadFeature, defineFeature } from 'jest-cucumber';
 
-const feature = loadFeature('features/example.feature');
+const feature = loadFeature('tests/features/example.feature');
 
 defineFeature(feature, (test) => {
   let prismaService: PrismaService;
@@ -33,9 +33,7 @@ defineFeature(feature, (test) => {
           id: 0,
           name: 'linksy',
           username: 'linksy',
-          email: 'linksy',
-          password: 'linksy',
-          bio: "Tô!",
+          bio: "Tô bemmm!",
           picture: null,
       };
       const user = await userService.findOne(mockUser.id);

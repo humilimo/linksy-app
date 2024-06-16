@@ -7,28 +7,28 @@ import { UpdateUserDto } from './dto/update-user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   
-  @Post()
+  @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  @Get(':loggedId/profile')
+  findOne(@Param('loggedId') loggedId: string) {
+    return this.userService.findOne(+loggedId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get(':loggedId/profile/:id')
+  findFriend(@Param('loggedId') loggedId: string, @Param('loggedId') id: string) {
+    return this.userService.findFriend(+loggedId, +id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
+  @Patch(':loggedId/profile')
+  update(@Param('loggedId') loggedId: string, @Body() updateUserDto: UpdateUserDto) {
+    return this.userService.update(+loggedId, updateUserDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  @Delete(':loggedId/profile')
+  remove(@Param('loggedId') loggedId: string) {
+    return this.userService.remove(+loggedId);
   }
 }

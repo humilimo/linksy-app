@@ -33,7 +33,7 @@ defineFeature(feature, (test) => {
           id: 0,
           name: 'linksy',
           username: 'linksy',
-          bio: "Tô bemmm!",
+          bio: null,
           picture: null,
       };
       const user = await userService.findOne(mockUser.id);

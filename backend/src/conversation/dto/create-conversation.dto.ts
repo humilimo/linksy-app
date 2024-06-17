@@ -6,4 +6,5 @@ export class CreateConversationDto implements Prisma.ConversationCreateInput {
   picture: string
   isGroup: boolean
   ids?: number[]
+  createdAt?: string;
 }

@@ -86,12 +86,13 @@ export class MessageService {
           senderId:true,
         },
         where:{
-          conversationId:{
-            in: conversationIdsOfLoggedUser,
-          },
+          conversationId: conversationId,
           content:{
             contains: targetWord,
           },
+        },
+        orderBy:{
+          id: 'desc'
         },
       })
       return messages;

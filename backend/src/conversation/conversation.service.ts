@@ -171,8 +171,16 @@ export class ConversationService {
           }
         }
       });
-      recentConversations.push(conversation);
+      const {userConversations, ...conversationWithoutUserConversations } = conversation;
+
+      const mergedInfos = {
+        ...conversationWithoutUserConversations,
+        favorited: userConversations[0].favorited
+      };
+      
+      recentConversations.push(mergedInfos);
     }
+
     return recentConversations;
 }
   async getConversationsOfLoggedUser(loggedId: number)

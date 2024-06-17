@@ -36,6 +36,6 @@ lib/
 .vercel
 
 # Database
-prisma/dev.db
+prisma/*.db
 prisma/migrations
 prisma/dev.db-journal

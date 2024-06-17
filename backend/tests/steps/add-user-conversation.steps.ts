@@ -91,7 +91,7 @@ defineFeature(feature, (test) => {
     });
     when(/^uma requisição "(.*)" for enviada para "(.*)" com o corpo sendo um JSON com ids "(.*)"$/, async (req, url, content) => {
       if (req == "POST") {
-        response = await request(app.getHttpServer()).post("/"+url).send({
+        response = await request(app.getHttpServer()).post(url).send({
           ids: content.split(',').map(Number)
         })
       }

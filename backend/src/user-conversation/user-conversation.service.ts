@@ -187,6 +187,12 @@ export class UserConversationService {
       data: {
         favorited: newFavoritedValue,
       },
+      select:{
+        userId: true,
+        conversationId:true,
+        leftConversation: true,
+        favorited: true
+      }
     });
   }
 }

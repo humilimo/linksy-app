@@ -56,11 +56,10 @@ defineFeature(feature, (test) => {
       })
       expect(user).not.toBeNull();
     });
-    and(/^existe uma conversation de id "(.*)" e nome "(.*)"$/, async (id, name) => {
+    and(/^existe uma conversation de id "(.*)"$/, async (id) => {
       const conversation = await prismaService.conversation.findUnique({
         where: {
           id: Number(id),
-          name: name
         }
       })
       expect(conversation).not.toBeNull();
@@ -72,7 +71,7 @@ defineFeature(feature, (test) => {
             conversationId: Number(idConversation),
             userId: Number(idUser)
           },
-          owner: Boolean(owner)
+          owner: (owner === 'true')
         }
       })
       expect(conversation).not.toBeNull();

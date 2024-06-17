@@ -1,7 +1,11 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma.service';
+import { JwtService } from '@nestjs/jwt';
+
+const jwt = require('jsonwebtoken');
+const SECRET = 'LINKSY';
 
 @Injectable()
 export class UserService {
@@ -81,4 +85,21 @@ export class UserService {
       where: { id },
     });
   }
+
+  async login(user: {username: string, password: string}) {
+
+    var checkUser = await this.prisma.user.findUnique({
+        select: { id: true },
+        where: { username: user.username, password: user.password },
+    });
+
+    if (checkUser) {
+        const token = jwt.sign({ userId: checkUser.id }, SECRET, { expiresIn: 300 });
+        return { auth: true, token };
+    }
+
+    const createError = require('http-errors');
+    throw createError(401, 'Unauthorized');
+  } 
+
 }

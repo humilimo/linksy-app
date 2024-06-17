@@ -2,33 +2,35 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { FriendService } from './friend.service';
 import { CreateFriendDto } from './dto/create-friend.dto';
 import { UpdateFriendDto } from './dto/update-friend.dto';
+import { CreateUserDto } from 'src/user/dto/create-user.dto';
 
-@Controller('friend')
+@Controller('user/:loggedId/friend')
+
 export class FriendController {
   constructor(private readonly friendService: FriendService) {}
 
-  @Post()
-  create(@Body() createFriendDto: CreateFriendDto) {
-    return this.friendService.create(createFriendDto);
+  @Post('add')
+  create(@Param('loggedId') loggedId: string, @Body() username: {username : string}) {
+    return this.friendService.create(+loggedId, username);
   }
 
-  @Get()
-  findAll() {
-    return this.friendService.findAll();
+  @Get('all')
+  findAll(@Param('loggedId') loggedId: string) {
+    return this.friendService.findAll(+loggedId);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.friendService.findOne(+id);
-  }
+  // @Get(':id')
+  // findOne(@Param('id') id: string) {
+  //   return this.friendService.findOne(+id);
+  // }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateFriendDto: UpdateFriendDto) {
-    return this.friendService.update(+id, updateFriendDto);
-  }
+  // @Patch(':id')
+  // update(@Param('id') id: string, @Body() updateFriendDto: UpdateFriendDto) {
+  //   return this.friendService.update(+id, updateFriendDto);
+  // }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.friendService.remove(+id);
+  @Delete('delete')
+  remove(@Param('loggedId') loggedId: string,  @Body() username: {username : string}) {
+    return this.friendService.remove(+loggedId, username);
   }
 }

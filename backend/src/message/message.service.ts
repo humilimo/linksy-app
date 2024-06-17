@@ -18,7 +18,8 @@ export class MessageService {
       data: {
         senderId: senderId,
         conversationId: conversationId,
-        content: createMessageDto.content
+        content: createMessageDto.content,
+        createdAt: createMessageDto.createdAt
       }
     });
   }

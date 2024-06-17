@@ -9,7 +9,8 @@
     "build": "tsc -p .",
     "update": "git fetch --all && git checkout main && git pull",
     "prod": "node dist/src/index.js",
-    "test": "NODE_ENV=test jest && NODE_ENV=development",
+    "test": "NODE_ENV=test jest",
+    "posttest": "export NODE_ENV=development",
     "check-env": "node -e \"console.log(process.env.NODE_ENV)\""
   },
   "keywords": [],

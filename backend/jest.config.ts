@@ -18,6 +18,7 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1', // Mapeia caminhos para simplificar os imports
   },
   globalSetup: './jest-global-setup.ts',
+  globalTeardown: './jest-global-teardown.ts',
 };
 
 export default config;

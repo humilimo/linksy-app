@@ -27,7 +27,7 @@ export class ConversationController {
     return this.conversationService.findOne(+loggedId, +id);
   }
 
-  @Get(':id/perfil')
+  @Get(':id/profile')
   getConversationInfo(@Param('loggedId') loggedId: string, @Param('id') conversationId: string){
     return this.conversationService.getConversationInfo(+loggedId, +conversationId)
   }
@@ -38,7 +38,7 @@ export class ConversationController {
   }
 
 
-  @Delete(':id/apagar_tudo')
+  @Delete(':id/delete_all')
     removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
     return this.conversationService.removeAll(+loggedId, +conversationId);
   }

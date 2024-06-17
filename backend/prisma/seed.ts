@@ -33,24 +33,36 @@ async function main() {
     
     // Usar Para Retornar à uma Conversa Simples
     // Usar Para Pegar Detalhes de uma Conversa Simples
-    await conversationService.createSimpleConversation(1, {isGroup: false, name: null, ids: [2], picture: null, createdAt: "2024-06-15T19:43:20.589Z"}); // CONVERSATION ID 2
+    await conversationService.createSimpleConversation(1, {isGroup: false, name: null, ids: [2], picture: null}); // CONVERSATION ID 2
     await userConversationService.deleteUser(1, 2, 1);
 
     // Usar Para Pegar Detalhes de um Grupo
-    await conversationService.createGroupConversation(1, {isGroup: true, name: "Grupo com Caio", ids: [3], picture: null, createdAt: "2024-06-14T17:27:20.589Z"}); // CONVERSATION ID 3
+    await conversationService.createGroupConversation(1, {isGroup: true, name: "Grupo com Caio", ids: [3], picture: null}); // CONVERSATION ID 3
 
   // Para Testes de LUIS:
     // Usar para criar conversa
-    await conversationService.createSimpleConversation(2, {isGroup: false, name: null, ids: [4], picture: null}); // CONVERSATION ID 4
+    await conversationService.createSimpleConversation(2, {isGroup: false, name: null, ids: [3], picture: null}); // CONVERSATION ID 4
     //Usar para enviar mensagem
-    await messageService.sendMessage({content: "Oiii, Gabriel!", createdAt: '2024-06-17T00:39:23.430Z'}, 2, 4); // MESSAGE ID 8
+    await messageService.sendMessage({content: "Oiii, Mateus!", createdAt: '2024-06-17T00:39:23.430Z'}, 2, 4); // MESSAGE ID 8
     await messageService.sendMessage({content: "Tudo bem?", createdAt: '2024-06-17T00:40:23.430Z'}, 2, 4); // MESSAGE ID 9
-    await messageService.sendMessage({content: "Tudo bem simmm!", createdAt: '2024-06-17T00:41:23.430Z'}, 4, 4); // MESSAGE ID 10
-    await messageService.sendMessage({content: "E com você ?", createdAt: '2024-06-17T00:42:23.430Z'}, 4, 4); // MESSAGE ID 11
+    await messageService.sendMessage({content: "Tudo bem simmm!", createdAt: '2024-06-17T00:41:23.430Z'}, 3, 4); // MESSAGE ID 10
+    await messageService.sendMessage({content: "E com você ?", createdAt: '2024-06-17T00:42:23.430Z'}, 3, 4); // MESSAGE ID 11
 
-  // Para Testes de ____
+  // Para Testes de BIEL
+  await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [1], picture: null}); // CONVERSATION ID 5 eu e neves
+  await conversationService.createGroupConversation(4, {isGroup: true, name: "Peneira", ids: [1,2], picture: null}); // CONVERSATION ID 6 eu luis e neves
+  await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [2], picture: null}); // CONVERSATION ID 7 eu e luis
+  await userConversationService.toggleFavorite(4,7); // favorito eu e luis
 
+  await messageService.sendMessage({content: "Boa tarde Mateus!", createdAt: '2024-06-16T23:40:24.421Z'}, 4, 5); // MESSAGE ID 17
+  await messageService.sendMessage({content: "Boa, tudo bom com voce gabriel?", createdAt: '2024-06-16T23:40:47.428Z'}, 1, 5); // MESSAGE ID 18
+  await messageService.sendMessage({content: "Boa tarde grupo!", createdAt: '2024-06-16T23:49:00.321Z'}, 4, 6); // MESSAGE ID 19
+  await messageService.sendMessage({content: "Boaaaa", createdAt: '2024-06-16T23:50:04.680Z'}, 1, 6); // MESSAGE ID 20
+  await messageService.sendMessage({content: "Boa tardeee", createdAt: '2024-06-16T23:51:27.021Z'}, 2, 6); // MESSAGE ID 21
+  await messageService.sendMessage({content: "Eaaaai Luiiiss", createdAt: '2024-06-17T00:29:27.288Z'}, 4, 7); // MESSAGE ID 22
+  await messageService.sendMessage({content: "Como voces estao?", createdAt: '2024-06-17T00:29:57.933Z'}, 4, 6); // MESSAGE ID 23
 }
+
 main()
   .then(async () => {
     await prisma.$disconnect()

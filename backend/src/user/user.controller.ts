@@ -28,7 +28,7 @@ export class UserController {
   }
 
   @Get(':loggedId/profile/:id')
-  findFriend(@Param('loggedId') loggedId: string, @Param('loggedId') id: string) {
+  findFriend(@Param('loggedId') loggedId: string, @Param('id') id: string) {
     return this.userService.findFriend(+loggedId, +id);
   }
 

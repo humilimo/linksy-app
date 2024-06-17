@@ -62,6 +62,15 @@ async function main() {
   await messageService.sendMessage({content: "Eaaaai Luiiiss", createdAt: '2024-06-17T00:29:27.288Z'}, 4, 7); // MESSAGE ID 22
   await messageService.sendMessage({content: "Como voces estao?", createdAt: '2024-06-17T00:29:57.933Z'}, 4, 6); // MESSAGE ID 23
 
+  // Para Testes de Luan
+  await prisma.friend.create({
+    data: {
+      receiverId: 3,
+      requesterId: 2
+    }
+  })
+
+
   //TESTE DE CAIO
   //grupo
   await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3,4], picture: null}); // CONVERSATION ID 8

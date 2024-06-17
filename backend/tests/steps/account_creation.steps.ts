@@ -66,7 +66,7 @@ defineFeature(feature, (test) => {
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
 
-        expect(response.status).toBe(Number(status)); // Verifica se o status da resposta é 201
+        expect(response.status).toBe(Number(status));
         user = response.body;
 
       });
@@ -116,13 +116,14 @@ defineFeature(feature, (test) => {
 
         then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
 
-            expect(response.status).toBe(Number(status)); // Verifica se o status da resposta é 201
+            expect(response.status).toBe(Number(status));
     
         });
 
-        and(/^o JSON deve conter message "(.*)"$/, async (message) => {
+        and(/^o JSON deve conter message "(.*)" e error "(.*)"$/, async (message, error) => {
     
             expect(response.body.message).toEqual([message]);
+            expect(response.body.error).toEqual(error)
     
         });
   
@@ -154,13 +155,14 @@ defineFeature(feature, (test) => {
 
         then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
 
-            expect(response.status).toBe(Number(status)); // Verifica se o status da resposta é 201
+            expect(response.status).toBe(Number(status)); 
     
         });
 
-        and(/^o JSON deve conter message "(.*)"$/, async (message) => {
+        and(/^o JSON deve conter message "(.*)" e error "(.*)"$/, async (message, error) => {
     
             expect(response.body.message).toEqual([message]);
+            expect(response.body.error).toEqual(error);
     
         });
   

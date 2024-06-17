@@ -37,7 +37,7 @@ async function main() {
     await userConversationService.deleteUser(1, 2, 1);
 
     // Usar Para Pegar Detalhes de um Grupo
-    await conversationService.createGroupConversation(1, {isGroup: true, name: "Grupo com Caio", ids: [3], picture: null}); // CONVERSATION ID 3
+    await conversationService.createGroupConversation(1, {isGroup: true, name: "Grupo com Caio", ids: [3], picture: null, createdAt: "2024-06-14T17:27:20.589Z"}); // CONVERSATION ID 3
 
   // Para Testes de LUIS:
     // Usar para criar conversa

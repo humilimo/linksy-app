@@ -17,6 +17,7 @@ const config: Config = {
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1', // Mapeia caminhos para simplificar os imports
   },
+  globalSetup: './jest-global-setup.ts',
 };
 
 export default config;

@@ -1,1 +1,4 @@
-export class CreateFriendDto  {}
+export class CreateFriendDto  {
+    requesterId?: number
+    receiverId: number
+}

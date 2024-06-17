@@ -17,6 +17,11 @@ export class UserController {
     }
   }
 
+  @Post('login')
+  login(@Body() user:{ username: string, password: string}) {
+    return this.userService.login(user);
+  }
+
   @Get(':loggedId/profile')
   findOne(@Param('loggedId') loggedId: string) {
     return this.userService.findOne(+loggedId);

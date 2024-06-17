@@ -61,6 +61,10 @@ async function main() {
   await messageService.sendMessage({content: "Boa tardeee", createdAt: '2024-06-16T23:51:27.021Z'}, 2, 6); // MESSAGE ID 21
   await messageService.sendMessage({content: "Eaaaai Luiiiss", createdAt: '2024-06-17T00:29:27.288Z'}, 4, 7); // MESSAGE ID 22
   await messageService.sendMessage({content: "Como voces estao?", createdAt: '2024-06-17T00:29:57.933Z'}, 4, 6); // MESSAGE ID 23
+
+  //TESTE DE CAIO
+  //grupo
+  await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3,4], picture: null}); // CONVERSATION ID 8
 }
 
 main()

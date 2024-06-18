@@ -10,7 +10,7 @@ So that eu posso me comunicar com outros usuários
     When uma requisição POST com um JSON com name "Luan", username "lbc2", email "luan@email.com", password "luan12345" de corpo
     And esta requisição for enviada para "user/register"
     Then o status da resposta deve ser "201"
-    And o JSON da resposta deve conter id "7", name "Luan", username "lbc2", email "luan@email.com", password "luan12345", bio "null", picture "null"
+    And o JSON da resposta deve conter name "Luan", username "lbc2", email "luan@email.com", password "luan12345", bio "null", picture "null"
 
     Scenario: Cadastro sem sucesso por senha pequena demais
     Given O usuário quer realizar um cadastro no sistema

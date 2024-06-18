@@ -41,31 +41,24 @@ defineFeature(feature, (test) => {
     });
   
     test('Cadastro com sucesso', async ({ given, when, and, then }) => {
-      given('O usuário quer realizar um cadastro no sistema', async () => {
-        
-      });
+      given('O usuário quer realizar um cadastro no sistema', async () => {});
 
       when(/^uma requisição POST com um JSON com name "(.*)", username "(.*)", email "(.*)", password "(.*)" de corpo$/, async (name, username, email, password) => {
-
         mockUser = {
             name: name,
             username: username,
             email: email,
             password: password,
         };
-
       });
 
       and('esta requisição for enviada para "user/register"', async () => {
-
         response = await request(app.getHttpServer())
             .post('/user/register')
             .send(mockUser);
-
       });
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
         expect(response.status).toBe(Number(status));
         user = {
           name: response.body.name,
@@ -78,7 +71,6 @@ defineFeature(feature, (test) => {
       });
 
       and(/^o JSON da resposta deve conter name "(.*)", username "(.*)", email "(.*)", password "(.*)", bio "(.*)", picture "(.*)"$/, async (name, username, email, password, bio, picture) => {
-
         const expectedUser = {
             name: name,
             username: username,
@@ -87,90 +79,66 @@ defineFeature(feature, (test) => {
             bio: bio == "null"? null : bio,
             picture: picture == "null"? null : picture
         };
-
         expect(user).toEqual(expectedUser);
-
       });
-
     });
 
     test('Cadastro sem sucesso por senha pequena demais', async ({ given, when, and, then }) => {
         
-        given('O usuário quer realizar um cadastro no sistema', async () => {
-        
-        });
+        given('O usuário quer realizar um cadastro no sistema', async () => {});
 
         when(/^uma requisição POST com um JSON com name "(.*)", username "(.*)", email "(.*)", password "(.*)" de corpo$/, async (name, username, email, password) => {
-
             mockUser = {
                 name: name,
                 username: username,
                 email: email,
                 password: password,
             };
-    
         });
 
         and('esta requisição for enviada para "user/register"', async () => {
-
             response = await request(app.getHttpServer())
                 .post('/user/register')
                 .send(mockUser);
-    
         });
 
         then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
             expect(response.status).toBe(Number(status));
-    
         });
 
         and(/^o JSON deve conter message "(.*)" e error "(.*)"$/, async (message, error) => {
-    
             expect(response.body.message).toEqual([message]);
             expect(response.body.error).toEqual(error)
-    
         });
   
     });
 
     test('Cadastro sem sucesso por falta de username', async ({ given, when, and, then }) => {
         
-        given('O usuário quer realizar um cadastro no sistema', async () => {
-        
-        });
+        given('O usuário quer realizar um cadastro no sistema', async () => {});
 
         when(/^uma requisição POST com um JSON com name "(.*)", email "(.*)", password "(.*)" de corpo$/, async (name, email, password) => {
-
             mockUser = {
                 name: name,
                 email: email,
                 password: password,
             };
-    
         });
 
         and('esta requisição for enviada para "user/register"', async () => {
-
             response = await request(app.getHttpServer())
                 .post('/user/register')
                 .send(mockUser);
-    
         });
 
         then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
             expect(response.status).toBe(Number(status)); 
-    
         });
 
         and(/^o JSON deve conter message "(.*)" e error "(.*)"$/, async (message, error) => {
-    
             expect(response.body.message).toEqual([message]);
             expect(response.body.error).toEqual(error);
-    
         });
-  
     });
 
   });

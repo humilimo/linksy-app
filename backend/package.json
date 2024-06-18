@@ -9,7 +9,7 @@
     "build": "tsc -p .",
     "update": "git fetch --all && git checkout main && git pull",
     "prod": "node dist/src/index.js",
-    "test": "cross-env NODE_ENV=test jest",
+    "test": "cross-env NODE_ENV=test jest --runInBand --detectOpenHandles --forceExit",
     "posttest": "cross-env NODE_ENV=development",
     "check-env": "node -e \"console.log(process.env.NODE_ENV)\""
   },

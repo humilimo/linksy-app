@@ -88,11 +88,21 @@ export class UserService {
     });
   }
 
-  async login(user: {username: string, password: string}) {
+  async login(user: {username: string, password: string}) { 
+
+    var checkUsername = await this.prisma.user.findUnique({
+      select: { id: true },
+      where: { username: user.username },
+    });
+
+    if (!checkUsername) {
+      const createError = require('http-errors');
+      throw createError(401, 'Usuário não cadastrado.');
+    }
 
     var checkUser = await this.prisma.user.findUnique({
-        select: { id: true },
-        where: { username: user.username, password: user.password },
+      select: { id: true },
+      where: { username: user.username, password: user.password },
     });
 
     if (checkUser) {
@@ -101,7 +111,7 @@ export class UserService {
     }
 
     const createError = require('http-errors');
-    throw createError(401, 'Unauthorized');
+    throw createError(401, 'Senha inválida.');
   } 
 
 }

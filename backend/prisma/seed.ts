@@ -27,7 +27,6 @@ async function main() {
   });
 
   // Para Testes de MATEUS:
-
     // Usar Para Deletar Grupo Completamente
     await conversationService.createGroupConversation(1, {isGroup: true, name: "Projeto ESS - Grupo 6", ids: [2], picture: null}); // CONVERSATION ID 1
     
@@ -41,12 +40,12 @@ async function main() {
 
   // Para Testes de LUIS:
     // Usar para criar conversa
-  await conversationService.createSimpleConversation(2, {isGroup: false, name: null, ids: [3], picture: null, createdAt: "2024-06-18T04:43:54.263Z"}); // CONVERSATION ID 4
+  await conversationService.createSimpleConversation(3, {isGroup: false, name: null, ids: [5], picture: null, createdAt: "2024-06-18T04:43:54.263Z"}); // CONVERSATION ID 4
     //Usar para enviar mensagem
-    await messageService.sendMessage({content: "Oiii, Mateus!", createdAt: '2024-06-17T00:39:23.430Z'}, 2, 4); // MESSAGE ID 8
-    await messageService.sendMessage({content: "Tudo bem?", createdAt: '2024-06-17T00:40:23.430Z'}, 2, 4); // MESSAGE ID 9
-    await messageService.sendMessage({content: "Tudo bem simmm!", createdAt: '2024-06-17T00:41:23.430Z'}, 3, 4); // MESSAGE ID 10
-    await messageService.sendMessage({content: "E com você ?", createdAt: '2024-06-17T00:42:23.430Z'}, 3, 4); // MESSAGE ID 11
+    await messageService.sendMessage({content: "Oiii, Mari!", createdAt: '2024-06-17T00:39:23.430Z'}, 3, 4); // MESSAGE ID 8
+    await messageService.sendMessage({content: "Tudo bem?", createdAt: '2024-06-17T00:40:23.430Z'}, 3, 4); // MESSAGE ID 9
+    await messageService.sendMessage({content: "Tudo bem simmm!", createdAt: '2024-06-17T00:41:23.430Z'}, 5, 4); // MESSAGE ID 10
+    await messageService.sendMessage({content: "E com você ?", createdAt: '2024-06-17T00:42:23.430Z'}, 5, 4); // MESSAGE ID 11
 
   // Para Testes de BIEL
     await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [1], picture: null,createdAt:"2024-06-17T17:04:24.372Z"}); // CONVERSATION ID 5 eu e neves
@@ -69,8 +68,6 @@ async function main() {
       requesterId: 2
     }
   })
-
-
   //TESTE DE CAIO
   //grupo
   await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3], picture: null}); // CONVERSATION ID 8

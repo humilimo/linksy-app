@@ -140,7 +140,7 @@ defineFeature(feature, (test) => {
           name: name == 'null' ? null : name,
           userPicture: userPicture == 'null' ? null : userPicture
         }
-        const message = response.body.messages.find((msg) => msg.senderInfo.name === name);
+        const message = await response.body.messages.find((msg) => msg.senderInfo.name === name);
         expect(message).toBeTruthy();
         expect(message.senderInfo.name).toBe(mockInfo.name);
         expect(message.senderInfo.userPicture).toBe(mockInfo.userPicture);

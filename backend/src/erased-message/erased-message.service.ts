@@ -1,10 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateErasedMessageDto } from './dto/create-erased-message.dto';
 import { UpdateErasedMessageDto } from './dto/update-erased-message.dto';
 import { PrismaService } from '../prisma.service';
-import { CreateMessageDto } from 'src/message/dto/create-message.dto';
-import { MessageService } from 'src/message/message.service';
-import { ConversationService } from 'src/conversation/conversation.service';
+import { MessageService } from '../message/message.service';
+import { ConversationService } from '../conversation/conversation.service';
 
 @Injectable()
 export class ErasedMessageService {

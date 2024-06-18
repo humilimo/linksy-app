@@ -33,9 +33,11 @@ export class UserService {
   async findFriend(loggedId: number, id: number) {
     return this.prisma.user.findUnique({
       where: { 
-        id: loggedId,
-        friends:{
-          some: {receiverId: id}
+        id: id,
+        friendOf:{
+          some: {
+            requesterId: loggedId
+          }
         }
       },
       select: {

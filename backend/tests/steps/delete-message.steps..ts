@@ -6,7 +6,7 @@ import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { ErasedMessageService } from '../../src/erased-message/erased-message.service';
 
-const feature = loadFeature('tests/features/account_creation.feature');
+const feature = loadFeature('tests/features/delete-message.feature');
 
 defineFeature(feature, (test) => {
   let prismaService: PrismaService;
@@ -33,8 +33,8 @@ defineFeature(feature, (test) => {
     await app.close();
   });
 
-  test('Mensagem excluída para todos (chat em grupo)', ({ given, then, when, and }) => {
-    given(/^o grupo "(.*)" está na lista de conversas de "paçoca" com userId "(.*)"$/, async (chatId, userId) => {
+  test('Mensagem excluída para todos(chat em grupo)', ({ given, then, when, and }) => {
+    given(/^o grupo "grupoMari" de id "(.*)"  está na lista de conversa de Mari de id"(.*)"$/, async (chatId, userId) => {
       const userConversation = await prismaService.userConversation.findUnique({
         where: {
           userId_conversationId: {
@@ -46,28 +46,33 @@ defineFeature(feature, (test) => {
       expect(userConversation).not.toBeNull();
     });
 
-    and(/^existe uma mensagem de id "(.*)"$/, async (messageId) => {
-      const msg = await prismaService.message.findUnique({
-        where: { id: Number(messageId) },
+    and(/^“grupoMari” de id "(.*)"está na lista de conversa de "Lucas" de id "(.*)"$/, async (chatId, userId) => {
+      const userConversation = await prismaService.userConversation.findUnique({
+        where: {
+          userId_conversationId: {
+            userId: Number(userId),
+            conversationId: Number(chatId),
+          },
+        },
       });
-      expect(msg).not.toBeNull();
+      expect(userConversation).not.toBeNull();
     });
 
-    when(/^"(.*)"  seleciona "excluir para todos" na mensagem de id "(.*)" na conversa de id "(.*)"$/, async (userId,messageId, chatId) => {
+    when(/^"Mari" de id"(.*)" seleciona “excluir para todos” na mensagem de id "(.*)" na coversa de id "(.*)"$/, async (userId,messageId, chatId) => {
       response = await request(app.getHttpServer())
-        .patch(`/user/${userId}/conversation/${chatId}/apagarMensagemParaTodos/${messageId}`)
+        .delete(`/user/${userId}/conversation/${chatId}/deleteForAll/${messageId}`)
         .send();
       expect(response.status).toBe(200);
     });
 
-    then(/^a mensagem é excluída para todos do grupo "(.*)"$/, async (chatId) => {
-      const erasedMessages = await prismaService.erasedMessages.findMany({
+    then(/^a mensagem de id "(.*)" é excluída  para todos do grupo “grupoMari”$/, async (messageId) => {
+      const erasedMessage = await prismaService.message.findUnique({
         where: {
-          chatId: Number(chatId),
+          id: Number(messageId),
         },
       });
-      expect(erasedMessages.length).toBeGreaterThan(0);
-      expect(erasedMessages.find(msg => msg.messageId === Number(response.body.messageId))).toBeUndefined();
+      expect(erasedMessage).toBeNull();
+      
     });
   });
 });

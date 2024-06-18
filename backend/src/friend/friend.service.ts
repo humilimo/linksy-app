@@ -15,12 +15,18 @@ export class FriendService {
       where:{ username: username.username },
     })
 
-    return await this.prisma.friend.create({
-      data: {
-        requesterId: loggedId,
-        receiverId: user.id,
-      },
-    });
+    if (user) {
+      return await this.prisma.friend.create({
+        data: {
+          requesterId: loggedId,
+          receiverId: user.id,
+        },
+      });
+    }
+
+    const createError = require('http-errors');
+    throw createError(401, 'Usuário inválido.');
+
   }
   
   async findAll(loggedId: number) {
@@ -42,7 +48,11 @@ export class FriendService {
       },
     });
 
-    return friendsOfLoggedUser.map(friend => friend.receiver)
+    var aux = { friendList : []}
+
+    friendsOfLoggedUser.map(friend => aux.friendList.push(friend.receiver))
+
+    return aux
   }
 
   // findOne(id: number) {

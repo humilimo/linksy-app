@@ -4,11 +4,13 @@ import { UserService } from '../src/user/user.service'
 import { ConversationService } from '../src/conversation/conversation.service'
 import { UserConversationService } from '../src/user-conversation/user-conversation.service'
 import { MessageService } from '../src/message/message.service'
+import { FriendService } from '../src/friend/friend.service'
 
 const prisma = new PrismaClient();
 const prismaService = new PrismaService();
 const userService = new UserService(prismaService);
 const userConversationService = new UserConversationService(prismaService);
+const friendService = new FriendService(prismaService);
 
 const messageService = new MessageService(prismaService, null);
 const conversationService = new ConversationService(prismaService, userConversationService, messageService);
@@ -71,7 +73,15 @@ async function main() {
   //TESTE DE CAIO
   //grupo
   await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3], picture: null}); // CONVERSATION ID 8
+
+
+   //TESTES DE LUCAS 
+   await userService.login({username: "ljat", password: "lucas12345"});
+   await friendService.create(6, {username: "lfoc"});
+   await friendService.create(6, {username: "man2"});
+   await friendService.create(6, {username: "crc"});
 }
+
 
 main()
   .then(async () => {

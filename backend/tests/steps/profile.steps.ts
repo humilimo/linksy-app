@@ -44,32 +44,25 @@ defineFeature(feature, (test) => {
     test('Edição de nome com sucesso', async ({ given, when, and, then }) => {
       given(/^existe um user com id "(.*)"$/, async (id) => {
         userId = id
-
       });
 
       when(/^uma requisição PATCH com um JSON com name "(.*)" de corpo$/, async (name) => {
-
         mockUser = {
             name: name
         };
-
       });
 
       and('esta requisição for enviada para "user/2/profile"', async () => {
-
         response = await request(app.getHttpServer())
             .patch(`/user/${userId}/profile`)
             .send(mockUser);
-
       });
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
         expect(response.status).toBe(Number(status));
       });
 
       and(/^o JSON da resposta deve conter id "(.*)", name "(.*)", username "(.*)", email "(.*)", password "(.*)", bio "(.*)" e picture "(.*)"$/, async (id, name, username, email, password, bio, picture) => {
-
         let user = {
           "id": Number(id),
           "name": name,
@@ -81,7 +74,6 @@ defineFeature(feature, (test) => {
         }
 
         expect(response.body).toEqual(user)
-
       });
 
     });
@@ -90,35 +82,27 @@ defineFeature(feature, (test) => {
     test('Edição de email sem sucesso', async ({ given, when, and, then }) => {
       given(/^existe um user com id "(.*)"$/, async (id) => {
         userId = id
-
       });
 
       when(/^uma requisição PATCH com um JSON com email "(.*)" de corpo$/, async (email) => {
-
         mockUser = {
             email: email
         };
-
       });
 
       and('esta requisição for enviada para "user/2/profile"', async () => {
-
         response = await request(app.getHttpServer())
             .patch(`/user/${userId}/profile`)
             .send(mockUser);
-
       });
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
         expect(response.status).toBe(Number(status));
       });
 
       and(/^o JSON deve conter message "(.*)" e error "(.*)"$/, async (message, error) => {
-    
         expect(response.body.message).toEqual(message);
         expect(response.body.error).toEqual(error)
-
       });
 
     });
@@ -127,22 +111,18 @@ defineFeature(feature, (test) => {
     test('Visualização do próprio perfil', async ({ given, when, and, then }) => {
       given(/^existe um user com id "(.*)"$/, async (id) => {
         userId = id
-
       });
 
       when('uma requisição GET foi enviada para "user/3/profile"', async () => {
-
         response = await request(app.getHttpServer())
             .get(`/user/${userId}/profile`)
       });
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
         expect(response.status).toBe(Number(status));
       });
 
       and(/^o JSON da resposta deve conter id "(.*)", name "(.*)", username "(.*)", bio "(.*)" e picture "(.*)"$/, async (id, name, username, bio, picture) => {
-
         let user = {
           "id": Number(id),
           "name": name,
@@ -164,18 +144,15 @@ defineFeature(feature, (test) => {
       });
 
       when('uma requisição GET foi enviada para "user/2/profile/3"', async () => {
-
         response = await request(app.getHttpServer())
             .get(`/user/${userId}/profile/${friendId}`)
       });
 
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
-
         expect(response.status).toBe(Number(status));
       });
 
       and(/^o JSON da resposta deve conter id "(.*)", name "(.*)", username "(.*)", bio "(.*)" e picture "(.*)"$/, async (id, name, username, bio, picture) => {
-
         let user = {
           "id": Number(id),
           "name": name,
@@ -185,7 +162,6 @@ defineFeature(feature, (test) => {
         }
 
         expect(response.body).toEqual(user)
-
       });
 
     });

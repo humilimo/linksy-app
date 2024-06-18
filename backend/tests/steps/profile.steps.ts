@@ -5,6 +5,7 @@ import { loadFeature, defineFeature } from 'jest-cucumber';
 import { UserController } from '../../src/user/user.controller';
 import * as request from 'supertest';
 import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { execSync } from 'child_process';
 
 const feature = loadFeature('tests/features/profile.feature');
 
@@ -39,6 +40,7 @@ defineFeature(feature, (test) => {
     afterAll(async () => {
       await testingModule.close();
       await app.close();
+      await execSync('npx prisma migrate reset --schema=prisma/schema.test.prisma --force');
     });
   
     test('Edição de nome com sucesso', async ({ given, when, and, then }) => {

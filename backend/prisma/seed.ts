@@ -41,7 +41,7 @@ async function main() {
 
   // Para Testes de LUIS:
     // Usar para criar conversa
-    await conversationService.createSimpleConversation(2, {isGroup: false, name: null, ids: [3], picture: null}); // CONVERSATION ID 4
+  await conversationService.createSimpleConversation(2, {isGroup: false, name: null, ids: [3], picture: null, createdAt: "2024-06-18T04:43:54.263Z"}); // CONVERSATION ID 4
     //Usar para enviar mensagem
     await messageService.sendMessage({content: "Oiii, Mateus!", createdAt: '2024-06-17T00:39:23.430Z'}, 2, 4); // MESSAGE ID 8
     await messageService.sendMessage({content: "Tudo bem?", createdAt: '2024-06-17T00:40:23.430Z'}, 2, 4); // MESSAGE ID 9

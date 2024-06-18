@@ -49,9 +49,9 @@ async function main() {
     await messageService.sendMessage({content: "E com você ?", createdAt: '2024-06-17T00:42:23.430Z'}, 3, 4); // MESSAGE ID 11
 
   // Para Testes de BIEL
-    await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [1], picture: null}); // CONVERSATION ID 5 eu e neves
-    await conversationService.createGroupConversation(4, {isGroup: true, name: "Peneira", ids: [1,2], picture: null}); // CONVERSATION ID 6 eu luis e neves
-    await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [2], picture: null}); // CONVERSATION ID 7 eu e luis
+    await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [1], picture: null,createdAt:"2024-06-17T17:04:24.372Z"}); // CONVERSATION ID 5 eu e neves
+    await conversationService.createGroupConversation(4, {isGroup: true, name: "Peneira", ids: [1,2], picture: null,createdAt:"2024-06-17T17:04:24.338Z"}); // CONVERSATION ID 6 eu luis e neves
+    await conversationService.createSimpleConversation(4, {isGroup: false, name: null, ids: [2], picture: null,createdAt:"2024-06-17T17:04:24.321Z"}); // CONVERSATION ID 7 eu e luis
     await userConversationService.toggleFavorite(4,7); // favorito eu e luis
 
     await messageService.sendMessage({content: "Boa tarde Mateus!", createdAt: '2024-06-16T23:40:24.421Z'}, 4, 5); // MESSAGE ID 17
@@ -73,7 +73,7 @@ async function main() {
 
   //TESTE DE CAIO
   //grupo
-  await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3,4], picture: null}); // CONVERSATION ID 8
+  await conversationService.createGroupConversation(1, {isGroup: true, name: "grupo ess", ids: [2,3], picture: null}); // CONVERSATION ID 8
 }
 
 main()

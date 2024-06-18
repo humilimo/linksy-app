@@ -49,7 +49,7 @@ Scenario: Lista de conversas recentes
     When uma requisição "GET" for enviada para "/user/4/conversation"
     Then o status da resposta deve ser "200"
     And o JSON da resposta deve conter um array conversas
-    And o elemento de index "0" é uma conversa que tem id "7" e name "null" e picture "null" e isGroup "false" e createdAt "2024-06-17T17:04:24.372Z" e favorited "true"
+    And o elemento de index "0" é uma conversa que tem id "7" e name "null" e picture "null" e isGroup "false" e createdAt "2024-06-17T17:04:24.321Z" e favorited "true"
     And o elemento de index "1" é uma conversa que tem id "6" e name "Peneira" e picture "null" e isGroup "true" e createdAt "2024-06-17T17:04:24.338Z" e favorited "false"
-    And o elemento de index "2" é uma conversa que tem id "5" e name "null" e picture "null" e isGroup "false" e createdAt "2024-06-17T17:04:24.321Z" e favorited "false"
+    And o elemento de index "2" é uma conversa que tem id "5" e name "null" e picture "null" e isGroup "false" e createdAt "2024-06-17T17:04:24.372Z" e favorited "false"
     

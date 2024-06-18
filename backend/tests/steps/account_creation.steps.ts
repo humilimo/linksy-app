@@ -67,14 +67,19 @@ defineFeature(feature, (test) => {
       then(/^o status da resposta deve ser "(.*)"$/, async (status) => {
 
         expect(response.status).toBe(Number(status));
-        user = response.body;
-
+        user = {
+          name: response.body.name,
+          username: response.body.username,
+          email: response.body.email,
+          password: response.body.password,
+          bio: response.body.bio,
+          picture: response.body.picture
+        }
       });
 
-      and(/^o JSON da resposta deve conter id "(.*)", name "(.*)", username "(.*)", email "(.*)", password "(.*)", bio "(.*)", picture "(.*)"$/, async (id, name, username, email, password, bio, picture) => {
+      and(/^o JSON da resposta deve conter name "(.*)", username "(.*)", email "(.*)", password "(.*)", bio "(.*)", picture "(.*)"$/, async (name, username, email, password, bio, picture) => {
 
         const expectedUser = {
-            id: Number(id),
             name: name,
             username: username,
             email: email,

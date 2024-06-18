@@ -6,7 +6,7 @@ Feature: remove user from a group
         And existe uma conversation de id "8"
         And existe um user conversation de idUser "1", idConversation "8" e owner "true"
         And existe um user conversation de idUser "2", idConversation "8", owner "false" e leftConversation "false"
-        When uma requisição "PATCH" for enviada para "/user/1/conversation/1/remover/2"
+        When uma requisição "PATCH" for enviada para "/user/1/conversation/8/remover/2"
         Then o status de resposta deve ser "200"
         And o JSON da resposta deve conter o content "'lfoc' foi removido do grupo."
     

@@ -6,7 +6,7 @@ Feature: add user to a group
         And existe uma conversation de id "8"
         And existe um user conversation de idUser "1", idConversation "8" e owner "true"
         And não existe um user conversation de idUser "5", idConversation "8" e leftConversation "false"
-        When uma requisição "POST" for enviada para "/user/1/conversation/1/adicionar" com o corpo sendo um JSON com ids "5"
+        When uma requisição "POST" for enviada para "/user/1/conversation/8/adicionar" com o corpo sendo um JSON com ids "5"
         Then o status de resposta deve ser "201"
         And a resposta deve conter a lista de string com o elemento "'mms11' foi adicionado ao grupo."
     

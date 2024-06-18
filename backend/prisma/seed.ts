@@ -80,6 +80,11 @@ async function main() {
    await friendService.create(6, {username: "lfoc"});
    await friendService.create(6, {username: "man2"});
    await friendService.create(6, {username: "crc"});
+
+   //teste Mari
+  await conversationService.createGroupConversation(5, {isGroup: true, name: "grupoMari", ids: [6], picture: null}); // CONVERSATION ID 9  
+  await messageService.sendMessage({content: "vou ser apagada !" }, 5, 9); //messaID =29
+
 }
 
 

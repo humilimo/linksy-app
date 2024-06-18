@@ -3,14 +3,28 @@ import { CreateErasedMessageDto } from './dto/create-erased-message.dto';
 import { UpdateErasedMessageDto } from './dto/update-erased-message.dto';
 import { PrismaService } from '../prisma.service';
 import { CreateMessageDto } from 'src/message/dto/create-message.dto';
+import { MessageService } from 'src/message/message.service';
+import { ConversationService } from 'src/conversation/conversation.service';
 
 @Injectable()
 export class ErasedMessageService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService, 
+    private messageService: MessageService,
+    private conversationService: ConversationService,
+    
+  ) {}
 
-  async create(createErasedMessageDto: CreateErasedMessageDto) {
+  async create(userId: number, chatId: number, messageId: number) {
+    //return {userId, chatId, messageId};
     return this.prisma.erasedMessages.create({
-      data: createErasedMessageDto,
+      data: {  
+        
+         erasedById: userId,
+         conversationId: chatId,
+         messageId: messageId,
+        
+      },
+      
     });
   }
 
@@ -18,22 +32,18 @@ export class ErasedMessageService {
 
   async update(id: number, updateErasedMessageDto: UpdateErasedMessageDto) {
     return this.prisma.erasedMessages.update({
-      where: { userId: id },
+      where: {  
+        erasedById_conversationId_messageId:{
+         erasedById: updateErasedMessageDto.userId,
+         conversationId: updateErasedMessageDto.chatId,
+         messageId: updateErasedMessageDto.messageId,
+        }
+      },
       data: updateErasedMessageDto,
     });
   }
 
-  async remove(userId: number, chatId: number, messageId: number) {
-    return this.prisma.erasedMessages.delete({
-      where: { 
-        userId: userId,
-        chatId: chatId,
-        messageId: messageId,
-
-      },
-    });
-  }
-
+  
   async findAllMessageFromConversation(userId: number, chatId: number) {//retorna um array de mensagens na conversa na interface user/chat
     const userConversation = await this.prisma.userConversation.findUnique({
       where: {
@@ -73,53 +83,10 @@ export class ErasedMessageService {
 
 
   async removeMessageFromConversationToMe(userId: number, messageId: number, chatId: number) {
-    const messageList = await this.findAllMessageFromConversation(userId, chatId);
-    if (!messageList) {
-      throw new Error('No messages to be deleted');
-    }
   
-    const userConversation = await this.prisma.userConversation.findUnique({
-      where: {
-        userId_conversationId: {
-          userId: userId,
-          conversationId: chatId,
-        },
-      },
-      include: {
-        Message: true, 
-      },
-    });
-  
-    if (!userConversation) {
-      throw new Error('No conversation found');
-    }
-  
-    // Remove the message from the message list
-    const updatedMessageList = messageList.filter(message => message.id !== messageId);
-  
-    // Update the user conversation with the new message list
-    await this.prisma.userConversation.update({
-      where: {
-        userId_conversationId: {
-          userId: userId,
-          conversationId: chatId,
-        },
-      },
-      data: {
-        Message: {
-          set: updatedMessageList.map(message => ({ id: message.id })),
-        },
-      },
-    });
   
     // Add the message to the erasedMessages table
-    await this.prisma.erasedMessages.create({
-      data: {
-        userId: userId,
-        chatId: chatId,
-        messageId: messageId,
-      },
-    });
+    return await this.create(userId, chatId,messageId);
   }
 
   async getparticipantsIds(conversationId: number) {
@@ -148,13 +115,15 @@ export class ErasedMessageService {
   }
 
   async removeMessageFromConversationToAll( messageId: number, chatId: number) {
-    const ids = await this.getparticipantsIds(chatId);
+    // //return {chatId, messageId};
+    //  let ids = await this.getparticipantsIds(chatId);
+   
+    // // Add the message to the erasedMessages table
+    // for(let i = 0; i < ids.length; i++){
+    //   if()
+    //   this.create(ids[i], chatId,messageId);
+    // }
+    return await this.messageService.remove(messageId);
   
-    for (let i = 0; i < ids.length; i++) {
-      await this.removeMessageFromConversationToMe(ids[i], messageId, chatId);
-    }
-  }
-  async findAll(){
-    return this.prisma.erasedMessages.findMany();
-  }
+}
 }

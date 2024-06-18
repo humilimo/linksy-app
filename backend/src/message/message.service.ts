@@ -66,7 +66,7 @@ export class MessageService {
   }
 
   async remove(id: number) {
-    return this.prisma.message.delete({
+    return await this.prisma.message.delete({
       where: { id },
     });
   }

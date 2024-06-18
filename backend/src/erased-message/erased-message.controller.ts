@@ -3,32 +3,27 @@ import { ErasedMessageService } from './erased-message.service';
 import { CreateErasedMessageDto } from './dto/create-erased-message.dto';
 import { UpdateErasedMessageDto } from './dto/update-erased-message.dto';
 
-@Controller('erased-message')
+@Controller('user/:loggedId/conversation/:conversationId')
 export class ErasedMessageController {
   constructor(private readonly erasedMessageService: ErasedMessageService) {}
 
-  @Post()
-  create(@Body() createErasedMessageDto: CreateErasedMessageDto) {
-    return this.erasedMessageService.create(createErasedMessageDto);
+  
+
+  @Post('deleteForMe/:messageId')
+  async eraseMessageToMe(
+    @Param('loggedId') loggedId: string,
+    @Param('conversationId') conversationId: string,
+    @Param('messageId') messageId: string,
+  ) {
+    return this.erasedMessageService.removeMessageFromConversationToMe(+loggedId,+messageId, +conversationId);
   }
 
-  @Get()
-  findAll() {
-    return this.erasedMessageService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.erasedMessageService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateErasedMessageDto: UpdateErasedMessageDto) {
-    return this.erasedMessageService.update(+id, updateErasedMessageDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.erasedMessageService.remove(+id);
+  @Delete('deleteForAll/:messageId')
+  async eraseMessageToAll(
+    @Param('conversationId') conversationId: string,
+    @Param('messageId') messageId: string,
+  ) {
+    //const userIds = await this.erasedMessageService.getparticipantsIds(+conversationId);
+    return this.erasedMessageService.removeMessageFromConversationToAll( +messageId, +conversationId);
   }
 }

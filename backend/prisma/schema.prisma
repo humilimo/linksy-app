@@ -80,7 +80,7 @@ model ErasedMessages {
   messageId          Int
 
   userConversation   UserConversation @relation(fields: [erasedById, conversationId], references: [userId, conversationId], onDelete: Cascade)
-  message            Message          @relation(fields: [messageId], references: [id])
+  message            Message          @relation(fields: [messageId], references: [id], onDelete: Cascade)
 
   @@id([erasedById, conversationId, messageId])
 }

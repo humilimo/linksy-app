@@ -84,6 +84,7 @@ async function main() {
    //teste Mari
   await conversationService.createGroupConversation(5, {isGroup: true, name: "grupoMari", ids: [6], picture: null}); // CONVERSATION ID 9  
   await messageService.sendMessage({content: "vou ser apagada !" }, 5, 9); //messaID =29
+  await messageService.sendMessage({content: "vou ser apagada apenas para mari!" }, 5, 9); //messaID =29
 
 }
 

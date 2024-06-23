@@ -1,4 +1,4 @@
-Feature: Get Conversation Messages
+Feature: Send Messages in conversations
 
   Scenario: Enviar mensagens em conversas
     Given existe um user com id "3", username "crc"

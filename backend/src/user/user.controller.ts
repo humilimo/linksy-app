@@ -10,10 +10,14 @@ export class UserController {
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     try{
+
       return this.userService.create(createUserDto);
+
     }
     catch (error) {
+
       throw new BadRequestException(error.message);
+      
     }
   }
 

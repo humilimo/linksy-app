@@ -1,4 +1,4 @@
-import { Routes, BrowserRouter, Route } from "react-router-dom";
+import { Routes, BrowserRouter } from "react-router-dom";
 export function Router() {
     return (
       <BrowserRouter>

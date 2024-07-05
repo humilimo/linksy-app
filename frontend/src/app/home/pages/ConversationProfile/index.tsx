@@ -102,10 +102,10 @@ const ConversationProfileMenu = () => {
               <p className="text-2xl text-center font-bold py-6">{conversation.name}</p>
             </div>
             
-            <div className='ps-8 pb-2 flex justify-between'>
+            <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 me-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
                   Adicionar
                 </button>
               ) : null}
@@ -130,7 +130,11 @@ const ConversationProfileMenu = () => {
                       <p className='pe-4'>({participant.username})</p>
                     </div>
                     {index == 0 ? (
-                      <p className='justify-end text-gray-500'>Dono</p>
+                      <p className='justify-end pe-5 text-gray-500'>Dono</p>
+                    ) : owner ? (
+                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button">
+                        Remover
+                      </button>
                     ) : null}
                   </li>
                 ))}
@@ -139,11 +143,11 @@ const ConversationProfileMenu = () => {
             
             <div className='pb-[50px] pt-6 flex justify-end'>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 me-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={() => setShowDeleteGroupModal(true)}>
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowDeleteGroupModal(true)}>
                   Deletar Grupo
                 </button>
               ) : (
-                <button className="text-center text-white py-2 px-5 me-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
                 Sair do Grupo
               </button>
               )}
@@ -223,7 +227,7 @@ const ConversationProfileMenu = () => {
             </div>
 
             <div className='pb-[50px] pt-6 flex justify-end'>
-              <button className="text-center text-white py-2 px-5 me-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" >
+              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" >
                 Excluir Conversa
               </button>
             </div>

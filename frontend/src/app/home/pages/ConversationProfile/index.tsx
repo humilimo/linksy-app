@@ -6,6 +6,7 @@ import {ConversationProfileProps, UserProps} from '../../../../components/Conver
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
+
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ const ConversationProfileMenu = () => {
   const [participants, setParticipants] = useState<ConversationProfileProps["participants"] | null>(null);
   
   const [user, setUser] = useState<UserProps | null>(null);
+  const [friendList, setFriendList] = useState<UserProps[] | null>(null);
+  const [showAddUsersModal, setShowAddUsersModal] = useState(false);
+  const [idList, setIdList] = useState<Number[]>([]);
 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
   const [groupName, setGroupName] = React.useState<string | null>(null);
@@ -34,6 +38,19 @@ const ConversationProfileMenu = () => {
       }
       else{
         setUser(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchFriendList = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:3002/user/${loggedId}/friend/all`
+      );
+      if (response.data.friendList){
+        setFriendList(response.data.friendList.filter(friend => !participants?.map(p => p.id).includes(friend.id)));
       }
     } catch (error) {
       console.log(error);
@@ -61,6 +78,21 @@ const ConversationProfileMenu = () => {
       console.log(error);
     }
 
+  }
+
+  const submitAddUsers = async () =>{
+    try {
+      const response = await axios.post(
+        `http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/adicionar`, {ids: idList}
+      );
+      window.location.reload();
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const handleCheckBox = async (id) =>{
+    setIdList(idList.includes(id) ? idList.filter(i => i != id) : idList.concat(id));
   }
 
   return (
@@ -105,9 +137,68 @@ const ConversationProfileMenu = () => {
             <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => {setShowAddUsersModal(true); fetchFriendList()}}>
                   Adicionar
                 </button>
+              ) : null}
+
+              {showAddUsersModal ? (
+                <>
+                <div className="justify-center items-center flex fixed inset-0 z-50 outline-none focus:outline-none h-full">
+                  <div className="relative w-auto my-6 mx-auto max-w-3xl h-[calc(100%-1rem)]">
+                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none max-h-[100%]">
+                      {/* HEADER */}
+                      <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
+                        <h3 className="text-3xl font-semibold">
+                          Adicionar usuários
+                        </h3>
+                      </div>
+                      {/* BODY */}
+                      <div className="relative p-6 overflow-y-auto">
+                        <ul className='lista'>
+                          {friendList?.map(friend => (
+                            <li key={friend.id} className="text-black mb-2 flex items-center justify-between">
+                              <div className='flex items-center'>
+                                <div className='relative pe-4'>
+                                  {friend.picture ? (
+                                    <img src={friend.picture} alt={friend.name} className="w-10 h-10 rounded-full"/>
+                                  ) : (
+                                    <div className='relative'>
+                                      <BsCircle className="w-12 h-12"/>
+                                      <BsPeopleFill className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
+                                    </div>
+                                  )}
+                                </div>
+                                <p className='pe-4'>{friend.name}</p>
+                                <p className='pe-4'>({friend.username})</p>
+                              </div>
+                              <input
+                                type="checkbox"
+                                onChange={() => handleCheckBox(friend.id)}
+                                className="form-checkbox h-6 w-6 text-primary border-2 border-gray-300 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+                              />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                      {/* FOOTER */}
+                      <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
+                        <button className="bg-gray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-gray-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" 
+                        onClick={() => {
+                          setShowAddUsersModal(false);
+                          setIdList([]);
+                        }}>
+                          Cancelar
+                        </button>
+                        <button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" onClick={() => submitAddUsers()}>
+                          Confirmar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+              </>
               ) : null}
             </div>
 

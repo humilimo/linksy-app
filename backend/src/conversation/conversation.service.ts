@@ -258,7 +258,8 @@ export class ConversationService {
           conversationId: conversationId,
           userId: {
             not: 0 //ghost-user Id
-          }
+          },
+          leftConversation: false
         },
         select:{
           user:{

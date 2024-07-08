@@ -39,7 +39,7 @@ export class ConversationController {
 
 
   @Delete(':id/delete_all')
-    removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string) {
-    return this.conversationService.removeAll(+loggedId, +conversationId);
+    removeAll(@Param('loggedId') loggedId: string, @Param('id') conversationId: string, @Body() request: {groupName: string}) {
+    return this.conversationService.removeAll(+loggedId, +conversationId, request.groupName);
   }
 }

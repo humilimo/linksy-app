@@ -21,7 +21,6 @@ const ConversationProfileMenu = () => {
   const [conversation, setConversation] = useState<ConversationProps | null>(null);
   const [participants, setParticipants] = useState<ParticipantProps[] | null>(null);
   
-  const [friendList, setFriendList] = useState<UserProps[] | null>(null);
   const [showAddUsersModal, setShowAddUsersModal] = useState(false);
   const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
   const [deleteParticipant, setDeleteParticipant] = useState<ParticipantProps | null>(null);
@@ -54,21 +53,6 @@ const ConversationProfileMenu = () => {
   useEffect(() => {
     fetchConversationProfileData();
   }, [loggedId, conversationId]);
-
-  const fetchFriendList = async () => {
-    await axios
-      .get(
-        `http://127.0.0.1:3002/user/${loggedId}/friend/all`
-      )
-      .then(response => {
-        if (response.data.friendList){
-          setFriendList(response.data.friendList.filter(friend => !participants?.map(p => p.id).includes(friend.id)));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
 
   return (
     <div className="flex justify-end items-center p-4 bg-white border border-gray-300">
@@ -114,13 +98,13 @@ const ConversationProfileMenu = () => {
             <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => {setShowAddUsersModal(true); fetchFriendList()}}>
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowAddUsersModal(true)}>
                   Adicionar
                 </button>
               ) : null}
 
               {showAddUsersModal ? (
-                <AddParticipantToGroupModal loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal}  friendList={friendList} path={null}/>
+                <AddParticipantToGroupModal loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal} participants={participants} path={null}/>
               ) : null}
             </div>
           {/* PARTICIPANTS LIST */}

@@ -1,12 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
-
+import {FriendProps} from "../FriendsList/FriendsListModel"
 function AddParticipantToGroupModal(props) {
   const navigate = useNavigate();
 
   const [idList, setIdList] = useState<Number[]>([]);
+  const [friendList, setFriendList] = useState<FriendProps[] | null>(null);
+
+  const fetchFriendListData = async () => {
+    await axios
+      .get(
+        `http://127.0.0.1:3002/user/${props.loggedId}/friend/all`
+      )
+      .then(response => {
+        if (response.data.friendList){
+          setFriendList(response.data.friendList.filter(friend => !props.participants.map(p => p.id).includes(friend.id)));
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  useEffect(() => {
+    fetchFriendListData();
+  }, [props.loggedId, props.conversationId]);
 
   const handleCheckBox = async (id) =>{
     setIdList(idList.includes(id) ? idList.filter(i => i != id) : idList.concat(id));
@@ -45,7 +65,7 @@ function AddParticipantToGroupModal(props) {
           {/* BODY */}
           <div className="relative p-6 overflow-y-auto">
             <ul className='lista'>
-              {props.friendList?.map(friend => (
+              {friendList?.map(friend => (
                 <li key={friend.id} className="text-black mb-2 flex items-center justify-between">
                   <div className='flex items-center'>
                     <div className='relative pe-4'>

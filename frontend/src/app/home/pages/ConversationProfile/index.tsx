@@ -5,6 +5,7 @@ import axios from 'axios';
 import {ConversationProfileProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
 import AddUserConversationModal from '../../../../components/ConversationProfile/AddUserConversation'
 import DeleteUserConversationModal from '../../../../components/ConversationProfile/DeleteUserConversation'
+import LeaveConversationModal from '../../../../components/ConversationProfile/leaveConversation'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +26,7 @@ const ConversationProfileMenu = () => {
   const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
   const [deleteId, setDeleteId] = useState<Number>(0);
   const [deleteName, setDeleteName] = useState<String>();
+  const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
   const [groupName, setGroupName] = React.useState<string | null>(null);
@@ -175,10 +177,14 @@ const ConversationProfileMenu = () => {
                   Deletar Grupo
                 </button>
               ) : (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
                 Sair do Grupo
               </button>
               )}
+
+              {showLeaveConversationModal ? (
+                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+              ) : null}
 
               {showDeleteGroupModal ? (
               <>

@@ -3,7 +3,8 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import {ConversationProfileProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
-import AddUserConversationModal from '../../../../components/AddUserConversation/AddUserConversation'
+import AddUserConversationModal from '../../../../components/ConversationProfile/AddUserConversation'
+import DeleteUserConversationModal from '../../../../components/ConversationProfile/DeleteUserConversation'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +22,9 @@ const ConversationProfileMenu = () => {
   const [user, setUser] = useState<UserProps | null>(null);
   const [friendList, setFriendList] = useState<UserProps[] | null>(null);
   const [showAddUsersModal, setShowAddUsersModal] = useState(false);
+  const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<Number>(0);
+  const [deleteName, setDeleteName] = useState<String>();
 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
   const [groupName, setGroupName] = React.useState<string | null>(null);
@@ -153,9 +157,12 @@ const ConversationProfileMenu = () => {
                     {index == 0 ? (
                       <p className='justify-end pe-5 text-gray-500'>Dono</p>
                     ) : owner ? (
-                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button">
+                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteId(participant.id); setDeleteName(participant.name)}}>
                         Remover
                       </button>
+                    ) : null}
+                    {showDeleteUsersModal ? (
+                      <DeleteUserConversationModal setShowDeleteUsersModal={setShowDeleteUsersModal} name={deleteName} loggedId={loggedId} conversationId={conversationId} deleteId={deleteId}/>
                     ) : null}
                   </li>
                 ))}

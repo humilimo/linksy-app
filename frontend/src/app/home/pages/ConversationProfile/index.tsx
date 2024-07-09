@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import {ConversationProfileProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
-import AddUserConversationModal from '../../../../components/ConversationProfile/AddUserConversation'
-import DeleteUserConversationModal from '../../../../components/ConversationProfile/DeleteUserConversation'
-import LeaveConversationModal from '../../../../components/ConversationProfile/leaveConversation'
+import {ConversationProps, ParticipantProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
+import AddParticipantToGroupModal from '../../../../components/ConversationProfile/AddParticipantToGroupModal'
+import RemoveParticipantFromGroupModal from '../../../../components/ConversationProfile/RemoveParticipantFromGroupModal'
+import LeaveConversationModal from '../../../../components/ConversationProfile/LeaveConversationModal'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
@@ -16,21 +16,21 @@ const ConversationProfileMenu = () => {
 
   const { loggedId, conversationId } = useParams<{ loggedId: string; conversationId: string }>();
   
-  const [owner, setOwner] = useState<ConversationProfileProps["owner"] | null>(null);
-  const [conversation, setConversation] = useState<ConversationProfileProps["conversation"] | null>(null);
-  const [participants, setParticipants] = useState<ConversationProfileProps["participants"] | null>(null);
+  const [owner, setOwner] = useState<boolean | null>(null);
+  const [conversation, setConversation] = useState<ConversationProps | null>(null);
+  const [participants, setParticipants] = useState<ParticipantProps[] | null>(null);
   
-  const [user, setUser] = useState<UserProps | null>(null);
   const [friendList, setFriendList] = useState<UserProps[] | null>(null);
   const [showAddUsersModal, setShowAddUsersModal] = useState(false);
   const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
-  const [deleteId, setDeleteId] = useState<Number>(0);
-  const [deleteName, setDeleteName] = useState<String>();
+  const [deleteParticipant, setDeleteParticipant] = useState<ParticipantProps | null>(null);
   const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
-
+  
   const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
   const [groupName, setGroupName] = React.useState<string | null>(null);
   const [wrongGroupName, setWrongGroupName] = React.useState<boolean | false>(false);
+  
+  const [user, setUser] = useState<UserProps | null>(null);
 
   const fetchConversationProfileData = async () => {
     try {
@@ -110,9 +110,10 @@ const ConversationProfileMenu = () => {
             className="absolute right-4 top-4 cursor-pointer"
           />
         </div>
-
+      {/* GROUP CONVERSATION */}
         {(conversation && participants) ? (
           <div className='flex flex-col h-screen'>
+          {/* PICTURE AND NAME */}
             <div className='p-6 flex flex-col items-center'>
               {conversation.picture ? (
                 <img src={conversation.picture} className="w-16 h-16 rounded-full"/>
@@ -125,6 +126,7 @@ const ConversationProfileMenu = () => {
               <p className="text-2xl text-center font-bold py-6">{conversation.name}</p>
             </div>
             
+          {/* PARTICIPANTS TITLE AND ADD BUTTON */}
             <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
@@ -134,10 +136,10 @@ const ConversationProfileMenu = () => {
               ) : null}
 
               {showAddUsersModal ? (
-                <AddUserConversationModal friendList={friendList} loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal} path={null}/>
+                <AddParticipantToGroupModal friendList={friendList} loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal} path={null}/>
               ) : null}
             </div>
-
+          {/* PARTICIPANTS LIST */}
             <div className='flex-1 bg-gray-100 mx-4 px-6 py-4 rounded-lg shadow-lg overflow-y-auto'>
               <ul className="list-disc list-inside">
                 {participants.map((participant, index) => (
@@ -159,18 +161,18 @@ const ConversationProfileMenu = () => {
                     {index == 0 ? (
                       <p className='justify-end pe-5 text-gray-500'>Dono</p>
                     ) : owner ? (
-                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteId(participant.id); setDeleteName(participant.name)}}>
+                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteParticipant(participant)}}>
                         Remover
                       </button>
                     ) : null}
                     {showDeleteUsersModal ? (
-                      <DeleteUserConversationModal setShowDeleteUsersModal={setShowDeleteUsersModal} name={deleteName} loggedId={loggedId} conversationId={conversationId} deleteId={deleteId}/>
+                      <RemoveParticipantFromGroupModal setShowDeleteUsersModal={setShowDeleteUsersModal} loggedId={loggedId} conversationId={conversationId} deleteParticipant={deleteParticipant}/>
                     ) : null}
                   </li>
                 ))}
               </ul>
             </div>
-            
+          {/* DELETE/LEAVE GRUOP BUTTON */}
             <div className='pb-[50px] pt-6 flex justify-end'>
               {owner ? (
                 <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowDeleteGroupModal(true)}>
@@ -236,6 +238,8 @@ const ConversationProfileMenu = () => {
               ) : null}
             </div>
           </div>
+
+      // SIMPLE CONVERSATION
         ) : user ? (
           <div className='flex flex-col h-screen'>
             <div className='p-6 flex flex-col items-center'>

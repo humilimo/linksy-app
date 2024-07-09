@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 
-function AddUserConversationModal(props) {
+function AddParticipantToGroupModal(props) {
   const navigate = useNavigate();
 
   const [idList, setIdList] = useState<Number[]>([]);
@@ -14,7 +14,7 @@ function AddUserConversationModal(props) {
 
   const submitAddUsers = async (loggedId, conversationId, path) =>{
     try {
-      const response = await axios.post(
+      await axios.post(
       `http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/adicionar`, {ids: idList}
       );
       if(path) {
@@ -88,4 +88,4 @@ function AddUserConversationModal(props) {
   );
 };
 
-export default AddUserConversationModal;
+export default AddParticipantToGroupModal;

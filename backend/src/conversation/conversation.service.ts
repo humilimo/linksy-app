@@ -16,7 +16,7 @@ export class ConversationService {
 
   async createGroupConversation(loggedId: number, createConversationDto: CreateConversationDto){
     const { ids, ...conversationData } = createConversationDto;
-    const {conversation, createMessage} = await this.prisma.$transaction(async p => {
+    const conversationId = await this.prisma.$transaction(async p => {
     
       // add conversation
       const conversation = await this.prisma.conversation.create({
@@ -44,17 +44,14 @@ export class ConversationService {
         conversation.id
       )).content;
 
-      return {
-        conversation: conversation,
-        createMessage: createMessage
-      }
+      return conversation.id;
     });
     
-    const addMessages = await this.userConversationService.addUsers(loggedId, conversation.id, {ids: ids});
+    await this.userConversationService.addUsers(loggedId, conversationId, {ids: ids});
 
     return {
-      createMessage: createMessage,
-      addMessages: addMessages
+      conversationId: conversationId,
+      message: "create group"
     };
   }
 
@@ -63,12 +60,21 @@ export class ConversationService {
     const conversationId = await this.checkIfSimpleConversationExists(loggedId, ids[0]);
     
     if (conversationId){
-      await this.userConversationService.returnToConversation(loggedId, conversationId);
-      
-      const loggedUser = (await this.prisma.user.findUnique({where:{id: loggedId}})).username;
-      const otherUser = (await this.prisma.user.findUnique({where:{id: ids[0]}})).username;
-      
-      return {returnMessage: "'" + loggedUser + "' voltou à conversa com '" + otherUser + "'."};
+      const leftConversation = await this.checkIfLeftConversation(loggedId, conversationId);
+
+      if (leftConversation){
+        await this.userConversationService.returnToConversation(loggedId, conversationId);
+
+        return {
+          conversationId: conversationId,
+          action: "return"
+        }
+      }
+
+      return {
+        conversationId: conversationId,
+        action: "open"
+      }
     }
 
     // add conversation
@@ -97,14 +103,24 @@ export class ConversationService {
       owner: false
     });
     
-    // Create the 'begin conversation' message from system
-    const beginMessage = (await this.messageService.sendMessage(
-      {content: "'" + loggedUser.user.username + "' iniciou uma conversa com '" + otherUser.user.username + "'."},
-      0, //ghost-user Id
-      conversation.id
-    )).content;
+    return {
+      conversationId: conversation.id,
+      message: "create" 
+    }
+  }
 
-    return {beginMessage};
+  async checkIfLeftConversation(loggedId: number, conversationId: number){
+    return (await this.prisma.userConversation.findUnique({
+      where:{
+        userId_conversationId: {
+          conversationId: conversationId,
+          userId: loggedId
+        }
+      },
+      select:{
+        leftConversation: true
+      }
+    })).leftConversation;
   }
 
   async checkIfSimpleConversationExists(loggedId: number, otherId: number){

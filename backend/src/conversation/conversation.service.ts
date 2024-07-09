@@ -235,6 +235,7 @@ export class ConversationService {
         userConversations :{
           some: {
             userId: loggedId,
+            leftConversation: false
           }
         }
       }

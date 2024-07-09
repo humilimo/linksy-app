@@ -1,18 +1,19 @@
-import React, { useEffect, useState } from 'react';
-import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+
+import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { BsPeopleFill, BsCircle } from "react-icons/bs";
+
 import {ConversationProps, ParticipantProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
+
 import AddParticipantToGroupModal from '../../../../components/ConversationProfile/AddParticipantToGroupModal'
 import RemoveParticipantFromGroupModal from '../../../../components/ConversationProfile/RemoveParticipantFromGroupModal'
 import LeaveConversationModal from '../../../../components/ConversationProfile/LeaveConversationModal'
-import { BsPeopleFill, BsCircle } from "react-icons/bs";
-import { useNavigate } from "react-router-dom";
-
+import DeleteGroupModal from '../../../../components/ConversationProfile/DeleteGroupModal'
 
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);
-  const navigate = useNavigate();
 
   const { loggedId, conversationId } = useParams<{ loggedId: string; conversationId: string }>();
   
@@ -26,9 +27,7 @@ const ConversationProfileMenu = () => {
   const [deleteParticipant, setDeleteParticipant] = useState<ParticipantProps | null>(null);
   const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
   
-  const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
-  const [groupName, setGroupName] = React.useState<string | null>(null);
-  const [wrongGroupName, setWrongGroupName] = React.useState<boolean | false>(false);
+  const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false);
   
   const [user, setUser] = useState<UserProps | null>(null);
 
@@ -50,6 +49,10 @@ const ConversationProfileMenu = () => {
     }
   };
 
+  useEffect(() => {
+    fetchConversationProfileData();
+  }, [loggedId, conversationId]);
+
   const fetchFriendList = async () => {
     try {
       const response = await axios.get(
@@ -62,29 +65,6 @@ const ConversationProfileMenu = () => {
       console.log(error);
     }
   };
-
-  useEffect(() => {
-    fetchConversationProfileData();
-  }, [loggedId, conversationId]);
-
-  const submitGroupDeletion = async (e) =>{
-    e.preventDefault();
-    try {
-      const response = await axios.delete(
-        `http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/delete_all`, {data: {groupName: groupName}}
-      );
-      if (response.data.destroyMessage){
-        let path = `/user/${loggedId}/conversation`; 
-        navigate(path, {state:{destroyMessage:response.data.destroyMessage}});
-      }
-      else if (response.data.wrongNameMessage){
-        setWrongGroupName(true);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-  }
 
   return (
     <div className="flex justify-end items-center p-4 bg-white border border-gray-300">
@@ -136,7 +116,7 @@ const ConversationProfileMenu = () => {
               ) : null}
 
               {showAddUsersModal ? (
-                <AddParticipantToGroupModal friendList={friendList} loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal} path={null}/>
+                <AddParticipantToGroupModal loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal}  friendList={friendList} path={null}/>
               ) : null}
             </div>
           {/* PARTICIPANTS LIST */}
@@ -166,7 +146,7 @@ const ConversationProfileMenu = () => {
                       </button>
                     ) : null}
                     {showDeleteUsersModal ? (
-                      <RemoveParticipantFromGroupModal setShowDeleteUsersModal={setShowDeleteUsersModal} loggedId={loggedId} conversationId={conversationId} deleteParticipant={deleteParticipant}/>
+                      <RemoveParticipantFromGroupModal loggedId={loggedId} conversationId={conversationId} setShowDeleteUsersModal={setShowDeleteUsersModal} deleteParticipant={deleteParticipant}/>
                     ) : null}
                   </li>
                 ))}
@@ -185,56 +165,11 @@ const ConversationProfileMenu = () => {
               )}
 
               {showLeaveConversationModal ? (
-                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+                <LeaveConversationModal loggedId={loggedId} conversationId={conversationId} setShowLeaveConversationModal={setShowLeaveConversationModal} message={"Deseja sair do grupo?"}/>
               ) : null}
 
               {showDeleteGroupModal ? (
-              <>
-                <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none">
-                  <form onSubmit={submitGroupDeletion} className="relative w-auto my-6 mx-auto max-w-3xl">
-                    <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
-                      {/* HEADER */}
-                      <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
-                        <h3 className="text-3xl font-semibold">
-                          Deseja deletar o grupo?
-                        </h3>
-                        <button className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onClick={() => setShowDeleteGroupModal(false)}>
-                          <span className="bg-transparent text-black opacity-5 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                            ×
-                          </span>
-                        </button>
-                      </div>
-                      {/* BODY */}
-                      <div className="relative p-6 flex-auto">
-                        <p className="mb-1 text-blueGray-500 text-lg leading-relaxed text-center">
-                          Para confirmar a deleção do grupo, escreva abaixo <br /> o nome do grupo e clique em 'Deletar' 
-                        </p>
-                        { wrongGroupName ? (
-                          <p className='text-red-500'>
-                            Nome do Grupo Incorreto
-                          </p>
-                        ) : null}
-                        
-                        <input name='groupName' id='groupName' onChange={(e)=>{setGroupName(e.target.value)}} type="text" className='rounded shadow border border-gray-200 px-1 py-2 mt-3 w-full' />
-                      </div>
-                      {/* FOOTER */}
-                      <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
-                        <button className="bg-gray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-gray-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" 
-                        onClick={() => {
-                          setShowDeleteGroupModal(false); 
-                          setWrongGroupName(false);
-                        }}>
-                          Cancelar
-                        </button>
-                        <button className="bg-red-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">
-                          Deletar
-                        </button>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
-              </>
+                <DeleteGroupModal loggedId={loggedId} conversationId={conversationId} setShowDeleteGroupModal={setShowDeleteGroupModal}/>
               ) : null}
             </div>
           </div>

@@ -54,7 +54,7 @@ function CreateSimpleConversationModal(props) {
           <h3 className="text-3xl font-semibold">
             Amigos
           </h3>
-          <button className="justify-end p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onClick={() => props.setShowFriendListSelectionModal(false)}>
+          <button className="justify-end p-1 ml-auto bg-transparent border-0 text-black float-right text-3xl leading-none font-semibold outline-none focus:outline-none" onClick={() => props.setShowCreateSimpleConversationModal(false)}>
             <span className="bg-transparent text-black h-6 w-6 text-4xl block outline-none focus:outline-none">
               ×
             </span>

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 
 import CreateSimpleConversationModal from "../../../../components/ConversationList/CreateSimpleConversationModal"
+import CreateGroupModal from "../../../../components/ConversationList/CreateGroupModal"
 
 
 function ConversationList() {
@@ -10,7 +11,8 @@ function ConversationList() {
 
   const { loggedId } = useParams<{ loggedId: string }>();
 
-  const [showFriendListSelectionModal, setShowFriendListSelectionModal] = useState(false);
+  const [showCreateSimpleConversationModal, setShowCreateSimpleConversationModal] = useState(false);
+  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
 
   return (
     <div className="p-6 pt-8 bg-gray-100 min-h-screen">
@@ -21,16 +23,28 @@ function ConversationList() {
             <p> {location.state.destroyMessage}</p>
           ) : null}
         </div>
+        <div className='flex justify-end'>
+          {/* NEW SIMPLE CONVERSATION BUTTON */}
+          <div className='pr-4'>
+            <button className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowCreateSimpleConversationModal(true)}>
+              Nova Conversa
+            </button>
 
-        {/* NEW SIMPLE CONVERSATION BUTTON */}
-        <div className='pb-[50px] pt-6 flex justify-end'>
-          <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowFriendListSelectionModal(true)}>
-            Nova Conversa
-          </button>
+            {showCreateSimpleConversationModal ? (
+              <CreateSimpleConversationModal loggedId={loggedId} setShowCreateSimpleConversationModal={setShowCreateSimpleConversationModal}/>
+            ) : null}
+          </div>
 
-          {showFriendListSelectionModal ? (
-            <CreateSimpleConversationModal loggedId={loggedId} setShowFriendListSelectionModal={setShowFriendListSelectionModal}/>
-          ) : null}
+          {/* NEW GROUP BUTTON */}
+          <div>
+            <button className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowCreateGroupModal(true)}>
+              Novo Grupo
+            </button>
+
+            {showCreateGroupModal ? (
+              <CreateGroupModal loggedId={loggedId} setShowCreateGroupModal={setShowCreateGroupModal}/>
+            ) : null}
+          </div>
         </div>
       </div>
     </div>

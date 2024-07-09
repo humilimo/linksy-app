@@ -32,21 +32,23 @@ const ConversationProfileMenu = () => {
   const [user, setUser] = useState<UserProps | null>(null);
 
   const fetchConversationProfileData = async () => {
-    try {
-      const response = await axios.get(
+    await axios
+      .get(
         `http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/profile`
-      );
-      if (response.data.conversation){
-        setOwner(response.data.owner);
-        setConversation(response.data.conversation);
-        setParticipants(response.data.participants);
-      }
-      else{
-        setUser(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      )
+      .then(response => {
+        if (response.data.conversation){
+          setOwner(response.data.owner);
+          setConversation(response.data.conversation);
+          setParticipants(response.data.participants);
+        }
+        else{
+          setUser(response.data);
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   useEffect(() => {
@@ -54,16 +56,18 @@ const ConversationProfileMenu = () => {
   }, [loggedId, conversationId]);
 
   const fetchFriendList = async () => {
-    try {
-      const response = await axios.get(
+    await axios
+      .get(
         `http://127.0.0.1:3002/user/${loggedId}/friend/all`
-      );
-      if (response.data.friendList){
-        setFriendList(response.data.friendList.filter(friend => !participants?.map(p => p.id).includes(friend.id)));
-      }
-    } catch (error) {
-      console.log(error);
-    }
+      )
+      .then(response => {
+        if (response.data.friendList){
+          setFriendList(response.data.friendList.filter(friend => !participants?.map(p => p.id).includes(friend.id)));
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   return (

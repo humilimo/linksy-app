@@ -3,8 +3,12 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import {ConversationProfileProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
+import AddUserConversationModal from '../../../../components/ConversationProfile/AddUserConversation'
+import DeleteUserConversationModal from '../../../../components/ConversationProfile/DeleteUserConversation'
+import LeaveConversationModal from '../../../../components/ConversationProfile/leaveConversation'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+
 
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);
@@ -17,6 +21,12 @@ const ConversationProfileMenu = () => {
   const [participants, setParticipants] = useState<ConversationProfileProps["participants"] | null>(null);
   
   const [user, setUser] = useState<UserProps | null>(null);
+  const [friendList, setFriendList] = useState<UserProps[] | null>(null);
+  const [showAddUsersModal, setShowAddUsersModal] = useState(false);
+  const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
+  const [deleteId, setDeleteId] = useState<Number>(0);
+  const [deleteName, setDeleteName] = useState<String>();
+  const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
 
   const [showDeleteGroupModal, setShowDeleteGroupModal] = React.useState(false);
   const [groupName, setGroupName] = React.useState<string | null>(null);
@@ -34,6 +44,19 @@ const ConversationProfileMenu = () => {
       }
       else{
         setUser(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchFriendList = async () => {
+    try {
+      const response = await axios.get(
+        `http://127.0.0.1:3002/user/${loggedId}/friend/all`
+      );
+      if (response.data.friendList){
+        setFriendList(response.data.friendList.filter(friend => !participants?.map(p => p.id).includes(friend.id)));
       }
     } catch (error) {
       console.log(error);
@@ -105,9 +128,13 @@ const ConversationProfileMenu = () => {
             <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => {setShowAddUsersModal(true); fetchFriendList()}}>
                   Adicionar
                 </button>
+              ) : null}
+
+              {showAddUsersModal ? (
+                <AddUserConversationModal friendList={friendList} loggedId={loggedId} conversationId={conversationId} setShowAddUsersModal={setShowAddUsersModal} path={null}/>
               ) : null}
             </div>
 
@@ -132,9 +159,12 @@ const ConversationProfileMenu = () => {
                     {index == 0 ? (
                       <p className='justify-end pe-5 text-gray-500'>Dono</p>
                     ) : owner ? (
-                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button">
+                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteId(participant.id); setDeleteName(participant.name)}}>
                         Remover
                       </button>
+                    ) : null}
+                    {showDeleteUsersModal ? (
+                      <DeleteUserConversationModal setShowDeleteUsersModal={setShowDeleteUsersModal} name={deleteName} loggedId={loggedId} conversationId={conversationId} deleteId={deleteId}/>
                     ) : null}
                   </li>
                 ))}
@@ -147,10 +177,14 @@ const ConversationProfileMenu = () => {
                   Deletar Grupo
                 </button>
               ) : (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button">
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
                 Sair do Grupo
               </button>
               )}
+
+              {showLeaveConversationModal ? (
+                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+              ) : null}
 
               {showDeleteGroupModal ? (
               <>
@@ -227,9 +261,12 @@ const ConversationProfileMenu = () => {
             </div>
 
             <div className='pb-[50px] pt-6 flex justify-end'>
-              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" >
+              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
                 Excluir Conversa
               </button>
+              {showLeaveConversationModal ? (
+                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+              ) : null}
             </div>
           </div>
         ) : (

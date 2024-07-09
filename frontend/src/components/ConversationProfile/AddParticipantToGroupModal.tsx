@@ -1,37 +1,14 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
-import { BsPeopleFill, BsCircle } from "react-icons/bs";
-import {FriendProps} from "../FriendsList/FriendsListModel"
+import FriendListMultSelectComponent from "../FriendsList/FriendListMultSelectComponent"
+
 function AddParticipantToGroupModal(props) {
   const navigate = useNavigate();
 
   const [idList, setIdList] = useState<Number[]>([]);
-  const [friendList, setFriendList] = useState<FriendProps[] | null>(null);
 
-  const fetchFriendListData = async () => {
-    await axios
-      .get(
-        `http://127.0.0.1:3002/user/${props.loggedId}/friend/all`
-      )
-      .then(response => {
-        if (response.data.friendList){
-          setFriendList(response.data.friendList.filter(friend => !props.participants.map(p => p.id).includes(friend.id)));
-        }
-      })
-      .catch(error => {
-        console.log(error);
-      });
-  };
-
-  useEffect(() => {
-    fetchFriendListData();
-  }, [props.loggedId, props.conversationId]);
-
-  const handleCheckBox = async (id) =>{
-    setIdList(idList.includes(id) ? idList.filter(i => i != id) : idList.concat(id));
-  }
-
+  
   const submitAddUsers = async () =>{
     await axios
       .post(
@@ -63,29 +40,7 @@ function AddParticipantToGroupModal(props) {
             </h3>
           </div>
           {/* BODY */}
-          <div className="relative p-6 overflow-y-auto">
-            <ul className='lista'>
-              {friendList?.map(friend => (
-                <li key={friend.id} className="text-black mb-2 flex items-center justify-between">
-                  <div className='flex items-center'>
-                    <div className='relative pe-4'>
-                      {friend.picture ? (
-                        <img src={friend.picture} alt={friend.name} className="w-10 h-10 rounded-full"/>
-                      ) : (
-                        <div className='relative'>
-                          <BsCircle className="w-12 h-12"/>
-                          <BsPeopleFill className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-                        </div>
-                      )}
-                    </div>
-                    <p className='pe-4'>{friend.name}</p>
-                    <p className='pe-4'>({friend.username})</p>
-                  </div>
-                  <input className="form-checkbox h-6 w-6 text-primary border-2 border-gray-300 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary" type="checkbox" onChange={() => handleCheckBox(friend.id)} />
-                </li>
-              ))}
-            </ul>
-          </div>
+          <FriendListMultSelectComponent loggedId={props.loggedId} idList={idList} setIdList={setIdList} participants={props.participants}/>
           {/* FOOTER */}
           <div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
             <button className="bg-gray-600 text-white font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-gray-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" 

@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import DeleteMessageModal from '../components/DeleteMessageModal'; // Certifique-se de ajustar o caminho conforme necessário
-import Message from './Message'; // Certifique-se de ajustar o caminho conforme necessário
+import DeleteMessageModal from '../components/DeleteMessageModal'; 
+import Message from './Message'; 
 
 const Conversation = () => {
   const [message, setMessage] = useState<MessageProps | null>(null);
   const [showDeleteMessageModal, setShowDeleteMessageModal] = useState(false);
-  const [loggedId, setLoggedId] = useState<number>(1); // Ajuste conforme necessário
-  const [chatId, setChatId] = useState<number>(1); // Ajuste conforme necessário
-  const [messageId, setMessageId] = useState<number>(0); // Ajuste conforme necessário
+  const [loggedId, setLoggedId] = useState<number>(0); 
+  const [chatId, setChatId] = useState<number>(0); 
+  const [messageId, setMessageId] = useState<number>(0); 
   const navigate = useNavigate();
 
   const handleDeleteMessage = (id: number) => {
@@ -24,7 +24,7 @@ const Conversation = () => {
 
   return (
     <div>
-      {/* Renderize suas mensagens aqui */}
+      {/* Renderizar mensagen */}
       <Message id={1} text="Mensagem de exemplo" onDelete={handleDeleteMessage} showOptions={showOptions} />
 
       {showDeleteMessageModal && (

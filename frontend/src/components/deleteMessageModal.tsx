@@ -20,7 +20,7 @@ function DeleteMessageModal(props) {
       }
     } catch (error) {
       console.log(error);
-      // Pode adicionar uma função para exibir uma mensagem de erro ao usuário
+      //adicionar popup de erro
     }
   }
 

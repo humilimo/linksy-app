@@ -5,7 +5,6 @@ import {FriendProps} from './FriendsListModel'
 
 
 function FriendListMultSelectComponent(props) {
-
   const [friendList, setFriendList] = useState<FriendProps[] | null>(null);
   const fetchFriendListData = async () => {
     await axios
@@ -14,12 +13,7 @@ function FriendListMultSelectComponent(props) {
       )
       .then(response => {
         if (response.data.friendList){
-          if (props.participants){
-            setFriendList(response.data.friendList.filter(friend => !props.participants.map(p => p.id).includes(friend.id)));
-          }
-          else{
-            setFriendList(response.data.friendList);
-          }
+          setFriendList(response.data.friendList.filter(friend => !props.participants?.map(p => p.id).includes(friend.id)));
         }
       })
       .catch(error => {

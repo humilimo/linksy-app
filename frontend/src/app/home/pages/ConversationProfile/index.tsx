@@ -192,7 +192,7 @@ const ConversationProfileMenu = () => {
                 Excluir Conversa
               </button>
               {showLeaveConversationModal ? (
-                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+                <LeaveConversationModal message={"Deseja excluir a conversa?"} setShowLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
               ) : null}
             </div>
           </div>

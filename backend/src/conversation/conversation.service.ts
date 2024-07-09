@@ -235,6 +235,7 @@ export class ConversationService {
         userConversations :{
           some: {
             userId: loggedId,
+            leftConversation: false
           }
         }
       }
@@ -258,7 +259,8 @@ export class ConversationService {
           conversationId: conversationId,
           userId: {
             not: 0 //ghost-user Id
-          }
+          },
+          leftConversation: false
         },
         select:{
           user:{
@@ -269,7 +271,11 @@ export class ConversationService {
               picture: true,
             },
           }
-        }
+        },
+        orderBy: [
+          { owner: 'desc' },
+          { user: { name: 'asc' } }
+        ]
       });
 
       return {
@@ -342,7 +348,7 @@ export class ConversationService {
 
   }
 
-  async removeAll(loggedId:number, conversationId: number) {
+  async removeAll(loggedId: number, conversationId: number, groupName: string) {
     const userConversation = await this.prisma.userConversation.findUnique({
       where: {
         userId_conversationId: {
@@ -351,14 +357,27 @@ export class ConversationService {
         },
         owner: true
       },
+      include:{
+        conversation:{
+          select:{
+            name: true
+          }
+        }
+      }
     });
 
-    const conversation = await this.prisma.conversation.delete({
-      where: {
-        id: userConversation.conversationId
-      },
-    });
+    if (userConversation.conversation.name == groupName){
+      const conversation = await this.prisma.conversation.delete({
+        where: {
+          id: userConversation.conversationId
+        },
+      });
+      return {destroyMessage: "Grupo '" + conversation.name + "' deletado completamente."}
+    }
 
-    return {destroyMessage: "Grupo '" + conversation.name + "' deletado completamente."}
+    else{
+      return {wrongNameMessage: "O nome do grupo inserido está incorreto."}
+    }
+
   }
 }

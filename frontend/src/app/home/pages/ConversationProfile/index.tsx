@@ -261,9 +261,12 @@ const ConversationProfileMenu = () => {
             </div>
 
             <div className='pb-[50px] pt-6 flex justify-end'>
-              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" >
+              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
                 Excluir Conversa
               </button>
+              {showLeaveConversationModal ? (
+                <LeaveConversationModal message={"Deseja sair do grupo?"} setLeaveConversationModal={setShowLeaveConversationModal} loggedId={loggedId} conversationId={conversationId}/>
+              ) : null}
             </div>
           </div>
         ) : (

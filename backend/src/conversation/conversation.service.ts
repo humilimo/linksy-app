@@ -153,66 +153,104 @@ export class ConversationService {
   };
 
   async getRecentConversations(loggedId: number) {
-
-    var conversationsOfLoggedUser = await this.getConversationsOfLoggedUser(loggedId);
-
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
-    var favoritedConversationsIdsOfLoggedUser = conversationsOfLoggedUser
+    const conversationsOfLoggedUser = await this.getConversationsOfLoggedUser(loggedId);
+  
+    const conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
+    const favoritedConversationsIdsOfLoggedUser = conversationsOfLoggedUser
       .filter(conversation => conversation.favorited === true)
       .map(conversation => conversation.conversationId);
     
-    var recentMessagesByDate = await this.getRecentMessagesByDate(conversationIdsOfLoggedUser);
-
-    var recentConversationsIdsOfLoggedUser = recentMessagesByDate.map(conversation=> conversation.conversationId);        
-    var nonFavoritedRecentConversationsIds = recentConversationsIdsOfLoggedUser.filter(
-      conversationId => !(favoritedConversationsIdsOfLoggedUser.includes(conversationId))  
+    const recentMessagesByDate = await this.getRecentMessagesByDate(conversationIdsOfLoggedUser);
+  
+    const recentConversationsIdsOfLoggedUser = recentMessagesByDate.map(conversation => conversation.conversationId);        
+    const nonFavoritedRecentConversationsIds = recentConversationsIdsOfLoggedUser.filter(
+      conversationId => !favoritedConversationsIdsOfLoggedUser.includes(conversationId)
     );
-
-    var recentConversationsIds = favoritedConversationsIdsOfLoggedUser.concat(nonFavoritedRecentConversationsIds);
-
-    var recentConversations = [];
-    for (var conversationId of recentConversationsIds) {
-      var conversation = await this.prisma.conversation.findUnique({                    
+  
+    const recentConversationsIds = favoritedConversationsIdsOfLoggedUser.concat(nonFavoritedRecentConversationsIds);
+  
+    const recentConversations = [];
+    for (const conversationId of recentConversationsIds) {
+      const conversation = await this.prisma.conversation.findUnique({
         where: {
-          id: conversationId,                                              
+          id: conversationId,
         },
-        include:{
-          userConversations:{
-            select:{
+        include: {
+          userConversations: {
+            select: {
               favorited: true,
             },
-            where:{
+            where: {
               userId: loggedId,
             }
           }
         }
       });
-      const {userConversations, ...conversationWithoutUserConversations } = conversation;
-
+      
+      const { userConversations, ...conversationWithoutUserConversations } = conversation;
+      
+      const lastMessage = await this.prisma.message.findFirst({
+        select:{
+          content:true,
+        },
+        orderBy: {
+          id: 'desc',
+        },
+        where:{
+          conversationId: conversationId
+        }
+      });
+      
       const mergedInfos = {
         ...conversationWithoutUserConversations,
-        favorited: userConversations[0].favorited
+        favorited: userConversations[0].favorited,
+        lastMessage: lastMessage.content, 
       };
       
+      if(!conversation.isGroup){
+        const otherUserConversation = await this.prisma.userConversation.findFirst({
+          select: {
+            userId: true,
+          },
+          where: {
+            conversationId: conversationId,
+            userId: {
+              notIn: [loggedId, 0],
+            },
+          },
+        });
+        
+        const nameOfOtherUser = await this.prisma.user.findUnique({
+          select:{
+            name:true,
+          },
+          where:{
+            id: otherUserConversation.userId,
+          }
+        });
+
+        mergedInfos.name = nameOfOtherUser.name;
+      }
+
       recentConversations.push(mergedInfos);
     }
-
+  
     return recentConversations;
-}
-  async getConversationsOfLoggedUser(loggedId: number)
-  {
-      var conversationIdsOfLoggedUser = await this.prisma.userConversation.findMany({
-      select:{
-        conversationId: true,
-        favorited: true
-      },
-      where:{                                                                       
-        userId: loggedId,
-        leftConversation: false,
-      },
-    })
-      return conversationIdsOfLoggedUser;
   }
+  
+async getConversationsOfLoggedUser(loggedId: number) {
+  const conversationIdsOfLoggedUser = await this.prisma.userConversation.findMany({
+    select: {
+      conversationId: true,
+      favorited: true
+    },
+    where: {                                                                       
+      userId: loggedId,
+      leftConversation: false,
+    },
+  });
+    return conversationIdsOfLoggedUser;
+}
 
   async getRecentMessagesByDate(conversationIdsOfLoggedUser :number[]){
     var recentMessagesByDate = await this.prisma.message.findMany({ 

@@ -1,10 +1,8 @@
 import axios from 'axios';
-import { useNavigate } from "react-router-dom";
 import { useState } from 'react';
 
 function EditGroupNameModal(props) {
 	const [newGroupName, setNewGroupName] = useState<string | null>(null);
-	const navigate = useNavigate();
 
 	const submitNewGroupName = async (e) =>{
 		e.preventDefault();
@@ -15,7 +13,6 @@ function EditGroupNameModal(props) {
 				{name: newGroupName}
 			)
 			.then(() => {
-				//navigate(`/user/${props.loggedId}/conversation/${props.conversationId}`);
 				window.location.reload();
 			})
 			.catch(error => {

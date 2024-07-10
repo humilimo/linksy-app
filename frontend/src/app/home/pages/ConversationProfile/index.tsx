@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
-import { BsPeopleFill, BsCircle } from "react-icons/bs";
+import { BsPeopleFill, BsCircle, BsPencilSquare } from "react-icons/bs";
 
 import {ConversationProps, ParticipantProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
 
@@ -11,6 +11,7 @@ import AddParticipantToGroupModal from '../../../../components/ConversationProfi
 import RemoveParticipantFromGroupModal from '../../../../components/ConversationProfile/RemoveParticipantFromGroupModal'
 import LeaveConversationModal from '../../../../components/ConversationProfile/LeaveConversationModal'
 import DeleteGroupModal from '../../../../components/ConversationProfile/DeleteGroupModal'
+import EditGroupNameModal from '../../../../components/ConversationProfile/EditGroupNameModal'
 
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);
@@ -25,6 +26,7 @@ const ConversationProfileMenu = () => {
   const [showDeleteUsersModal, setShowDeleteUsersModal] = useState(false);
   const [deleteParticipant, setDeleteParticipant] = useState<ParticipantProps | null>(null);
   const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
+  const [showEditGroupNameModal, setShowEditGroupNameModal] = useState(false);
   
   const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false);
   
@@ -91,7 +93,18 @@ const ConversationProfileMenu = () => {
                   <BsPeopleFill className="w-28 h-28 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
                 </div>
               )}
-              <p className="text-2xl text-center font-bold py-6">{conversation.name}</p>
+              <div className='flex item-center justify-center text-2xl text-center font-bold py-6'>
+                <p className="text-2xl text-center font-bold">{conversation.name}</p>
+                
+                {owner ? (
+                  <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)}>
+                    <BsPencilSquare />
+                  </button>
+                ) : null}
+                {showEditGroupNameModal ? (
+                    <EditGroupNameModal loggedId={loggedId} conversationId={conversationId} setShowEditGroupNameModal={setShowEditGroupNameModal}/>
+                ) : null}
+              </div>
             </div>
             
           {/* PARTICIPANTS TITLE AND ADD BUTTON */}

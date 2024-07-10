@@ -1,4 +1,4 @@
-export interface Conversation {
+export interface ConversationProps {
   id: number;
   name: string;
   picture: string | null;
@@ -6,7 +6,7 @@ export interface Conversation {
   createdAt: string;
 }
 
-export interface Participant {
+export interface ParticipantProps {
   id: number;
   name: string;
   username: string;
@@ -20,10 +20,4 @@ export interface UserProps{
   picture: string | null;
   email: string,
   bio: string | null
-}
-
-export interface ConversationProfileProps {
-  owner: boolean;
-  conversation: Conversation;
-  participants: Participant[];
 }

@@ -60,5 +60,10 @@
     "vite": "^4.3.2",
     "vite-plugin-istanbul": "^4.1.0",
     "vitest": "^0.31.1"
+  },
+  "cypress-cucumber-preprocessor": {
+    "stepDefinitions": [
+      "cypress/e2e/steps/*.ts"
+    ]
   }
 }

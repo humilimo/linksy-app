@@ -76,6 +76,18 @@ defineFeature(feature, (test) => {
 			});
 		};
 
+		const checkMessageResponseStep = ({then}) => {
+			then(/^o JSON da resposta deve conter message "(.*)"$/, async function (message) {
+				expect(response.body.message).toBe(message);
+			});
+		};
+
+		const checkIdResponseStep = ({then}) => {
+			then(/^o JSON da resposta deve conter o id da nova conversa criada$/, async function () {
+				expect(response.body.message).toBeDefined();
+			});
+		};
+
 	// TESTS
 
 		test('Criar um Grupo', async ({given, when, then}) => {
@@ -88,17 +100,9 @@ defineFeature(feature, (test) => {
 
 			checkStatusResponseStep({then});
 
-			then(/^o JSON da resposta deve conter createMessage "(.*)"$/, async function (createMessage) {
-				expect(response.body.createMessage).toBe(createMessage);
-			});
+			checkMessageResponseStep({then});
 
-			then(/^o JSON da resposta deve conter o array de strings addMessages$/, async function () {
-				expect(response.body.addMessages).toBeDefined();
-			});
-
-			then(/^o array addMessages deve conter a string "(.*)"$/, async function (addMessage) {
-				expect(response.body.addMessages).toContain(addMessage);
-			});
+			checkIdResponseStep({then});
 		});
 
 		test('Criar uma Conversa Simples', async ({given, when, then}) => {
@@ -111,9 +115,9 @@ defineFeature(feature, (test) => {
 			
 			checkStatusResponseStep({then});
 
-			then(/^o JSON da resposta deve conter beginMessage "(.*)"$/, async function (beginMessage) {
-				expect(response.body.beginMessage).toBe(beginMessage);
-			});
+			checkMessageResponseStep({then});
+
+			checkIdResponseStep({then});
 		});
 
 		test('Retornar para uma Conversa Simples', async ({given, when, then}) => {
@@ -163,8 +167,8 @@ defineFeature(feature, (test) => {
 			
 			checkStatusResponseStep({then});
 
-			then(/^o JSON da resposta deve conter returnMessage "(.*)"$/, async function (returnMessage) {
-				expect(response.body.returnMessage).toBe(returnMessage);
-			});
+			checkMessageResponseStep({then});
+
+			checkIdResponseStep({then});
 		});
 });

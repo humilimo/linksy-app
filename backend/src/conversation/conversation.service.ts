@@ -67,13 +67,13 @@ export class ConversationService {
 
         return {
           conversationId: conversationId,
-          action: "return"
+          message: "return"
         }
       }
 
       return {
         conversationId: conversationId,
-        action: "open"
+        message: "open"
       }
     }
 

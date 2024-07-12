@@ -7,9 +7,8 @@ Feature: Create Conversation
     And o array ids deve conter o inteiro "2"
     And uma requisição "POST" for enviada para "/user/1/conversation"
     Then o status da resposta deve ser "201"
-    And o JSON da resposta deve conter createMessage "'man2' criou o grupo 'Sandeiro Cinza'."
-    And o JSON da resposta deve conter o array de strings addMessages
-    And o array addMessages deve conter a string "'lfoc' foi adicionado ao grupo."
+    And o JSON da resposta deve conter message "create group"
+    And o JSON da resposta deve conter o id da nova conversa criada
   
   Scenario: Criar uma Conversa Simples
     Given existe um user com id "1" e username "man2"
@@ -18,7 +17,8 @@ Feature: Create Conversation
     And o array ids deve conter o inteiro "3"
     And uma requisição "POST" for enviada para "/user/1/conversation"
     Then o status da resposta deve ser "201"
-    And o JSON da resposta deve conter beginMessage "'man2' iniciou uma conversa com 'crc'."
+    And o JSON da resposta deve conter message "create"
+    And o JSON da resposta deve conter o id da nova conversa criada
 
   Scenario: Retornar para uma Conversa Simples
     Given existe um user com id "1" e username "man2"
@@ -30,4 +30,5 @@ Feature: Create Conversation
     And o array ids deve conter o inteiro "2"
     And uma requisição "POST" for enviada para "/user/1/conversation"
     Then o status da resposta deve ser "201"
-    And o JSON da resposta deve conter returnMessage "'man2' voltou à conversa com 'lfoc'."
+    And o JSON da resposta deve conter message "return"
+    And o JSON da resposta deve conter o id da nova conversa criada

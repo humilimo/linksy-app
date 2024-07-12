@@ -59,7 +59,7 @@ const ConversationProfileMenu = () => {
   return (
     <div className="flex justify-end items-center p-4 bg-white border border-gray-300">
       {/* Right side */}
-      <div className="flex items-center">
+      <div className="flex items-center" data-cy={"conversation-profile-button"}>
         <div onClick={() => setNav(!nav)} className="cursor-pointer">
           <AiOutlineMenu size={30} />
         </div>
@@ -86,18 +86,18 @@ const ConversationProfileMenu = () => {
           {/* PICTURE AND NAME */}
             <div className='p-6 flex flex-col items-center'>
               {conversation.picture ? (
-                <img src={conversation.picture} className="w-16 h-16 rounded-full"/>
+                <img src={conversation.picture} className="w-16 h-16 rounded-full" data-cy={"conversation-profile-group-picture"}/>
               ) : (
-                <div className="relative">
+                <div className="relative null" data-cy={"conversation-profile-group-picture"}>
                   <BsCircle className="w-40 h-40"/>
                   <BsPeopleFill className="w-28 h-28 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
                 </div>
               )}
               <div className='flex item-center justify-center text-2xl text-center font-bold py-6'>
-                <p className="text-2xl text-center font-bold">{conversation.name}</p>
+                <p className="text-2xl text-center font-bold" data-cy={"conversation-profile-group-name"}>{conversation.name}</p>
                 
                 {owner ? (
-                  <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)}>
+                  <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)} data-cy={"conversation-profile-group-name-edit-button"}>
                     <BsPencilSquare />
                   </button>
                 ) : null}
@@ -111,7 +111,7 @@ const ConversationProfileMenu = () => {
             <div className='ps-8 pb-2 flex justify-between items-center mb-1'>
               <h2 className="text-2xl font-semibold">Participantes</h2>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowAddUsersModal(true)}>
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowAddUsersModal(true)} data-cy={"conversation-profile-participants-add-button"}>
                   Adicionar
                 </button>
               ) : null}
@@ -121,7 +121,7 @@ const ConversationProfileMenu = () => {
               ) : null}
             </div>
           {/* PARTICIPANTS LIST */}
-            <div className='flex-1 bg-gray-100 mx-4 px-6 py-4 rounded-lg shadow-lg overflow-y-auto'>
+            <div className='flex-1 bg-gray-100 mx-4 px-6 py-4 rounded-lg shadow-lg overflow-y-auto' data-cy={"conversation-profile-participants-list"}>
               <ul className="list-disc list-inside">
                 {participants.map((participant, index) => (
                   <li key={participant.id} className="text-gray-700 mb-2 flex items-center justify-between">
@@ -137,12 +137,12 @@ const ConversationProfileMenu = () => {
                         )}
                       </div>
                       <p className='pe-4'>{participant.name}</p>
-                      <p className='pe-4'>({participant.username})</p>
+                      <p className='pe-4' data-cy={"conversation-profile-participant-"+participant.username}>({participant.username})</p>
                     </div>
                     {index == 0 ? (
-                      <p className='justify-end pe-5 text-gray-500'>Dono</p>
+                      <p className='justify-end pe-5 text-gray-500' data-cy={"conversation-profile-owner-"+participant.username}>Dono</p>
                     ) : owner ? (
-                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteParticipant(participant)}}>
+                      <button className="justify-end text-center text-xs text-white py-1 px-2 rounded-xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none mb-1 ease-linear transition-all duration-150" type="button" onClick={() =>{setShowDeleteUsersModal(true); setDeleteParticipant(participant)}} data-cy={"conversation-profile-participant-"+participant.username+"-remove"}>
                         Remover
                       </button>
                     ) : null}
@@ -156,11 +156,11 @@ const ConversationProfileMenu = () => {
           {/* DELETE/LEAVE GRUOP BUTTON */}
             <div className='pb-[50px] pt-6 flex justify-end'>
               {owner ? (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowDeleteGroupModal(true)}>
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowDeleteGroupModal(true)} data-cy={"conversation-profile-delete-group-button"}>
                   Deletar Grupo
                 </button>
               ) : (
-                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
+                <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)} data-cy={"conversation-profile-leave-group-button"}>
                 Sair do Grupo
               </button>
               )}
@@ -180,16 +180,16 @@ const ConversationProfileMenu = () => {
           <div className='flex flex-col h-screen'>
             <div className='p-6 flex flex-col items-center'>
               {user.picture ? (
-                <img src={user.picture} className="w-16 h-16 rounded-full"/>
+                <img src={user.picture} className="w-16 h-16 rounded-full" data-cy={"conversation-profile-user-picture"}/>
               ) : (
-                <div className="relative">
+                <div className="relative null" data-cy={"conversation-profile-user-picture"}>
                   <BsCircle className="w-40 h-40"/>
                   <BsPeopleFill className="w-28 h-28 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
                 </div>
               )}
-              <p className="text-2xl text-center font-bold pt-6">{user.name}</p>
-              <p className="text-md text-center font-bold pt-1">({user.username})</p>
-              <p className="text-md text-center pt-1">{user.email}</p>
+              <p className="text-2xl text-center font-bold pt-6" data-cy={"conversation-profile-user-name"}>{user.name}</p>
+              <p className="text-md text-center font-bold pt-1" data-cy={"conversation-profile-user-username"}>({user.username})</p>
+              <p className="text-md text-center pt-1" data-cy={"conversation-profile-user-email"}>{user.email}</p>
             </div>
 
             <div className='ps-8 pb-2'>
@@ -197,11 +197,11 @@ const ConversationProfileMenu = () => {
             </div>
 
             <div className='flex-1 bg-gray-100 mx-4 px-6 py-4 rounded-lg shadow-lg overflow-y-auto'>
-              <p className="text-gray-700">{user.bio}</p>
+              <p className="text-gray-700" data-cy={"conversation-profile-user-bio"}>{user.bio}</p>
             </div>
 
             <div className='pb-[50px] pt-6 flex justify-end'>
-              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)}>
+              <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)} data-cy={"conversation-profile-delete-conversation-button"}>
                 Excluir Conversa
               </button>
               {showLeaveConversationModal ? (

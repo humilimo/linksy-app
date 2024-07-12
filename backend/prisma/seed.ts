@@ -31,7 +31,8 @@ async function main() {
   // Para Testes de MATEUS:
     // Usar Para Deletar Grupo Completamente
     await conversationService.createGroupConversation(1, {isGroup: true, name: "Projeto ESS - Grupo 6", ids: [2], picture: null}); // CONVERSATION ID 1
-    
+    await friendService.create(1, {username: "lfoc"});
+
     // Usar Para Retornar à uma Conversa Simples
     // Usar Para Pegar Detalhes de uma Conversa Simples
     await conversationService.createSimpleConversation(1, {isGroup: false, name: null, ids: [2], picture: null, createdAt: "2024-06-15T19:43:20.589Z"}); // CONVERSATION ID 2
@@ -39,6 +40,7 @@ async function main() {
 
     // Usar Para Pegar Detalhes de um Grupo
     await conversationService.createGroupConversation(1, {isGroup: true, name: "Grupo com Caio", ids: [3], picture: null, createdAt: "2024-06-14T17:27:20.589Z"}); // CONVERSATION ID 3
+    await friendService.create(1, {username: "crc"});
 
   // Para Testes de LUIS:
     // Usar para criar conversa

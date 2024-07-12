@@ -4,6 +4,7 @@ var userIdG, conversationIdG;
 
 Given("a conversa de id {string} e de nome {string} está aparecendo na lista de conversas do usuário de id {string}", (conversationId, conversationName, userId) => {
   cy.visit("/user/"+userId+"/conversation");
+  cy.wait(500);
   cy.get('[data-cy="conversation-list-id-'+conversationId+'"]')
     .should(
       'exist'
@@ -18,6 +19,7 @@ Given("o usuário de id {string} está na página da conversa de id {string}", (
   userIdG = userId;
   conversationIdG = conversationId;
   cy.visit("/user/"+userId+"/conversation/"+conversationId);
+  cy.wait(500);
 });
 
 When("o usuário clica no perfil da conversa", () => {
@@ -91,6 +93,7 @@ Then("o grupo de id {string} e de nome {string} não deve estar aparecendo", (id
 
 Then("o grupo de id {string} e de nome {string} ainda deve estar aparecendo na lista de conversas do usuário", (conversationId, conversationName) => {
   cy.visit("/user/"+userIdG+"/conversation");
+  cy.wait(500);
   cy.get('[data-cy="conversation-list-id-'+conversationId+'"]')
     .should(
       'exist'

@@ -2,6 +2,7 @@ import { Given, When, Then, Before } from "@badeball/cypress-cucumber-preprocess
 
 Given("o usuário de id {string} está na página da conversa de id {string}", (userId, conversationId) => {
   cy.visit("/user/"+userId+"/conversation/"+conversationId);
+  cy.wait(500);
 });
 
 When("o usuário clica no perfil da conversa", () => {

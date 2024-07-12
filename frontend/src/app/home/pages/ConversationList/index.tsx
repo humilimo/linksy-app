@@ -52,20 +52,20 @@ function ConversationList() {
         <div className="flex items-center justify-between pb-8">
           <h1 className="text-4xl font-bold">Conversation List</h1>
           <div className="flex space-x-4">
+          <button
+              className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+              type="button"
+              onClick={() => setShowCreateSimpleConversationModal(true)}
+            >
+              Nova Conversa
+            </button>
+
             <button
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowCreateGroupModal(true)}
             >
               Novo Grupo
-            </button>
-
-            <button
-              className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="button"
-              onClick={() => setShowCreateSimpleConversationModal(true)}
-            >
-              Nova Conversa
             </button>
           </div>
         </div>
@@ -78,8 +78,8 @@ function ConversationList() {
           {conversations.length > 0 ? (
             conversations.map(conversation => (
               <div
-                key={conversation.id}
                 className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative"
+                data-cy={"conversation-list-id-"+conversation.id}
               >
                 <Link
                   to={`/user/${loggedId}/conversation/${conversation.id}`}
@@ -91,7 +91,7 @@ function ConversationList() {
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
                   )}
                   <div>
-                    <h2 className="text-xl font-semibold">{conversation.name}</h2>
+                    <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-"+conversation.name}>{conversation.name}</h2>
                     <p>{conversation.lastMessage}</p>
                   </div>
                 </Link>

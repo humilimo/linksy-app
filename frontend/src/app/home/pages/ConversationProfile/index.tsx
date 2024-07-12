@@ -82,7 +82,7 @@ const ConversationProfileMenu = () => {
         </div>
       {/* GROUP CONVERSATION */}
         {(conversation && participants) ? (
-          <div className='flex flex-col h-screen'>
+          <div className='flex flex-col h-screen' data-cy={"conversation-profile-menu"}>
           {/* PICTURE AND NAME */}
             <div className='p-6 flex flex-col items-center'>
               {conversation.picture ? (

@@ -56,6 +56,8 @@ function ConversationList() {
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowCreateSimpleConversationModal(true)}
+              data-cy={"new-conversation-button"}
+
             >
               Nova Conversa
             </button>
@@ -64,6 +66,7 @@ function ConversationList() {
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowCreateGroupModal(true)}
+              data-cy={"new-group-button"}
             >
               Novo Grupo
             </button>
@@ -91,7 +94,12 @@ function ConversationList() {
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
                   )}
                   <div>
-                    <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-"+conversation.name}>{conversation.name}</h2>
+                    <div className='flex items-center'>
+                      <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-"+conversation.name}>{conversation.name}</h2>
+                      {conversation.isGroup ? null : (
+                        <h3 className='ml-4 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"} </h3>
+                      )}
+                    </div>
                     <p>{conversation.lastMessage}</p>
                   </div>
                 </Link>

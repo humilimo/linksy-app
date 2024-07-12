@@ -48,7 +48,7 @@ function FriendListMultSelectComponent(props) {
               <p className='pe-4'>{friend.name}</p>
               <p className='pe-4'>({friend.username})</p>
             </div>
-            <input className="form-checkbox h-6 w-6 text-primary border-2 border-gray-300 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary" type="checkbox" onChange={() => handleCheckBox(friend.id)} />
+            <input className="form-checkbox h-6 w-6 text-primary border-2 border-gray-300 rounded cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary" type="checkbox" onChange={() => handleCheckBox(friend.id)} data-cy={"friend-list-checkbox-"+friend.username}/>
           </li>
         ))}
       </ul>

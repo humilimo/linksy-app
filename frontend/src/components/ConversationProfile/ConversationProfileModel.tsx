@@ -4,6 +4,8 @@ export interface ConversationProps {
   picture: string | null;
   isGroup: boolean;
   createdAt: string;
+  favorited: boolean;
+  lastMessage: string;
 }
 
 export interface ParticipantProps {

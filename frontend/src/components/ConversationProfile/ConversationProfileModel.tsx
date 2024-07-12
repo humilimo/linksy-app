@@ -1,6 +1,7 @@
 export interface ConversationProps {
   id: number;
   name: string;
+  username: string;
   picture: string | null;
   isGroup: boolean;
   createdAt: string;

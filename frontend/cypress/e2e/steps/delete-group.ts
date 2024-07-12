@@ -40,6 +40,7 @@ When("o usuário digita {string}", (groupName: string) => {
 When("o usuário confirma a deleção do grupo", () => {
   cy.get('[data-cy="delete-group-modal-confirm-button"]')
     .click();
+  cy.wait(500);
 });
 
 Then("o usuário deve estar na pagina inicial", () => {

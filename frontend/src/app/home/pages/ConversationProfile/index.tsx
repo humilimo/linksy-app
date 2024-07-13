@@ -146,7 +146,7 @@ const ConversationProfileMenu = () => {
                         Remover
                       </button>
                     ) : null}
-                    {showDeleteUsersModal ? (
+                    {showDeleteUsersModal && deleteParticipant == participant? (
                       <RemoveParticipantFromGroupModal loggedId={loggedId} conversationId={conversationId} setShowDeleteUsersModal={setShowDeleteUsersModal} deleteParticipant={deleteParticipant}/>
                     ) : null}
                   </li>

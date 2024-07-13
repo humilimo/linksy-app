@@ -79,7 +79,7 @@ export class MessageService {
     var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
 
     if(conversationIdsOfLoggedUser.includes(conversationId)){
-      var messages = this.prisma.message.findMany({
+      const messages = await this.prisma.message.findMany({
         select:{
           content:true,
           createdAt:true,
@@ -94,41 +94,114 @@ export class MessageService {
         orderBy:{
           id: 'desc'
         },
-      })
-      return messages;
+      });
+      
+      const Messages = [];
+      for(let i =0;i<messages.length;i++){
+        var message = messages[i];
+
+        const sender = await this.prisma.user.findUnique({
+          select:{
+            name:true,
+            username:true,
+          },
+          where:{
+            id: message.senderId
+          }
+        });
+
+        Messages.push({
+          content: messages[i].content,
+          createdAt: messages[i].createdAt,
+          senderId: messages[i].senderId,
+          senderName: `${sender.name} (${sender.username})`,
+        })
+    }
+      return Messages;
     }
     else
       return [];
   } 
 
-  async searchMessageInAllConversations(loggedId: number,searchMessageDto: SearchMessageDto)
-  {
-    var targetWord = searchMessageDto.targetWord;
-
-    var conversationsOfLoggedUser = await this.conversationService.getConversationsOfLoggedUser(loggedId);
-    var conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
-    
-    var messages = this.prisma.message.findMany({
-      select:
-      {
-        content:true,
-        createdAt:true,
-        conversationId:true,
-        senderId:true,
+  async searchMessageInAllConversations(loggedId: number, searchMessageDto: SearchMessageDto) {
+    const targetWord = searchMessageDto.targetWord;
+  
+    const conversationsOfLoggedUser = await this.conversationService.getConversationsOfLoggedUser(loggedId);
+    const conversationIdsOfLoggedUser = conversationsOfLoggedUser.map(conversation => conversation.conversationId);
+  
+    const messages = await this.prisma.message.findMany({
+      select: {
+        content: true,
+        createdAt: true,
+        conversationId: true,
+        senderId: true,
       },
-      where:{
-        conversationId:{
-          in: conversationIdsOfLoggedUser
+      where: {
+        conversationId: {
+          in: conversationIdsOfLoggedUser,
         },
-        content:{
+        content: {
           contains: targetWord,
         },
       },
-      orderBy:{
-        id: 'desc'
+      orderBy: {
+        id: 'desc',
       },
-    })
-    return messages;
+    });
+  
+    const Messages = [];
+  
+    for (let i = 0; i < messages.length; i++) {
+      const message = messages[i];
+  
+      const conversation = await this.prisma.conversation.findUnique({
+        where: { id: message.conversationId },
+        select: { name: true, isGroup: true ,id: true},
+      });
+  
+      const sender = await this.prisma.user.findUnique({
+        where: { id: message.senderId },
+        select: { name: true, username: true },
+      });
+  
+      if (!conversation.isGroup) {
+        const otherUserConversation = await this.prisma.userConversation.findFirst({
+          select: {
+            userId: true,
+          },
+          where: {
+            conversationId: conversation.id,
+            userId: {
+              notIn: [loggedId, 0],
+            },
+          },
+        });
+  
+        if (otherUserConversation) {
+          const otherUser = await this.prisma.user.findUnique({
+            select: {
+              name: true,
+            },
+            where: {
+              id: otherUserConversation.userId,
+            },
+          });
+          conversation.name = otherUser.name;
+        }
+      }
+
+      if(sender.name != "linksy"){
+        Messages.push({
+          content: message.content,
+          createdAt: message.createdAt,
+          conversationId: message.conversationId,
+          senderId: message.senderId,
+          conversationName: conversation.name,
+          senderName: `${sender.name} (${sender.username})`,
+        });
+      }
+    }
+    return Messages;
   }
 }
 

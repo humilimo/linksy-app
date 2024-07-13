@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { MessageService } from './message.service';
 import { CreateMessageDto } from './dto/create-message.dto';
 import { UpdateMessageDto } from './dto/update-message.dto';
@@ -20,12 +20,12 @@ export class MessageController {
   }
 
   @Get(':id/search')
-  searchMessageInUniqueConversation(@Param('loggedId') loggedId: string,@Param('id') conversationId: string,@Body() searchMessageDto: SearchMessageDto) {
+  searchMessageInUniqueConversation(@Param('loggedId') loggedId: string,@Param('id') conversationId: string,@Query() searchMessageDto: SearchMessageDto) {
     return this.messageService.searchMessageInUniqueConversation(+loggedId,+conversationId,searchMessageDto);
   }
 
   @Get('search')
-  searchMessageInAllConversations(@Param('loggedId') loggedId: string,@Body() searchMessageDto: SearchMessageDto) {
+  searchMessageInAllConversations(@Param('loggedId') loggedId: string,@Query() searchMessageDto: SearchMessageDto) {
     return this.messageService.searchMessageInAllConversations(+loggedId,searchMessageDto);
   }  
 

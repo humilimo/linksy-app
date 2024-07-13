@@ -205,6 +205,7 @@ export class ConversationService {
         ...conversationWithoutUserConversations,
         favorited: userConversations[0].favorited,
         lastMessage: lastMessage.content, 
+        username: null
       };
       
       if(!conversation.isGroup){
@@ -223,6 +224,7 @@ export class ConversationService {
         const nameOfOtherUser = await this.prisma.user.findUnique({
           select:{
             name:true,
+            username:true
           },
           where:{
             id: otherUserConversation.userId,
@@ -230,6 +232,7 @@ export class ConversationService {
         });
 
         mergedInfos.name = nameOfOtherUser.name;
+        mergedInfos.username = nameOfOtherUser.username;
       }
 
       recentConversations.push(mergedInfos);

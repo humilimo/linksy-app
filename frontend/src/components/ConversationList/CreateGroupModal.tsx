@@ -46,7 +46,7 @@ function CreateGroupModal(props) {
           <div className="relative p-6 flex flex-col justify-between">
             <div className='mx-4'>
               <p className="text-lg"> Nome: </p>
-              <input name='groupName' id='groupName' type="text" className='rounded shadow border border-gray-200 px-1 py-2 w-full' onChange={(e)=>{setGroupName(e.target.value)}}/>
+              <input name='groupName' id='groupName' type="text" className='rounded shadow border border-gray-200 px-1 py-2 w-full' onChange={(e)=>{setGroupName(e.target.value)}} required data-cy={"group-modal-group-name-input"}/>
             </div>
             <div className='pt-6'>
               <p className="text-lg mx-4"> Participantes: </p>
@@ -63,7 +63,7 @@ function CreateGroupModal(props) {
             }}>
               Cancelar
             </button>
-            <button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">
+            <button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit" data-cy={"craete-group-modal-confirm-button"}>
               Criar
             </button>
           </div>

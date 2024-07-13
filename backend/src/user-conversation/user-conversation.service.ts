@@ -81,6 +81,15 @@ export class UserConversationService {
   }
 
   async deleteUser(loggedId: number, conversationId: number, deleteId: number) {
+    let isGroup = (await this.prisma.conversation.findUnique({
+      select:{
+        isGroup: true
+      },
+      where:{
+        id: conversationId,
+      }
+    })).isGroup;
+
     let isOwner = await this.prisma.userConversation.findUnique({
       select:{
         owner: true
@@ -105,9 +114,9 @@ export class UserConversationService {
         }
       });
 
-      let message = (await Promise.all(await this.prisma.$transaction([
+      let message = await this.prisma.$transaction(async p => {
         //delete user from group
-        this.prisma.userConversation.update({
+        await this.prisma.userConversation.update({
           where:{
             userId_conversationId:{
               conversationId: conversationId,
@@ -117,16 +126,23 @@ export class UserConversationService {
           data:{
             leftConversation: true
           }
-        }),
-        //send a message in conversation that indicates the user has been deleted
-        this.prisma.message.create({
-          data: {
-            content: (isOwner.owner == true)?("'" + userToDelete.username + "' foi removido do grupo."):("'" + userToDelete.username + "' saiu do grupo."),
-            senderId: 0,
-            conversationId: conversationId
-          }
-        })
-      ])))[1];
+        });
+        console.log('passou');
+
+        if (isGroup){
+          return (await this.prisma.message.create({
+            data: {
+              content: (isOwner.owner == true)?("'" + userToDelete.username + "' foi removido do grupo."):("'" + userToDelete.username + "' saiu do grupo."),
+              senderId: 0,
+              conversationId: conversationId
+            }
+          })).content;
+        }
+        else{
+          return "'" + userToDelete.username + "' excluiu a conversa."
+        }
+      })
+      
       return message;
     }
   }

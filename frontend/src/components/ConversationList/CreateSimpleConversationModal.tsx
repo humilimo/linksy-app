@@ -63,7 +63,7 @@ function CreateSimpleConversationModal(props) {
         {/* BODY */}                  
         <div className='flex-1 bg-gray-100 mx-4 my-5 rounded-lg shadow-lg overflow-y-auto'>
           {friendList?.map((friend, index, array) => (
-            <button className={"w-full border border-black hover:bg-gray-200" + (index == 0 ? (" rounded-t-lg") : array.length - 1 === index ? (" rounded-b-lg"): "")} onClick={() => handleCreateSimpleConversation(friend.id)}>
+            <button className={"w-full border border-black hover:bg-gray-200" + (index == 0 ? (" rounded-t-lg") : array.length - 1 === index ? (" rounded-b-lg"): "")} onClick={() => handleCreateSimpleConversation(friend.id)} data-cy={"friend-list-button-"+friend.username}>
               <div className='flex items-center ml-2 m-2'>
                 <div className='relative pe-4'>
                   {friend.picture ? (

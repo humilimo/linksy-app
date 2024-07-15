@@ -48,7 +48,7 @@ function EditGroupNameModal(props) {
 						}}>
 							Cancelar
 						</button>
-						<button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">
+						<button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit" data-cy="confirm-new-group-name">
 							Confirmar
 						</button>
 					</div>

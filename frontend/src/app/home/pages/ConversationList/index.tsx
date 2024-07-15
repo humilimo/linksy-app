@@ -138,6 +138,7 @@ function ConversationList() {
               <div
                 key={conversation.id}
                 className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative"
+                data-cy={"conversation-id-"+conversation.id}
               >
                 <Link
                   to={`/user/${loggedId}/conversation/${conversation.id}`}

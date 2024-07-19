@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useParams, Link } from 'react-router-dom';
-import { FaStar, FaUserCircle, FaUsers, FaSearch } from 'react-icons/fa';
+import { FaStar, FaUserCircle, FaUsers, FaSearch, FaSignOutAlt } from 'react-icons/fa';
 import CreateSimpleConversationModal from '../../../../components/ConversationList/CreateSimpleConversationModal';
 import CreateGroupModal from '../../../../components/ConversationList/CreateGroupModal';
 import { ConversationProps } from '../../../../components/ConversationProfile/ConversationProfileModel';
 import { MessageProps } from '../../../../components/SearchMessage/SearchMessageGlobalModel';
+import { useNavigate } from "react-router-dom";
+import axiosAuthInstance from '../../../../API/axiosAuthInstance';
 
 function ConversationList() {
   const { loggedId } = useParams<{ loggedId: string }>();
@@ -16,6 +17,8 @@ function ConversationList() {
   const [searchTerm, setSearchTerm] = useState('');
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [noResults, setNoResults] = useState(false);
+  const [authenticated, setAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchConversations();
@@ -23,20 +26,22 @@ function ConversationList() {
 
   const fetchConversations = async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:3002/user/${loggedId}/conversation`);
+      const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation`);
       if (response.data) {
         setConversations(response.data);
+        setAuthenticated(true)
       }
     } catch (error) {
       setError('Error fetching conversations');
       console.error(error);
+      navigate(`/user/login`)
     }
   };
 
   const searchMessages = async (targetWord: string) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:3002/user/${loggedId}/conversation/search`, {
-        params: { targetWord }
+      const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation/search`, {
+        params: { targetWord },
       });
       if (response.data && response.data.length > 0) {
         setMessages(response.data);
@@ -64,7 +69,7 @@ function ConversationList() {
 
   const toggleFavorite = async (conversationId: string) => {
     try {
-      await axios.patch(`http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/favoritar`);
+      await axiosAuthInstance.patch(`/user/${loggedId}/conversation/${conversationId}/favoritar`);
       setConversations(prevConversations =>
         prevConversations.map(conversation =>
           conversation.id === Number(conversationId)
@@ -80,6 +85,7 @@ function ConversationList() {
   };
 
   return (
+    authenticated &&
     <div className="p-6 pt-8 bg-gray-100 min-h-screen">
       <div className="bg-white p-6 rounded-lg shadow-lg">
         <div className="flex items-center justify-between pb-8">
@@ -110,6 +116,17 @@ function ConversationList() {
             >
               Nova Conversa
             </button>
+            <button
+             className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+              type="button"
+              onClick={() => navigate(`/user/${loggedId}/friend/all`)}
+            >Amigos
+            </button>
+            <div className="flex items-center justify-center">
+            <div className=" cursor-pointer w-12 h-full bg-red-600 hover:bg-red-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
+              <FaSignOutAlt className="text-white text-3xl" onClick={() => {localStorage.removeItem('token'); navigate(`/user/login`)}}/>
+            </div>
+            </div>
           </div>
         </div>
 

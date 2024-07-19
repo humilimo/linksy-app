@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import FriendListMultSelectComponent from "../FriendsList/FriendListMultSelectComponent"
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 function CreateGroupModal(props) {
   const navigate = useNavigate();
 
@@ -11,15 +11,15 @@ function CreateGroupModal(props) {
 
   const submitGroupCreation = async (e) =>{
     e.preventDefault();
-    await axios
+    await axiosAuthInstance
       .post(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation`,
+        `/user/${props.loggedId}/conversation`,
         {
           isGroup: true,
           name: groupName,
           ids: idList,
           picture: null
-        }
+        },
       )
       .then(response => {
         if (response.data.conversationId){

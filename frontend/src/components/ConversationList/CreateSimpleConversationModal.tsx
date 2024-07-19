@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import {FriendProps} from '../FriendsList/FriendsListModel'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function CreateSimpleConversationModal(props) {
   const navigate = useNavigate();
@@ -10,8 +10,8 @@ function CreateSimpleConversationModal(props) {
   const [friendList, setFriendList] = useState<FriendProps[] | null>(null);
 
   const fetchFriendListData = async () => {
-    await axios
-      .get(`http://127.0.0.1:3002/user/${props.loggedId}/friend/all`)
+    await axiosAuthInstance
+      .get(`/user/${props.loggedId}/friend/all`)
       .then(response => {
         if (response.data.friendList){
           setFriendList(response.data.friendList);
@@ -27,9 +27,9 @@ function CreateSimpleConversationModal(props) {
   }, [props.loggedId]);
 
   const handleCreateSimpleConversation = async (id) =>{
-    await axios
+    await axiosAuthInstance
       .post(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation`, 
+        `/user/${props.loggedId}/conversation`, 
         {
           name: null,
           picture: null,

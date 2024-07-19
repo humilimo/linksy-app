@@ -1,13 +1,13 @@
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function LeaveConversationModal(props) {
   const navigate = useNavigate();
 
   const submitLeaveConversation = async () =>{
-    await axios
+    await axiosAuthInstance
       .patch(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation/${props.conversationId}/sair`
+        `/user/${props.loggedId}/conversation/${props.conversationId}/sair`
       )
       .then(() => {
         navigate(`/user/${props.loggedId}/conversation`);

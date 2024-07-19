@@ -1,5 +1,5 @@
-import axios from 'axios';
 import { useState } from 'react';
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function EditGroupNameModal(props) {
 	const [newGroupName, setNewGroupName] = useState<string | null>(null);
@@ -7,9 +7,9 @@ function EditGroupNameModal(props) {
 	const submitNewGroupName = async (e) =>{
 		e.preventDefault();
 		if(newGroupName) {
-			await axios
+			await axiosAuthInstance
 			.patch(
-				`http://127.0.0.1:3002/user/${props.loggedId}/conversation/${props.conversationId}`,
+				`/user/${props.loggedId}/conversation/${props.conversationId}`,
 				{name: newGroupName}
 			)
 			.then(() => {

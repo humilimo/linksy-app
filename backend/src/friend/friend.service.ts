@@ -1,8 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFriendDto } from './dto/create-friend.dto';
-import { UpdateFriendDto } from './dto/update-friend.dto';
 import { PrismaService } from '../prisma.service';
-import { CreateUserDto } from 'src/user/dto/create-user.dto';
+import { SearchFriendDto } from './dto/search-friend.dto';
 
 @Injectable()
 export class FriendService {
@@ -39,7 +37,8 @@ export class FriendService {
             username: true,
             name: true,
             bio: true,
-            picture: true
+            picture: true,
+            email:true
           }
         }  
       },
@@ -55,13 +54,18 @@ export class FriendService {
     return aux
   }
 
-  // findOne(id: number) {
-  //   return `This action returns a #${id} friend`;
-  // }
+  async findFriend(loggedId: number, searchFriendDto: SearchFriendDto){
 
-  // update(id: number, updateFriendDto: UpdateFriendDto) {
-  //   return `This action updates a #${id} friend`;
-  // }
+    var user = await this.prisma.user.findUnique({
+      select:{ id:true, name:true, username:true, email:true, picture:true, bio:true },
+      where:{ username: searchFriendDto.username },
+    })
+
+    const usersArray = []
+    usersArray.push({...user})
+
+    return usersArray
+  }
 
   async remove(loggedId: number, username: {username:string}) {
 

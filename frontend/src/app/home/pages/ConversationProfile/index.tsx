@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from 'axios';
 
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BsPeopleFill, BsCircle, BsPencilSquare } from "react-icons/bs";
@@ -12,6 +11,7 @@ import RemoveParticipantFromGroupModal from '../../../../components/Conversation
 import LeaveConversationModal from '../../../../components/ConversationProfile/LeaveConversationModal'
 import DeleteGroupModal from '../../../../components/ConversationProfile/DeleteGroupModal'
 import EditGroupNameModal from '../../../../components/ConversationProfile/EditGroupNameModal'
+import axiosAuthInstance from '../../../../API/axiosAuthInstance';
 
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);
@@ -33,9 +33,9 @@ const ConversationProfileMenu = () => {
   const [user, setUser] = useState<UserProps | null>(null);
 
   const fetchConversationProfileData = async () => {
-    await axios
+    await axiosAuthInstance
       .get(
-        `http://127.0.0.1:3002/user/${loggedId}/conversation/${conversationId}/profile`
+        `/user/${loggedId}/conversation/${conversationId}/profile`
       )
       .then(response => {
         if (response.data.conversation){

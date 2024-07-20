@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import FriendListMultSelectComponent from "../FriendsList/FriendListMultSelectComponent"
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function AddParticipantToGroupModal(props) {
   const navigate = useNavigate();
@@ -10,9 +10,9 @@ function AddParticipantToGroupModal(props) {
 
   
   const submitAddUsers = async () =>{
-    await axios
+    await axiosAuthInstance
       .post(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation/${props.conversationId}/adicionar`,
+        `/user/${props.loggedId}/conversation/${props.conversationId}/adicionar`,
         {ids: idList}
       )
       .then(() => {

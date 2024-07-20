@@ -1,10 +1,10 @@
-import axios from 'axios';
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function RemoveParticipantFromGroupModal(props) {
   const submitDeleteUsers = async () =>{
-    await axios
+    await axiosAuthInstance
       .patch(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation/${props.conversationId}/remover/${props.deleteParticipant.id}`
+        `/user/${props.loggedId}/conversation/${props.conversationId}/remover/${props.deleteParticipant.id}`
       )
       .then(() => {
         window.location.reload();

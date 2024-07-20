@@ -9,6 +9,9 @@ import { ConversationModule } from './conversation/conversation.module';
 import { UserConversationModule } from './user-conversation/user-conversation.module';
 import { ErasedMessageModule } from './erased-message/erased-message.module';
 import { FriendModule } from './friend/friend.module'
+import { JwtService } from '@nestjs/jwt';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './guards/auth.guard';
 
 @Module({
   imports: [
@@ -20,6 +23,10 @@ import { FriendModule } from './friend/friend.module'
     FriendModule,
   ],
   controllers: [AppController],
-  providers: [AppService, PrismaService],
+  providers: [AppService, PrismaService, JwtService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },],
 })
 export class AppModule {}

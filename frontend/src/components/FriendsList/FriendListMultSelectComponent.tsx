@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import {FriendProps} from './FriendsListModel'
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 
 function FriendListMultSelectComponent(props) {
   const [friendList, setFriendList] = useState<FriendProps[] | null>(null);
   const fetchFriendListData = async () => {
-    await axios
+    await axiosAuthInstance
       .get(
-        `http://127.0.0.1:3002/user/${props.loggedId}/friend/all`
+        `/user/${props.loggedId}/friend/all` 
       )
       .then(response => {
         if (response.data.friendList){

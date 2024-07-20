@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function DeleteGroupModal(props) {
   const navigate = useNavigate();
@@ -11,9 +11,9 @@ function DeleteGroupModal(props) {
 
   const submitGroupDeletion = async (e) =>{
     e.preventDefault();
-    await axios
+    await axiosAuthInstance
       .delete(
-        `http://127.0.0.1:3002/user/${props.loggedId}/conversation/${props.conversationId}/delete_all`,
+        `/user/${props.loggedId}/conversation/${props.conversationId}/delete_all`,
         {data: {groupName: groupName}}
       )
       .then(response => {

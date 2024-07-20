@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaUserCircle, FaUsers, FaSearch, FaSignOutAlt } from 'react-icons/fa';
-import CreateSimpleConversationModal from '../../../../components/ConversationList/CreateSimpleConversationModal';
-import CreateGroupModal from '../../../../components/ConversationList/CreateGroupModal';
-import { ConversationProps } from '../../../../components/ConversationProfile/ConversationProfileModel';
-import { MessageProps } from '../../../../components/SearchMessage/SearchMessageGlobalModel';
+import CreateSimpleConversationModal from '../../components/ConversationList/CreateSimpleConversationModal';
+import CreateGroupModal from '../../components/ConversationList/CreateGroupModal';
+import { ConversationProps } from '../../components/ConversationProfile/ConversationProfileModel';
+import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
 import { useNavigate } from "react-router-dom";
-import axiosAuthInstance from '../../../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function ConversationList() {
   const { loggedId } = useParams<{ loggedId: string }>();

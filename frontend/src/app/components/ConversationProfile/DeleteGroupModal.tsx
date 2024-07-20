@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function DeleteGroupModal(props) {
   const navigate = useNavigate();

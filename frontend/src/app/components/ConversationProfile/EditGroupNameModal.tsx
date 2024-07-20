@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function EditGroupNameModal(props) {
 	const [newGroupName, setNewGroupName] = useState<string | null>(null);

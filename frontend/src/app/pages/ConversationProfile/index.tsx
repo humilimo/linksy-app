@@ -4,14 +4,14 @@ import { useParams } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BsPeopleFill, BsCircle, BsPencilSquare } from "react-icons/bs";
 
-import {ConversationProps, ParticipantProps, UserProps} from '../../../../components/ConversationProfile/ConversationProfileModel'
+import {ConversationProps, ParticipantProps, UserProps} from '../../components/ConversationProfile/ConversationProfileModel'
 
-import AddParticipantToGroupModal from '../../../../components/ConversationProfile/AddParticipantToGroupModal'
-import RemoveParticipantFromGroupModal from '../../../../components/ConversationProfile/RemoveParticipantFromGroupModal'
-import LeaveConversationModal from '../../../../components/ConversationProfile/LeaveConversationModal'
-import DeleteGroupModal from '../../../../components/ConversationProfile/DeleteGroupModal'
-import EditGroupNameModal from '../../../../components/ConversationProfile/EditGroupNameModal'
-import axiosAuthInstance from '../../../../API/axiosAuthInstance';
+import AddParticipantToGroupModal from '../../components/ConversationProfile/AddParticipantToGroupModal'
+import RemoveParticipantFromGroupModal from '../../components/ConversationProfile/RemoveParticipantFromGroupModal'
+import LeaveConversationModal from '../../components/ConversationProfile/LeaveConversationModal'
+import DeleteGroupModal from '../../components/ConversationProfile/DeleteGroupModal'
+import EditGroupNameModal from '../../components/ConversationProfile/EditGroupNameModal'
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 const ConversationProfileMenu = () => {
   const [nav, setNav] = useState(false);

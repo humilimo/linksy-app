@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import FriendListMultSelectComponent from "../FriendsList/FriendListMultSelectComponent"
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 function CreateGroupModal(props) {
   const navigate = useNavigate();
 

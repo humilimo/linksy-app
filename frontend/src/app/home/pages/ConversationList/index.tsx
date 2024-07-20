@@ -43,12 +43,9 @@ function ConversationList() {
       const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation/search`, {
         params: { targetWord },
       });
-      if (response.data && response.data.length > 0) {
+      console.log("Mensagens filtradas:", response.data);
+      if (response.data) {
         setMessages(response.data);
-        setNoResults(false); 
-      } else {
-        setMessages([]);
-        setNoResults(true); 
       }
     } catch (error) {
       setError('Error searching messages');
@@ -61,7 +58,6 @@ function ConversationList() {
     setSearchTerm(value);
     if (value.trim() === '') {
       setMessages([]);
-      setNoResults(false); 
     } else {
       searchMessages(value);
     }
@@ -100,12 +96,12 @@ function ConversationList() {
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
               />
               <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-              {noResults && <p className="text-red-500 absolute left-4 top-full mt-1">Mensagem não encontrada</p>}
             </div>
             <button
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowCreateGroupModal(true)}
+              data-cy={"new-group-button"}
             >
               Novo Grupo
             </button>
@@ -113,6 +109,7 @@ function ConversationList() {
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowCreateSimpleConversationModal(true)}
+              data-cy={"new-conversation-button"}
             >
               Nova Conversa
             </button>
@@ -131,18 +128,22 @@ function ConversationList() {
         </div>
 
         {error && <p className="text-red-500">{error}</p>}
-        <div className="conversation-list-container overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
+        <div
+          className="conversation-list-container overflow-y-auto"
+          style={{ maxHeight: 'calc(100vh - 250px)' }}
+        >
           {messages.length > 0 ? (
             messages.map((message, index) => (
-              <Link
+              <div
                 key={index}
-                to={`/user/${loggedId}/conversation/${message.conversationId}`}
                 className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
               >
                 <div className="flex items-center">
                   <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
                   <div>
-                    <div className="text-xl font-bold mb-2 text-black-600">{message.conversationName}</div>
+                    <div className="text-xl font-bold mb-2 text-black-600">
+                      {message.conversationName}
+                    </div>
                     <p>{message.content}</p>
                   </div>
                 </div>
@@ -150,23 +151,29 @@ function ConversationList() {
                   <h2 className="text-sm font-semibold">{message.senderName}</h2>
                   <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
                 </div>
-              </Link>
+              </div>
             ))
           ) : (
             conversations.map(conversation => (
-              <div key={conversation.id} className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative">
-                <Link to={`/user/${loggedId}/conversation/${conversation.id}`} className="conversation-link flex-1 flex items-center">
+              <div
+                key={conversation.id}
+                className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative"
+                data-cy={"conversation-list-id-"+conversation.id}
+              >
+                <Link
+                  to={`/user/${loggedId}/conversation/${conversation.id}`}
+                  className="conversation-link flex-1 flex items-center"
+                >
                   {conversation.isGroup ? (
                     <FaUsers className="text-gray-500 mr-4 text-4xl" />
                   ) : (
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
                   )}
                   <div>
-                    <div className="flex items-center">
-                      <h2 className="text-xl font-semibold">{conversation.name}</h2>
+                    <div className='flex items-center'>
+                    <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-" + conversation.name}>{conversation.name}</h2>
                       {!conversation.isGroup && (
-                        <h3 className="ml-4 text-gray-500" data-cy={`conversation-list-username-${conversation.username}`}>
-                          {`(${conversation.username})`}
+                        <h3 className='ml-4 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"}
                         </h3>
                       )}
                     </div>
@@ -201,4 +208,3 @@ function ConversationList() {
 }
 
 export default ConversationList;
-

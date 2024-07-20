@@ -4,19 +4,13 @@ import axiosAuthInstance from '../../../../API/axiosAuthInstance';
 
 function Login() {
   const [error, setError] = useState<string | null>(null);
-  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    credentials.username=username
-    credentials.password=password
-  }, [username,password]);
-
   const logIn = async () => {
     try {
-      const response = await axiosAuthInstance.post(`/user/login`, credentials);
+      const response = await axiosAuthInstance.post(`/user/login`, { username:username, password:password });
       if (response.data ) { 
         localStorage.setItem('token', response.data.token);
         navigate(`/user/${response.data.loggedId}/conversation`) 
@@ -24,17 +18,6 @@ function Login() {
     } catch (error) { 
       setError(`${error?.response?.data?.message}`);
     }
-  };
-
-  const receiveUsernameInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setUsername(value);
-    
-  };
-
-  const receivePasswordInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setPassword(value);
   };
 
   const handleKeyPress = (event) => {
@@ -54,10 +37,8 @@ function Login() {
             <div className="mb-4 ml-4">
             <h2>Username:</h2>
             <input
-                type="text"
                 placeholder="Your Username"
-                value={username}
-                onChange={receiveUsernameInfo}
+                onChange={(e)=>{setUsername(e.target.value)}}
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
               />
             </div> 
@@ -66,8 +47,7 @@ function Login() {
               <input
               type="password"
               placeholder="Your Password"
-              value={password}
-              onChange={receivePasswordInfo}
+              onChange={(e)=>{setPassword(e.target.value)}}
               className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
               onKeyPress={handleKeyPress}
             />

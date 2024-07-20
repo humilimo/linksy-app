@@ -1,21 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axiosAuthInstance from '../../API/axiosAuthInstance';
 
 function AddFriendModal(props) {
 
   const [username, setUsername] = useState<string | null>(null);
+  const [noResults, setNoResults] = useState(false);
+  const [alreadyFriends, setAlreadyFriends] = useState(false);
+
+  useEffect(() => {
+    setAlreadyFriends(false);
+  }, [username]);
 
   const addingFriend = async (e) =>{
     e.preventDefault();
-    await axiosAuthInstance.post(`/user/${props.loggedId}/friend/add`,{ username: username },)
-      .then(response => {
-        if (response.data.receiverId){
-            props.setShowAddFriendModal(false)
-        }
-      })
-      .catch(error => {
-        console.log("aqui"+error);
-      });
+    setNoResults(false);
+    setAlreadyFriends(false);
+      try {
+        await axiosAuthInstance.post(`/user/${props.loggedId}/friend/add`,{ username: username },)
+          .then(response => {
+            if (response.data.receiverId){
+                props.setShowAddFriendModal(false)
+              }
+            })
+      }
+      catch (error) {
+          if (error?.response.status == 401) setNoResults(true)
+          if (error?.response.status == 500) setAlreadyFriends(true)
+          console.log(error);
+      }
   }
   
   return (
@@ -32,6 +44,8 @@ function AddFriendModal(props) {
           {/* BODY */}
           <div className="relative p-6 flex flex-col justify-between">
             <div className='mx-4'>
+              {noResults && <p className="text-red-500">Usuário inválido</p>}
+              {alreadyFriends && <p className="text-red-500">{username?.toUpperCase()} já está na sua lista de amigos</p>} 
               <p className="text-lg"> Username: </p>
               <input 
               name='username' 

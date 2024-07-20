@@ -43,9 +43,14 @@ function ConversationList() {
       const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation/search`, {
         params: { targetWord },
       });
-      console.log("Mensagens filtradas:", response.data);
-      if (response.data) {
+     
+      if (response.data && response.data.length > 0) {
         setMessages(response.data);
+        setNoResults(false);
+      }
+      else{
+        setMessages([]);
+        setNoResults(true); 
       }
     } catch (error) {
       setError('Error searching messages');
@@ -58,6 +63,7 @@ function ConversationList() {
     setSearchTerm(value);
     if (value.trim() === '') {
       setMessages([]);
+      setNoResults(false);
     } else {
       searchMessages(value);
     }
@@ -96,6 +102,7 @@ function ConversationList() {
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
               />
               <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
+              {noResults && <p className="text-red-500 absolute left-4 top-full mt-1">Mensagem não encontrada</p>}
             </div>
             <button
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
@@ -134,8 +141,9 @@ function ConversationList() {
         >
           {messages.length > 0 ? (
             messages.map((message, index) => (
-              <div
+              <Link
                 key={index}
+                to = {`/user/${loggedId}/conversation/${message.conversationId}`}
                 className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
               >
                 <div className="flex items-center">
@@ -151,7 +159,7 @@ function ConversationList() {
                   <h2 className="text-sm font-semibold">{message.senderName}</h2>
                   <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
                 </div>
-              </div>
+              </Link>
             ))
           ) : (
             conversations.map(conversation => (

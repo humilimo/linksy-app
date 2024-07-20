@@ -188,8 +188,12 @@ function ConversationList() {
                     <p>{conversation.lastMessage}</p>
                   </div>
                 </Link>
+                <div className="text-sm mr-12">
+                  <h2 className="font-semibold">{conversation.lastMessageSenderName}</h2>
+                  <p className="text-gray-500 ml-2">{new Date(conversation.lastMessageCreatedAt).toLocaleTimeString('pt-BR',{hour: '2-digit',minute: '2-digit',day: '2-digit', month: '2-digit'})}</p>
+                </div>
                 <FaStar
-                  className={`cursor-pointer absolute top-1/2 transform -translate-y-1/2 right-4 text-3xl ${conversation.favorited ? 'text-yellow-500' : 'text-gray-400'}`}
+                  className={`cursor-pointer absolute top-[45%] transform -translate-y-1/2 right-4 text-3xl ${conversation.favorited ? 'text-yellow-500' : 'text-gray-400'}`}
                   onClick={() => toggleFavorite(String(conversation.id))}
                 />
               </div>

@@ -7,6 +7,8 @@ export interface ConversationProps {
   createdAt: string;
   favorited: boolean;
   lastMessage: string;
+  lastMessageCreatedAt: string;
+  lastMessageSenderName: string;
 }
 
 export interface ParticipantProps {

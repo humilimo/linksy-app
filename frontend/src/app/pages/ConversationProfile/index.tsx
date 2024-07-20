@@ -57,7 +57,7 @@ const ConversationProfileMenu = () => {
   }, [loggedId, conversationId]);
 
   return (
-    <div className="flex justify-end items-center p-4 bg-white border border-gray-300">
+    <div className="flex justify-end items-center p-4 bg-white border border-gray-300 fixed top-0 left-0 right-0 z-20">
       {/* Right side */}
       <div className="flex items-center" data-cy={"conversation-profile-button"}>
         <div onClick={() => setNav(!nav)} className="cursor-pointer">

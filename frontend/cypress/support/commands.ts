@@ -41,12 +41,22 @@ declare global {
   namespace Cypress {
     interface Chainable {
       getDataCy(dataCySelector: string): Chainable<JQuery<HTMLElement>>;
+      login(username: string, password: string): Chainable<void>;
     }
   }
 }
 
 Cypress.Commands.add("getDataCy", (dataCySelector) => {
   return cy.get(`[data-cy="${dataCySelector}"]`);
+});
+
+Cypress.Commands.add('login', (username, password) => {
+  cy.request('POST', 'http://127.0.0.1:3002/user/login', {
+    username,
+    password
+  }).then((response) => {
+    window.localStorage.setItem('token', response.body.token);
+  });
 });
 
 export {};

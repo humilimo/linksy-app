@@ -12,6 +12,13 @@ Given(
 );
 
 Given(
+    'estou logado no usuário de username {string} e senha {string}',
+    (username: string, password: string) => {
+        cy.login(username, password);
+    }
+);
+
+Given(
     'estou logado no usuário de id {string}',
     (id: string) => {
         loggedId = id;

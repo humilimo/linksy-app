@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import {FriendProps} from '../FriendsList/FriendsListModel'
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function CreateSimpleConversationModal(props) {
   const navigate = useNavigate();

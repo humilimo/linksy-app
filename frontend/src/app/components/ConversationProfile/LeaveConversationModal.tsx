@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function LeaveConversationModal(props) {
   const navigate = useNavigate();

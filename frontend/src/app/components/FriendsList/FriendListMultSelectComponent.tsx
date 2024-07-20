@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { BsPeopleFill, BsCircle } from "react-icons/bs";
 import {FriendProps} from './FriendsListModel'
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 
 function FriendListMultSelectComponent(props) {

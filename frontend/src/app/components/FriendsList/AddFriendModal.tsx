@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function AddFriendModal(props) {
 

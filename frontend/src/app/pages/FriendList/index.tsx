@@ -2,10 +2,10 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaUserCircle, FaSearch, FaTrash, FaComment } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
-import AddFriendModal from '../../../../components/FriendsList/AddFriendModal';
-import FriendInfoModal from '../../../../components/FriendsList/FriendInfoModal';
-import { FriendProps } from '../../../../components/FriendsList/FriendsListModel';
-import axiosAuthInstance from '../../../../API/axiosAuthInstance';
+import AddFriendModal from '../../components/FriendsList/AddFriendModal';
+import FriendInfoModal from '../../components/FriendsList/FriendInfoModal';
+import { FriendProps } from '../../components/FriendsList/FriendsListModel';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function FriendList() {
   const { loggedId } = useParams<{ loggedId: string }>();

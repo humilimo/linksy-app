@@ -1,4 +1,4 @@
-import axiosAuthInstance from '../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function RemoveParticipantFromGroupModal(props) {
   const submitDeleteUsers = async () =>{

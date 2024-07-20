@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import axiosAuthInstance from '../../../../API/axiosAuthInstance';
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 function Login() {
   const [error, setError] = useState<string | null>(null);
@@ -16,7 +16,7 @@ function Login() {
         navigate(`/user/${response.data.loggedId}/conversation`) 
       }
     } catch (error) { 
-      setError(`${error?.response?.data?.message}`);
+      setError(`${error}`);
     }
   };
 

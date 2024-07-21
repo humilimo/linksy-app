@@ -25,9 +25,7 @@ const ConversationPage = () => {
                   isOwnMessage={loggedId?.toString() === msg.message.senderId?.toString()} // Ajuste esta linha conforme necessário
                 />
               ))
-            ) : (
-              <p>No messages found</p>
-            )}
+            ) : null}
           </div>
           <div className={"fixed flex flex-col top-[69px] h-[calc(100%-127px)] w-[400px] bg-white z-10 duration-300" + (showProfile ? " right-0  border border-gray-300" : " right-[-100%]")}>
             <ConversationMenuProfileComponent loggedId={loggedId} conversationId={conversationId} setShowProfile={setShowProfile}/>

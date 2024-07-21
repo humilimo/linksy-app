@@ -1,36 +1,44 @@
 import React from "react";
+import { useState } from 'react';
 import MessageBox from "../../components/MessageBox/MessageBox";
-import ConversationProfileMenu from "../ConversationProfile/index";
+import ConversationMenuProfileComponent from "../../components/ConversationProfile/ConversationMenuProfileComponent";
+import ConversationMenuComponent from "../../components/ConversationPage/ConversationMenuComponent";
 import useConversationPage from "./ConversationPageController";
 import MessageInput from "../../components/MessageInput/MessageInput";
 
-const ConversationPage: React.FC = () => {
+const ConversationPage = () => {
   const { conversation, messages, loggedId, conversationId } = useConversationPage({ conversation: { name: '', picture: '' }, messages: [] });
+  const [showProfile, setShowProfile] = useState(false);
 
   return (
-    <div className="">
+    <div className="flex-col">
+      <ConversationMenuComponent loggedId={loggedId} conversationId={conversationId} showProfile={showProfile} setShowProfile={setShowProfile}/>
       <div className="bg-gray-100 min-h-screen flex flex-col justify-center">
-        <ConversationProfileMenu />
-        <div className="mx-[15px] h-[800px] overflow-y-auto justify-center scrollbar-hide">
-          {messages?.length > 0 ? (
-            messages.map((msg, index) => (
-              <MessageBox 
-              key={index}
-                message={msg.message}
-                senderInfo={msg.senderInfo} 
-                isOwnMessage={loggedId?.toString() === msg.message.senderId?.toString()} // Ajuste esta linha conforme necessário
-              />
-            ))
-          ) : (
-            <p>No messages found</p>
-          )}
+        <div className={`duration-300 ${showProfile ? 'mr-[400px]' : ''}`}>
+          <div className="mx-[15px] h-[800px] overflow-y-auto justify-center scrollbar-hide">
+            {messages?.length > 0 ? (
+              messages.map((msg, index) => (
+                <MessageBox 
+                key={index}
+                  message={msg.message}
+                  senderInfo={msg.senderInfo} 
+                  isOwnMessage={loggedId?.toString() === msg.message.senderId?.toString()} // Ajuste esta linha conforme necessário
+                />
+              ))
+            ) : (
+              <p>No messages found</p>
+            )}
+          </div>
+          <div className={"fixed flex flex-col top-[69px] h-[calc(100%-127px)] w-[400px] bg-white z-10 duration-300" + (showProfile ? " right-0  border border-gray-300" : " right-[-100%]")}>
+            <ConversationMenuProfileComponent loggedId={loggedId} conversationId={conversationId} setShowProfile={setShowProfile}/>
+          </div>
         </div>
-        <MessageInput 
-          onMessageSent={(message) => (console.log(message))}
-          loggedId={loggedId?.toString() || ''} 
-          conversationId={conversationId?.toString() || ''}
-          />
       </div>
+      <MessageInput 
+        onMessageSent={(message) => (console.log(message))}
+        loggedId={loggedId?.toString() || ''} 
+        conversationId={conversationId?.toString() || ''}
+        />
     </div>
   );
 }

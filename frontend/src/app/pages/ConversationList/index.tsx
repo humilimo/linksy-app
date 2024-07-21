@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaStar, FaUserCircle, FaUsers, FaSearch, FaSignOutAlt } from 'react-icons/fa';
-import CreateSimpleConversationModal from '../../components/ConversationList/CreateSimpleConversationModal';
-import CreateGroupModal from '../../components/ConversationList/CreateGroupModal';
+import { BsChatLeftFill } from "react-icons/bs";
+import FriendListModal from '../../components/FriendsList/FriendListModal';
 import { ConversationProps } from '../../components/ConversationProfile/ConversationProfileModel';
 import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
 import { useNavigate } from "react-router-dom";
@@ -12,8 +12,7 @@ function ConversationList() {
   const { loggedId } = useParams<{ loggedId: string }>();
   const [conversations, setConversations] = useState<ConversationProps[]>([]);
   const [error, setError] = useState<string | null>(null);
-  const [showCreateSimpleConversationModal, setShowCreateSimpleConversationModal] = useState(false);
-  const [showCreateGroupModal, setShowCreateGroupModal] = useState(false);
+  const [showFriendListModal, setShowFriendListModal] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [noResults, setNoResults] = useState(false);
@@ -107,25 +106,12 @@ function ConversationList() {
             <button
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
-              onClick={() => setShowCreateGroupModal(true)}
-              data-cy={"new-group-button"}
+              onClick={() => setShowFriendListModal(true)}
+              data-cy={""}
             >
-              Novo Grupo
+              <BsChatLeftFill/>
             </button>
-            <button
-              className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="button"
-              onClick={() => setShowCreateSimpleConversationModal(true)}
-              data-cy={"new-conversation-button"}
-            >
-              Nova Conversa
-            </button>
-            <button
-             className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
-              type="button"
-              onClick={() => navigate(`/user/${loggedId}/friend/all`)}
-            >Amigos
-            </button>
+ 
             <div className="flex items-center justify-center">
             <div className=" cursor-pointer w-12 h-full bg-red-600 hover:bg-red-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
               <FaSignOutAlt className="text-white text-3xl" onClick={() => {localStorage.removeItem('token'); navigate(`/user/login`)}}/>
@@ -202,17 +188,10 @@ function ConversationList() {
         </div>
       </div>
 
-      {showCreateSimpleConversationModal && (
-        <CreateSimpleConversationModal
+      {showFriendListModal && (
+        <FriendListModal
           loggedId={loggedId}
-          setShowCreateSimpleConversationModal={setShowCreateSimpleConversationModal}
-        />
-      )}
-
-      {showCreateGroupModal && (
-        <CreateGroupModal
-          loggedId={loggedId}
-          setShowCreateGroupModal={setShowCreateGroupModal}
+          setShowFriendListModal={setShowFriendListModal}
         />
       )}
     </div>

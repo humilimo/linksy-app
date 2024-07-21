@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BsPeopleFill, BsCircle, BsPencilSquare } from "react-icons/bs";
@@ -31,6 +31,7 @@ const ConversationProfileMenu = () => {
   const [showDeleteGroupModal, setShowDeleteGroupModal] = useState(false);
   
   const [user, setUser] = useState<UserProps | null>(null);
+  const navigate = useNavigate();
 
   const fetchConversationProfileData = async () => {
     await axiosAuthInstance
@@ -49,6 +50,7 @@ const ConversationProfileMenu = () => {
       })
       .catch(error => {
         console.log(error);
+        navigate(`/`)
       });
   };
 

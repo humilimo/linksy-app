@@ -34,7 +34,7 @@ function FriendList() {
     } catch (error) {
       setError('Error fetching friends');
       console.error(error);
-      navigate(`/user/login`)
+      navigate(`/`)
     }
   };
 

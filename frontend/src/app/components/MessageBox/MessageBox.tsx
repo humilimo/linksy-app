@@ -26,7 +26,7 @@ const MessageBox: React.FC<MessageBoxModel> = ({
             isOwnMessage ? "flex-row-reverse" : "flex-row"
           }`}
         >
-          {message.senderId != '0' && (
+          {message.senderId != "0" && (
             <>
               {senderInfo.picture ? (
                 <img
@@ -44,10 +44,8 @@ const MessageBox: React.FC<MessageBoxModel> = ({
           )}
           <p
             className={` text-black text-[12px] ${
-              isOwnMessage && message.senderId != '0' ? "flex-grow" : null
-            } ${
-              message.senderId == "0" ? "" : null
-            }`}
+              isOwnMessage && message.senderId != "0" ? "flex-grow" : null
+            } ${message.senderId == "0" ? "" : null}`}
           >
             {isToday(messageDate) ? formattedTime : formattedDateTime}
           </p>

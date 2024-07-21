@@ -1,5 +1,5 @@
 interface MessageInputModel {
-    onMessageSent: (message: string) => void;
-    loggedId: string;
-    conversationId: string;
-  }
+  onMessageSent: (message: string) => void;
+  loggedId: string;
+  conversationId: string;
+}

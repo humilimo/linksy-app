@@ -5,7 +5,7 @@ import { CgProfile } from "react-icons/cg";
 const MessageBox: React.FC<MessageBoxModel> = ({ message, senderInfo, isOwnMessage }) => (
     <div className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
       <div className='flex flex-col gap-1 min-w-40'>
-        <div className="flex flex-row gap-2">
+        <div className={`flex gap-2 ${isOwnMessage ? 'flex-row-reverse':'flex-row'}`}>
           {senderInfo.picture
             ? <img
                 src={senderInfo.picture}

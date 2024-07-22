@@ -15,16 +15,16 @@ const ConversationPage = () => {
   const [showProfile, setShowProfile] = useState(false);
 
   return (
-    <div className="flex-col">
+    <div className="flex-col h-screen">
       <ConversationMenuComponent
         loggedId={loggedId}
         conversationId={conversationId}
         showProfile={showProfile}
         setShowProfile={setShowProfile}
       />
-      <div className="bg-gray-100 min-h-screen flex flex-col justify-center">
+      <div className="bg-gray-100 flex flex-col justify-center">
         <div className={`duration-300 ${showProfile ? "mr-[400px]" : ""}`}>
-          <div className="px-[30px] h-[800px] overflow-y-auto justify-center scrollbar-hide">
+          <div className="px-[30px] py-[80px] justify-center scrollbar-hide">
             {messages?.length > 0
               ? messages.map((msg, index) => (
                   <MessageBox

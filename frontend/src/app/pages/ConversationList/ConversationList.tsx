@@ -167,7 +167,7 @@ function ConversationList() {
                     <div className='flex items-center'>
                     <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-" + conversation.name}>{conversation.name}</h2>
                       {!conversation.isGroup && (
-                        <h3 className='ml-4 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"}
+                        <h3 className='ml-2 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"}
                         </h3>
                       )}
                     </div>

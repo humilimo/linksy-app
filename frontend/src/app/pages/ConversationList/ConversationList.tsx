@@ -156,6 +156,7 @@ function ConversationList() {
               >
                 <Link
                   to={`/user/${loggedId}/conversation/${conversation.id}`}
+                  data-cy={`conversation-item-${conversation.id}`}
                   className="conversation-link flex-1 flex items-center"
                 >
                   {conversation.isGroup ? (
@@ -181,6 +182,7 @@ function ConversationList() {
                 <FaStar
                   className={`cursor-pointer absolute top-[45%] transform -translate-y-1/2 right-4 text-3xl ${conversation.favorited ? 'text-yellow-500' : 'text-gray-400'}`}
                   onClick={() => toggleFavorite(String(conversation.id))}
+                  data-cy={`conversation-favorited-${conversation.id}`}
                 />
               </div>
             ))

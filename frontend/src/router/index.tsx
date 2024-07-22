@@ -1,5 +1,5 @@
 import { Routes, BrowserRouter, Route } from "react-router-dom";
-import ConversationList from "../app/pages/ConversationList";
+import ConversationList from "../app/pages/ConversationList/ConversationList";
 import ConversationPage from "../app/pages/ConversationPage/ConversationPage";
 import Login from "../app/pages/Login/index";
 

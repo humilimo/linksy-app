@@ -3,6 +3,7 @@ import ConversationList from "../app/pages/ConversationList/ConversationList";
 import ConversationPage from "../app/pages/ConversationPage/ConversationPage";
 import Login from "../app/pages/Login/index";
 import AccountCreationPage from "../app/pages/AccountCreationPage";
+import SignUpForm from "../app/pages/AccountCreationPage";
 
 
 export function Router() {
@@ -12,7 +13,6 @@ export function Router() {
           <Route path="/" element={<Login/>} />
           <Route path="/user/:loggedId/conversation" element={<ConversationList />} />
           <Route path="/user/:loggedId/conversation/:conversationId" element={<ConversationPage />} />
-          <Route path="/user/:loggedId/friend/all" element={<FriendList />} />
           <Route path="/signOn" element={<AccountCreationPage />} />
         </Routes>
       </BrowserRouter>

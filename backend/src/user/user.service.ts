@@ -2,14 +2,15 @@ import { Injectable, BadRequestException, UnauthorizedException } from '@nestjs/
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { PrismaService } from '../prisma.service';
-import { JwtService } from '@nestjs/jwt';
+import secret from '../secret'
 
 const jwt = require('jsonwebtoken');
-const SECRET = 'LINKSY';
 
 @Injectable()
 export class UserService {
-  constructor(private prisma: PrismaService) {}
+  private readonly SECRET = secret.jwtSecret
+
+  constructor(private prisma: PrismaService ) {}
 
   async create(createUserDto: CreateUserDto) {
     return this.prisma.user.create({
@@ -90,6 +91,11 @@ export class UserService {
 
   async login(user: {username: string, password: string}) { 
 
+    if (user.username == "") {
+      const createError = require('http-errors');
+      throw createError(401, 'Digite seu username e password para logar.');
+    }
+
     var checkUsername = await this.prisma.user.findUnique({
       select: { id: true },
       where: { username: user.username },
@@ -100,14 +106,14 @@ export class UserService {
       throw createError(401, 'Usuário não cadastrado.');
     }
 
-    var checkUser = await this.prisma.user.findUnique({
+    var userInfo = await this.prisma.user.findUnique({
       select: { id: true },
       where: { username: user.username, password: user.password },
     });
 
-    if (checkUser) {
-        const token = jwt.sign({ userId: checkUser.id }, SECRET, { expiresIn: 300 });
-        return { auth: true, token };
+    if (userInfo) {
+        const token = jwt.sign({ userId: userInfo.id }, this.SECRET, { expiresIn: '5h' });
+        return { auth: true, token, loggedId: userInfo.id };
     }
 
     const createError = require('http-errors');

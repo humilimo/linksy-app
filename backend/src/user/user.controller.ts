@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, BadRequestException 
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Public } from 'src/public.decorator';
 
 @Controller('user')
 export class UserController {
@@ -21,6 +22,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Post('login')
   login(@Body() user:{ username: string, password: string}) {
     return this.userService.login(user);

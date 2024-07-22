@@ -29,12 +29,16 @@ async function main() {
   });
 
   // Para Testes de MATEUS:
+    await friendService.create(1, {username: "lfoc"});
+    await friendService.create(1, {username: "crc"});
+    await friendService.create(1, {username: "gvab"});
     // Usar Para Deletar Grupo Completamente
     await conversationService.createGroupConversation(1, {isGroup: true, name: "Projeto ESS - Grupo 6", ids: [2], picture: null}); // CONVERSATION ID 1
-    
+
     // Usar Para Retornar à uma Conversa Simples
     // Usar Para Pegar Detalhes de uma Conversa Simples
     await conversationService.createSimpleConversation(1, {isGroup: false, name: null, ids: [2], picture: null, createdAt: "2024-06-15T19:43:20.589Z"}); // CONVERSATION ID 2
+    await messageService.sendMessage({content: "Boa tarde Luis!", createdAt: '2024-06-16T23:40:24.421Z'}, 1, 2); // MESSAGE ID 4
     await userConversationService.deleteUser(1, 2, 1);
 
     // Usar Para Pegar Detalhes de um Grupo

@@ -67,13 +67,13 @@ export class ConversationService {
 
         return {
           conversationId: conversationId,
-          action: "return"
+          message: "return"
         }
       }
 
       return {
         conversationId: conversationId,
-        action: "open"
+        message: "open"
       }
     }
 
@@ -192,6 +192,8 @@ export class ConversationService {
       const lastMessage = await this.prisma.message.findFirst({
         select:{
           content:true,
+          senderId: true,
+          createdAt: true,
         },
         orderBy: {
           id: 'desc',
@@ -201,10 +203,23 @@ export class ConversationService {
         }
       });
       
+      const sender = await this.prisma.user.findUnique({
+        select:{
+          name:true,
+          username:true,
+        },
+        where:{
+          id: lastMessage.senderId
+        }
+      });
+
       const mergedInfos = {
         ...conversationWithoutUserConversations,
         favorited: userConversations[0].favorited,
         lastMessage: lastMessage.content, 
+        username: null,
+        lastMessageCreatedAt: lastMessage.createdAt,
+        lastMessageSenderName: `${sender.name} (${sender.username})`
       };
       
       if(!conversation.isGroup){
@@ -223,6 +238,7 @@ export class ConversationService {
         const nameOfOtherUser = await this.prisma.user.findUnique({
           select:{
             name:true,
+            username:true
           },
           where:{
             id: otherUserConversation.userId,
@@ -230,6 +246,7 @@ export class ConversationService {
         });
 
         mergedInfos.name = nameOfOtherUser.name;
+        mergedInfos.username = nameOfOtherUser.username;
       }
 
       recentConversations.push(mergedInfos);

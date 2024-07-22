@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import { BsPeopleFill, BsCircle, BsPencilSquare } from "react-icons/bs";
+import { BsPencilSquare } from "react-icons/bs";
+import { FaUserCircle, FaUsers } from 'react-icons/fa';
 
 
 import {ConversationProps, ParticipantProps, UserProps} from './ConversationProfileModel'
@@ -62,10 +63,7 @@ const ConversationMenuProfileComponent = (props) => {
             {conversation.picture ? (
               <img src={conversation.picture} className="w-16 h-16 rounded-full" data-cy={"conversation-profile-group-picture"}/>
             ) : (
-              <div className="relative null" data-cy={"conversation-profile-group-picture"}>
-                <BsCircle className="w-40 h-40"/>
-                <BsPeopleFill className="w-28 h-28 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-              </div>
+              <FaUsers data-cy={"conversation-profile-group-picture"} className="null text-gray-500 w-40 h-40"/>
             )}
             <div className='flex item-center justify-center text-2xl text-center font-bold py-6'>
               <p className="text-2xl text-center font-bold" data-cy={"conversation-profile-group-name"}>{conversation.name}</p>
@@ -104,10 +102,8 @@ const ConversationMenuProfileComponent = (props) => {
                       {participant.picture ? (
                         <img src={participant.picture} alt={participant.name} className="w-10 h-10 rounded-full"/>
                       ) : (
-                        <div className='relative'>
-                          <BsCircle className="w-12 h-12"/>
-                          <BsPeopleFill className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-                        </div>
+                        <FaUserCircle className="text-gray-500 w-12 h-12"/>
+
                       )}
                     </div>
                     <p className='pe-4'>{participant.name}</p>
@@ -156,10 +152,8 @@ const ConversationMenuProfileComponent = (props) => {
             {user.picture ? (
               <img src={user.picture} className="w-16 h-16 rounded-full" data-cy={"conversation-profile-user-picture"}/>
             ) : (
-              <div className="relative null" data-cy={"conversation-profile-user-picture"}>
-                <BsCircle className="w-40 h-40"/>
-                <BsPeopleFill className="w-28 h-28 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-              </div>
+              <FaUserCircle data-cy={"conversation-profile-user-picture"} className="null text-gray-500 w-40 h-40"/>
+
             )}
             <p className="text-2xl text-center font-bold pt-6" data-cy={"conversation-profile-user-name"}>{user.name}</p>
             <p className="text-md text-center font-bold pt-1" data-cy={"conversation-profile-user-username"}>({user.username})</p>

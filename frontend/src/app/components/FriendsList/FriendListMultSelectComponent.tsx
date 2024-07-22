@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BsPeopleFill, BsCircle } from "react-icons/bs";
+import { FaUserCircle } from 'react-icons/fa';
 import {FriendProps} from './FriendsListModel'
 import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
@@ -32,17 +32,14 @@ function FriendListMultSelectComponent(props) {
   return (
     <div className="relative p-6 overflow-y-auto">
       <ul className='lista'>
-        {friendList?.map(friend => (
-          <li key={friend.id} className="text-black mb-2 flex items-center justify-between">
+        {friendList?.map((friend, index) => (
+          <li key={friend.id} className={"text-black flex items-center justify-between"+(index == 0 ? "" : " pt-2")} >
             <div className='flex items-center'>
               <div className='relative pe-4'>
                 {friend.picture ? (
                   <img src={friend.picture} alt={friend.name} className="w-10 h-10 rounded-full"/>
                 ) : (
-                  <div className='relative'>
-                    <BsCircle className="w-12 h-12"/>
-                    <BsPeopleFill className="w-8 h-8 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"/>
-                  </div>
+                  <FaUserCircle className="text-gray-500 w-12 h-12"/>
                 )}
               </div>
               <p className='pe-4'>{friend.name}</p>

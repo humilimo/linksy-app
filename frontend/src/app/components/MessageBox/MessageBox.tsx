@@ -1,6 +1,6 @@
 import { format, isToday, Locale } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { CgProfile } from "react-icons/cg";
+import { FaUserCircle } from 'react-icons/fa';
 import useMessageBox from "./MessageBoxController";
 const ptBRLocale = ptBR as unknown as Locale;
 
@@ -35,7 +35,7 @@ const MessageBox: React.FC<MessageBoxModel> = ({
                   className="w-8 h-8 rounded-full"
                 />
               ) : (
-                <CgProfile className="w-8 h-8 text-gray-500" />
+                <FaUserCircle className="text-gray-500 w-8 h-8"/>
               )}
               <p className={`font-bold ${isOwnMessage ? "" : "flex-grow"}`}>
                 {senderInfo.name}

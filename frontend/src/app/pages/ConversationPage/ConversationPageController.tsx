@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axiosAuthInstance from "../../../API/axiosAuthInstance";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
 
 const useConversationPage = (model: ConversationPageModel) => {
@@ -17,6 +17,8 @@ const useConversationPage = (model: ConversationPageModel) => {
   const [noResults, setNoResults] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const navigate = useNavigate()
+
   const fetchConversationMessages = async () => {
     if (loggedId && conversationId) {
       try {
@@ -32,6 +34,7 @@ const useConversationPage = (model: ConversationPageModel) => {
         });
       } catch (error) {
         console.error("Error fetching conversation messages:", error);
+        navigate(`/`)
       }
     }
   };

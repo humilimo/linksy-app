@@ -30,7 +30,7 @@ function FriendListModal(props) {
       }
     } catch (error) {
       console.error('Error fetching friends: ', error);
-      navigate(`/user/login`)
+      navigate(`/`)
     }
   };
 

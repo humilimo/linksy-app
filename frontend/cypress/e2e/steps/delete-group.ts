@@ -2,8 +2,14 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
 var userIdG, conversationIdG;
 
-Given("a conversa de id {string} e de nome {string} está aparecendo na lista de conversas do usuário de id {string}", (conversationId, conversationName, userId) => {
-  cy.visit("/user/"+userId+"/conversation");
+Given("o usuário está logado com o usuário de id {string}, username {string} e senha {string}", (userId, userUsername: string, userPassword: string) => {
+  userIdG = userId;
+  cy.login(userUsername, userPassword);
+  cy.wait(500);
+});
+
+Given("a conversa de id {string} e de nome {string} está aparecendo na lista de conversas do usuário", (conversationId, conversationName) => {
+  cy.visit("/user/"+userIdG+"/conversation");
   cy.wait(500);
   cy.get('[data-cy="conversation-list-id-'+conversationId+'"]')
     .should(
@@ -15,10 +21,9 @@ Given("a conversa de id {string} e de nome {string} está aparecendo na lista de
     );
 });
 
-Given("o usuário de id {string} está na página da conversa de id {string}", (userId, conversationId) => {
-  userIdG = userId;
+Given("o usuário está na página da conversa de id {string}", ( conversationId) => {
   conversationIdG = conversationId;
-  cy.visit("/user/"+userId+"/conversation/"+conversationId);
+  cy.visit("/user/"+userIdG+"/conversation/"+conversationId);
   cy.wait(500);
 });
 

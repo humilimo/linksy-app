@@ -216,10 +216,10 @@ export class ConversationService {
       const mergedInfos = {
         ...conversationWithoutUserConversations,
         favorited: userConversations[0].favorited,
-        lastMessage: lastMessage.content, 
+        lastMessage: lastMessage.content,
         username: null,
         lastMessageCreatedAt: lastMessage.createdAt,
-        lastMessageSenderName: `${sender.name} (${sender.username})`
+        lastMessageSenderName: sender.name === "linksy" ? null : `${sender.name} (${sender.username})`
       };
       
       if(!conversation.isGroup){

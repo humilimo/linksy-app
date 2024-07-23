@@ -40,11 +40,6 @@ When("o usuário preenche o nome do grupo com {string}", (groupName: string) => 
   .type(groupName);
 });
 
-When("o usuário digita {string}", (groupName: string) => {
-  cy.get('[data-cy="delete-group-modal-group-name-input"]')
-  .type(groupName);
-});
-
 When("o usuário seleciona da lista de amigos o usuário de username {string}", (username) => {
   cy.get('[data-cy="friend-list-checkbox-'+username+'"]')
     .click();
@@ -75,8 +70,6 @@ Then("devem existir {string} grupos de nome {string} na lista de conversas do us
   });
 });
 
-// ==================================================================
-
 Given("a conversa com o usuário de username {string} não está aparecendo na lista de conversas do usuário", (username) => {
   cy.get('[data-cy="conversation-list-username-'+username+'"]')
     .should(
@@ -88,8 +81,6 @@ When("o usuário clica no usuário de username {string} da lista de amigos", (us
   cy.get('[data-cy="friend-list-button-'+username+'"]')
     .click();
 });
-
-// ==================================================================
 
 Then("o usuário deve estar na pagina da conversa de id {string} ao qual ele retornou", (id) => {
   cy.url().should(

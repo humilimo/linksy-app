@@ -18,7 +18,7 @@ function FriendListModal(props) {
 
   useEffect(() => {
     fetchFriends();
-  }, [props.loggedId,friendList]);
+  }, [props.loggedId]);
 
   const fetchFriends = async () => {
     try {
@@ -127,6 +127,7 @@ function FriendListModal(props) {
             className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg duration-150"
             type="button"
             onClick={() => setShowAddFriendModal(true)}
+            data-cy={"add-friend-modal-button"}
           >
             Adicionar amigo
           </button>
@@ -146,9 +147,9 @@ function FriendListModal(props) {
           >
             {(friends.length ? friends : friendList).map((friend, index) => (
               <div
-                key={friend.id}
+                key={friend.name}
                 className={"friend-item bg-gray-200 hover:bg-gray-300 hover:shadow-lg p-4 rounded cursor-pointer flex justify-between items-center relative duration-150" + (index == 0 ? ""  : " mt-4")}
-                data-cy={"friend-id-"+friend.id}
+                data-cy={"friends-list-"+friend.name}
               >
                 <button
                   onClick={() => handleCreateSimpleConversation(friend.id)}
@@ -182,6 +183,7 @@ function FriendListModal(props) {
         <AddFriendModal
           loggedId={props.loggedId}
           setShowAddFriendModal={setShowAddFriendModal}
+          fetchFriends={fetchFriends}
         />
       )}
 

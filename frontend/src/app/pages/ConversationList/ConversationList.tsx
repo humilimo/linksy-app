@@ -7,6 +7,7 @@ import { ConversationProps } from '../../components/ConversationProfile/Conversa
 import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
 import { useNavigate } from "react-router-dom";
 import axiosAuthInstance from '../../../API/axiosAuthInstance';
+import ProfileComponent from '../../components/Profile/ProfileComponent';
 
 function ConversationList() {
   const { loggedId } = useParams<{ loggedId: string }>();
@@ -86,6 +87,10 @@ function ConversationList() {
     }
   };
 
+  const handleShowProfile = () => {
+    setShowProfile(!showProfile)
+  }
+
   return (
     authenticated &&
     <div className="p-6 bg-gray-100 min-h-screen">
@@ -114,8 +119,8 @@ function ConversationList() {
             </button>
  
             <div className="flex items-center justify-center">
-            <div className=" cursor-pointer w-12 h-full bg-red-600 hover:bg-red-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
-              <FaSignOutAlt className="text-white text-3xl" onClick={() => {localStorage.removeItem('token'); navigate(`/`)}} data-cy={"logout-button"}/>
+            <div className=" cursor-pointer w-12 h-full bg-gray-600 hover:bg-gray-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
+              <FaUserCircle className="text-white text-3xl" onClick={() => handleShowProfile()} data-cy={"logout-button"}/>
             </div>
             </div>
           </div>
@@ -123,7 +128,7 @@ function ConversationList() {
 
         {error && <p className="text-red-500">{error}</p>}
           <div
-            className={`bg-white conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
+            className={`duration-300 bg-white conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
           > 
             {messages.length > 0 ? (
               messages.map((message, index) => (
@@ -192,13 +197,14 @@ function ConversationList() {
             className={
               "fixed flex flex-col top-[127px] h-[calc(100vh-180px)] w-[400px] bg-white z-10 duration-300" +
               (showProfile
-                ? " right-[1.5rem] border border-gray-300"
+                ? " right-[1.5rem]"
                 : " right-[-100%]")
             }
           >
-            <p>
-              LUAN
-            </p>
+            <ProfileComponent
+              loggedId={loggedId}
+              navigate={navigate}
+            />
           </div>
       </div>
 

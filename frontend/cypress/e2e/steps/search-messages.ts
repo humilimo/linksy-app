@@ -16,13 +16,24 @@ Given("o usuário de id {string} está na página da conversa de id {string}", (
   cy.wait(500);
 });
 
-When("o usuário pesquisar por {string} na conversa de id {string}", (searchTerm: string, conversationId: string) => {
-  cy.get('[data-cy="search-input"]').type(searchTerm);
-  cy.get('[data-cy="search-button"]').click();
+Given("a conversa de id {string} contém as mensagens {string}, {string} , {string} e {string}", (conversationId, msg1, msg2, msg3, msg4) => {
+  cy.visit(`/user/${userIdG}/conversation/${conversationId}`);
+  cy.wait(1000);
+  const messages = [msg1, msg2, msg3, msg4];
+  messages.forEach((message) => {
+    cy.get(`[data-cy="conversation-message-${message}"]`).should("exist");
+  });
 });
 
-Then("o resultado da pesquisa deve incluir as mensagens {string}, {string} e {string}", (msg1: string, msg2: string, msg3: string) => {
-  cy.get('[data-cy="searched-message"]').should("contain", msg1);
-  cy.get('[data-cy="searched-message"]').should("contain", msg2);
-  cy.get('[data-cy="searched-message"]').should("contain", msg3);
+When("o usuário pesquisar por {string} na conversa de id {string}", (searchTerm :string, conversationId) => {
+  cy.visit(`/user/${userIdG}/conversation/${conversationId}`);
+  cy.get('[data-cy="search-input-one-conversation"]').type(searchTerm);
+});
+
+
+Then("o resultado da pesquisa deve incluir as mensagens {string}, {string} e {string}", (msg1, msg2, msg3) => {
+  const searchResults = [msg1, msg2, msg3];
+  searchResults.forEach((result) => {
+    cy.get(`[data-cy="searched-message-id-${conversationIdG}-${result}"]`).should("exist");
+  });
 });

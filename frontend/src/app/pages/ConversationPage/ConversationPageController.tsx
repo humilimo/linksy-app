@@ -80,7 +80,7 @@ const useConversationPage = (model: ConversationPageModel) => {
       fetchConversationMessages();
       setTimeout(() => {
         scrollToBottom();
-      }, 100); // ajuste o tempo conforme necessário
+      }, 100);
     }
   }, [useEffectFlag]);
 

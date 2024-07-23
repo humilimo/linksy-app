@@ -4,6 +4,7 @@ import ConversationMenuProfileComponent from "../../components/ConversationProfi
 import ConversationMenuComponent from "../../components/ConversationPage/ConversationMenuComponent";
 import useConversationPage from "./ConversationPageController";
 import MessageInput from "../../components/MessageInput/MessageInput";
+import { FaUserCircle } from "react-icons/fa";
 
 const ConversationPage = () => {
   const {
@@ -14,6 +15,11 @@ const ConversationPage = () => {
     setShowProfile,
     messageContainerRef,
     updateMessageArray,
+    searchTerm,
+    loopSearch,
+    noResults,
+    error,
+    searchedMessages,
   } = useConversationPage({
     conversation: { name: "", picture: "" },
     messages: [],
@@ -26,6 +32,10 @@ const ConversationPage = () => {
         conversationId={conversationId}
         showProfile={showProfile}
         setShowProfile={setShowProfile}
+        searchTerm={searchTerm}
+        loopSearch={loopSearch}
+        noResults={noResults}
+        error={error}
       />
       <div className="bg-gray-100 flex flex-col flex-1">
         <div
@@ -36,7 +46,30 @@ const ConversationPage = () => {
             className="px-[30px] pt-[90px] overflow-y-auto scrollbar-hide"
             style={{ height: "calc(100vh - 61px)" }} // Adicione o estilo inline aqui
           >
-            {messages?.length > 0
+            {searchedMessages.length > 0 ? (
+              searchedMessages.map((message, index) => (
+                <div
+                  key={index}
+                  className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
+                  data-cy="searched-message"
+                >
+                  <div className="flex items-center">
+                    <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
+                    <div>
+                      <div className="text-xl font-bold mb-2 text-black-600">
+                        {message.conversationName}
+                      </div>
+                      <p>{message.content}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <h2 className="text-sm font-semibold">{message.senderName}</h2>
+                    <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
+                  </div>
+                </div>
+              ))
+            ) : (
+            messages?.length > 0
               ? messages.map((msg, index) => (
                   <MessageBox
                     key={index}
@@ -47,7 +80,7 @@ const ConversationPage = () => {
                     } // Ajuste esta linha conforme necessário
                   />
                 ))
-              : null}
+              : null)}
           </div>
           <div
             className={

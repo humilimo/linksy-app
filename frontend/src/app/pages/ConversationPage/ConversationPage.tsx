@@ -85,7 +85,7 @@ const ConversationPage = () => {
           </div>
           <div
             className={
-              "fixed flex flex-col top-[69px] h-[calc(100%-127px)] w-[400px] bg-white z-10 duration-300" +
+              "fixed flex flex-col top-[75px] h-[calc(100%-133px)] w-[400px] bg-white z-30 duration-300" +
               (showProfile
                 ? " right-0 border border-gray-300"
                 : " right-[-100%]")

@@ -95,7 +95,7 @@ function ConversationList() {
             <div className="relative">
               <input
                 type="text"
-                placeholder="Search messages..."
+                placeholder="Pesquisar Mensagem"
                 value={searchTerm}
                 onChange={loopSearch}
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"

@@ -105,6 +105,7 @@ function ConversationList() {
                 value={searchTerm}
                 onChange={loopSearch}
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
+                data-cy="search-input-all-conversation"
               />
               <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
               {noResults && <p className="text-red-500 absolute left-4 top-full mt-1">Mensagem não encontrada</p>}
@@ -136,6 +137,7 @@ function ConversationList() {
                   key={index}
                   to = {`/user/${loggedId}/conversation/${message.conversationId}`}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
+                  data-cy={"searched-message-all-conversation-"+message.content}
                 >
                   <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />

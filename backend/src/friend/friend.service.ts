@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { SearchFriendDto } from './dto/search-friend.dto';
+import { log } from 'console';
 
 @Injectable()
 export class FriendService {
@@ -56,13 +57,29 @@ export class FriendService {
 
   async findFriend(loggedId: number, searchFriendDto: SearchFriendDto){
 
+    var param = searchFriendDto.username.split(' ')
+    
     var user = await this.prisma.user.findUnique({
       select:{ id:true, name:true, username:true, email:true, picture:true, bio:true },
-      where:{ username: searchFriendDto.username },
+      where:{ username: param[0] },
+    })
+
+    var friendship = await this.prisma.friend.findUnique({
+      where: {
+         requesterId_receiverId:{
+            requesterId: +param[1],
+            receiverId: user.id
+         }
+      }
+    })
+
+    var friend = await this.prisma.user.findUnique({
+      select:{ id:true, name:true, username:true, email:true, picture:true, bio:true },
+      where:{ id: friendship.receiverId },
     })
 
     const usersArray = []
-    usersArray.push({...user})
+    usersArray.push({...friend})
 
     return usersArray
   }

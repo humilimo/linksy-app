@@ -36,6 +36,7 @@ const ConversationMenuComponent = ({
             value={searchTerm}
             onChange={loopSearch}
             className="py-2 px-3 w-64 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 mr-4"
+            data-cy="search-input-one-conversation"
           />
           <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 mr-4" />
           {error && (

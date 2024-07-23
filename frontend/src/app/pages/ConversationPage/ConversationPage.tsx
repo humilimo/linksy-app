@@ -44,14 +44,14 @@ const ConversationPage = () => {
           <div
             ref={messageContainerRef}
             className="px-[30px] pt-[90px] overflow-y-auto scrollbar-hide"
-            style={{ height: "calc(100vh - 61px)" }} // Adicione o estilo inline aqui
+            style={{ height: "calc(100vh - 61px)" }} 
           >
             {searchedMessages.length > 0 ? (
               searchedMessages.map((message, index) => (
                 <div
                   key={index}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
-                  data-cy="searched-message"
+                  data-cy={`searched-message-${message.content}`}
                 >
                   <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
@@ -77,7 +77,8 @@ const ConversationPage = () => {
                     senderInfo={msg.senderInfo}
                     isOwnMessage={
                       loggedId?.toString() === msg.message.senderId?.toString()
-                    } // Ajuste esta linha conforme necessário
+                    }
+                    data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
                   />
                 ))
               : null)}

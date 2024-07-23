@@ -1,6 +1,6 @@
-Feature: Conversation List
+Feature: Lista de Conversas
 
-  Scenario: Lista de conversas recentes
+  Scenario: Abrir uma conversa
     Given estou logado no usuário de username "gvab" e senha "gabriel12345"
     And o usuário de id "4" está na página da lista de conversas
     And a conversa com o usuário de username "lfoc" deve existir na lista de conversas do usuário

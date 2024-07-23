@@ -57,7 +57,7 @@ const ConversationMenuProfileComponent = (props) => {
     <>
     {/* GROUP CONVERSATION */}
       {(conversation && participants) ? (
-        <div className='flex flex-col h-screen' data-cy={"conversation-profile-menu"}>
+        <div className='flex flex-col h-full' data-cy={"conversation-profile-menu"}>
         {/* PICTURE AND NAME */}
           <div className='p-6 flex flex-col items-center'>
             {conversation.picture ? (

@@ -2,7 +2,7 @@ Feature: leave conversation
 
     Scenario: usuário sai de um grupo
         Given estou na página da conversa de id "8"
-        And estou logado no usuário de id "3"
+        And estou logado no usuário de username "crc", senha "caio12345" e id "3"
         When abro o perfil do grupo
         And clico no botão sair do grupo
         And clico em sair

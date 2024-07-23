@@ -18,7 +18,7 @@ function ConversationList() {
   const [noResults, setNoResults] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
-  const [showProfile, setShowProfile] = useState(true);
+  const [showProfile, setShowProfile] = useState(false);
 
   useEffect(() => {
     fetchConversations();
@@ -123,7 +123,7 @@ function ConversationList() {
 
         {error && <p className="text-red-500">{error}</p>}
           <div
-            className={`bg-blue-500 conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
+            className={`bg-white conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
           > 
             {messages.length > 0 ? (
               messages.map((message, index) => (

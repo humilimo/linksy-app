@@ -35,16 +35,18 @@ function FriendListModal(props) {
 
   const searchFriends = async (username: string) => {
     try {
-      const response = await axiosAuthInstance.get(`/user/${props.loggedId}/friend/search?username=${username}`);
+      const response = await axiosAuthInstance.get(`/user/${props.loggedId}/friend/search?username=${username+" "+props.loggedId}`);
       if (response.data && response.data[0].username) {
         setFriends(response.data);
-        setNoResults(false); 
+        setNoResults(false);
       } else {
         setFriends([]);
         setNoResults(true); 
       }
     } catch (error) {
       console.error('Error searching friends: ', error);
+      setNoResults(true);
+      setFriends([]);
     }
   };
 
@@ -115,6 +117,7 @@ function FriendListModal(props) {
             <div className="relative">
               <input
                 type="text"
+                data-cy={"search-friend-input"}
                 placeholder="Pesquisar Amigos..."
                 value={searchTerm}
                 onChange={loopSearch}
@@ -144,6 +147,7 @@ function FriendListModal(props) {
           <div
             className="friend-list-container overflow-y-auto"
             style={{ maxHeight: 'calc(100vh - 250px)' }}
+            data-cy={"friends-list"}
           >
             {(friends.length ? friends : friendList).map((friend, index) => (
               <div
@@ -168,7 +172,8 @@ function FriendListModal(props) {
                 </button>
                 <FaTrash
                     className={"text-3xl text-red-600 hover:text-red-500 hover:shadow-lg duration-150"}
-                    onClick={() => deleteFriend(String(friend.username))}
+                    onClick={() => {deleteFriend(String(friend.username))}}
+                    data-cy={"friends-list-delete-icon"+friend.name}
                 />
               </div>
               )

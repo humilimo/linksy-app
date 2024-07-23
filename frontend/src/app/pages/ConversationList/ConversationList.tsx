@@ -114,7 +114,7 @@ function ConversationList() {
  
             <div className="flex items-center justify-center">
             <div className=" cursor-pointer w-12 h-full bg-red-600 hover:bg-red-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
-              <FaSignOutAlt className="text-white text-3xl" onClick={() => {localStorage.removeItem('token'); navigate(`/`)}}/>
+              <FaSignOutAlt className="text-white text-3xl" onClick={() => {localStorage.removeItem('token'); navigate(`/`)}} data-cy={"logout-button"}/>
             </div>
             </div>
           </div>

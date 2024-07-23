@@ -16,12 +16,12 @@ Given("o usuário de id {string} está na página da conversa de id {string}", (
   cy.wait(500);
 });
 
-Given("a conversa de id {string} contém as mensagens {string}, {string} , {string} e {string}", (conversationId, msg1, msg2, msg3, msg4) => {
+Given('a conversa de id {string} contém as mensagens {string}, {string} , {string} e {string}', (conversationId, msg1, msg2, msg3, msg4) => {
   cy.visit(`/user/${userIdG}/conversation/${conversationId}`);
-  cy.wait(1000);
+  cy.wait(500);
   const messages = [msg1, msg2, msg3, msg4];
   messages.forEach((message) => {
-    cy.get(`[data-cy="conversation-message-${message}"]`).should("exist");
+    cy.get(`[data-cy="message-${message}"]`).should("exist");
   });
 });
 
@@ -34,6 +34,6 @@ When("o usuário pesquisar por {string} na conversa de id {string}", (searchTerm
 Then("o resultado da pesquisa deve incluir as mensagens {string}, {string} e {string}", (msg1, msg2, msg3) => {
   const searchResults = [msg1, msg2, msg3];
   searchResults.forEach((result) => {
-    cy.get(`[data-cy="searched-message-id-${conversationIdG}-${result}"]`).should("exist");
+    cy.get(`[data-cy="searched-message-${result}"]`).should("exist");
   });
 });

@@ -51,7 +51,7 @@ const ConversationPage = () => {
                 <div
                   key={index}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
-                  data-cy={"searched-message-id-"+(message.conversationId)+"-"+(message.content)}
+                  data-cy={`searched-message-${message.content}`}
                 >
                   <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
@@ -78,7 +78,7 @@ const ConversationPage = () => {
                     isOwnMessage={
                       loggedId?.toString() === msg.message.senderId?.toString()
                     }
-                    data-cy={"conversation-message-id-"+(msg.message.createdAt)+"-"+(msg.message.content)}
+                    data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
                   />
                 ))
               : null)}

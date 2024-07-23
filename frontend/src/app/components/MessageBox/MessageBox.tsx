@@ -54,6 +54,7 @@ const MessageBox: React.FC<MessageBoxModel> = ({
           className={`max-w-xs p-3 rounded-lg ${
             isOwnMessage ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
           } relative`}
+          data-cy={`message-${message.content}`}
         >
           <p className="text-sm break-words">{message.content}</p>
         </div>

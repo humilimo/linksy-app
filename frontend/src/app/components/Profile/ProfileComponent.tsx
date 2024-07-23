@@ -5,14 +5,18 @@ import { FaUserCircle, FaUsers } from 'react-icons/fa';
 
 
 import {UserProps} from './ConversationProfileModel'
-import EditGroupNameModal from './EditGroupNameModal'
-
 import axiosAuthInstance from '../../../API/axiosAuthInstance';
+import EditNameModal from './EditNameModal';
+import EditUsernameModal from './EditUsernameModal';
+import EditBioModal from './EditBioModal';
 
 const ConversationMenuProfileComponent = (props) => {
   const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
   const [user, setUser] = useState<UserProps | null>(null);
-  const [showEditGroupNameModal, setShowEditGroupNameModal] = useState(false);
+  const [showEditNameModal, setShowEditNameModal] = useState(false);
+  const [showEditBioModal, setShowEditBioModal] = useState(false);
+  const [showEditUsernameModal, setShowEditUsernameModal] = useState(false);
+  const [userFlag, setUserFlag] = useState(false);
 
   const fetchConversationProfileData = async () => {
     await axiosAuthInstance
@@ -21,6 +25,7 @@ const ConversationMenuProfileComponent = (props) => {
       )
       .then(response => {
         setUser(response.data);
+        setUserFlag(false);
       })
       .catch(error => {
         console.log(error);
@@ -29,7 +34,7 @@ const ConversationMenuProfileComponent = (props) => {
 
   useEffect(() => {
     fetchConversationProfileData();
-  }, [props.loggedId]);
+  }, [props.loggedId, userFlag]);
 
   return (
     <>
@@ -43,30 +48,39 @@ const ConversationMenuProfileComponent = (props) => {
                     ) : (
                     <FaUserCircle className="null text-gray-500 w-40 h-40"/>
                     )}
-                    <button className='mt-2 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)}>
+                    <button className='mt-2 hover:text-gray-500 text-[18px]' onClick={() => setShowEditNameModal(true)}>
                         <BsPencilSquare />
                     </button>
                 </div>
                 <div className='flex pt-6'>
                     <p className="text-2xl text-center font-bold">{user.name}</p>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)} data-cy={"conversation-profile-group-name-edit-button"}>
+                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditNameModal(true)}>
                         <BsPencilSquare />
                     </button>
+                    {showEditNameModal ? (
+                        <EditNameModal setShowEditNameModal={setShowEditNameModal} loggedId={props.loggedId} setUserFlag={setUserFlag}/>
+                    ) : null}
                 </div>
                 <div className='flex pt-2'>
                     <p className="text-md text-center font-bold">({user.username})</p>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)} data-cy={"conversation-profile-group-name-edit-button"}>
+                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditUsernameModal(true)}>
                         <BsPencilSquare />
                     </button>
+                    {showEditUsernameModal ? (
+                        <EditUsernameModal setShowEditUsernameModal={setShowEditUsernameModal} loggedId={props.loggedId} setUserFlag={setUserFlag}/>
+                    ) : null}
                 </div>
             </div>
             
             <div className='ps-8 pb-2'>
                 <div className='flex'>
                     <h2 className="text-2xl font-semibold">Bio:</h2>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditGroupNameModal(true)} data-cy={"conversation-profile-group-name-edit-button"}>
+                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditBioModal(true)}>
                         <BsPencilSquare />
                     </button>
+                    {showEditBioModal ? (
+                        <EditBioModal setShowEditBioModal={setShowEditBioModal} loggedId={props.loggedId} setUserFlag={setUserFlag}/>
+                    ) : null}
                 </div>
             </div>
             

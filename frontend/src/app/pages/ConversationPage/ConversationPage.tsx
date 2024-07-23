@@ -39,7 +39,7 @@ const ConversationPage = () => {
       />
       <div className="bg-gray-100 flex flex-col flex-1">
         <div
-          className={`flex flex-col ${showProfile ? "mr-[400px]" : ""} flex-1`}
+          className={`duration-300 flex flex-col ${showProfile ? "mr-[400px]" : ""} flex-1`}
         >
           <div
             ref={messageContainerRef}

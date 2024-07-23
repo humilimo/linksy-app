@@ -8,7 +8,7 @@ export default defineConfig({
   e2e: {
     viewportWidth: 1000,
     viewportHeight: 900,
-    baseUrl: "http://192.168.0.83:3000",
+    baseUrl: "http://localhost:3000",
     specPattern: "**/*.feature",
     async setupNodeEvents(
       on: Cypress.PluginEvents,

@@ -18,6 +18,7 @@ function ConversationList() {
   const [noResults, setNoResults] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate();
+  const [showProfile, setShowProfile] = useState(true);
 
   useEffect(() => {
     fetchConversations();
@@ -87,8 +88,8 @@ function ConversationList() {
 
   return (
     authenticated &&
-    <div className="p-6 pt-8 bg-gray-100 min-h-screen">
-      <div className="bg-white p-6 rounded-lg shadow-lg">
+    <div className="p-6 bg-gray-100 min-h-screen">
+      <div className={`bg-white p-6 rounded-lg shadow-lg h-[calc(100vh-3rem)]`}>
         <div className="flex items-center justify-between pb-8">
           <h1 className="text-4xl font-bold">Linksy</h1>
           <div className="flex space-x-4">
@@ -121,73 +122,84 @@ function ConversationList() {
         </div>
 
         {error && <p className="text-red-500">{error}</p>}
-        <div
-          className="conversation-list-container overflow-y-auto"
-          style={{ maxHeight: 'calc(100vh - 250px)' }}
-        >
-          {messages.length > 0 ? (
-            messages.map((message, index) => (
-              <Link
-                key={index}
-                to = {`/user/${loggedId}/conversation/${message.conversationId}`}
-                className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
-              >
-                <div className="flex items-center">
-                  <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
-                  <div>
-                    <div className="text-xl font-bold mb-2 text-black-600">
-                      {message.conversationName}
-                    </div>
-                    <p>{message.content}</p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <h2 className="text-sm font-semibold">{message.senderName}</h2>
-                  <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
-                </div>
-              </Link>
-            ))
-          ) : (
-            conversations.map(conversation => (
-              <div
-                key={conversation.id}
-                className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative"
-                data-cy={"conversation-list-id-"+conversation.id}
-              >
+          <div
+            className={`bg-blue-500 conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
+          > 
+            {messages.length > 0 ? (
+              messages.map((message, index) => (
                 <Link
-                  to={`/user/${loggedId}/conversation/${conversation.id}`}
-                  data-cy={`conversation-item-${conversation.id}`}
-                  className="conversation-link flex-1 flex items-center"
+                  key={index}
+                  to = {`/user/${loggedId}/conversation/${message.conversationId}`}
+                  className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
                 >
-                  {conversation.isGroup ? (
-                    <FaUsers className="text-gray-500 mr-4 text-4xl" />
-                  ) : (
+                  <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
-                  )}
-                  <div>
-                    <div className='flex items-center'>
-                    <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-" + conversation.name}>{conversation.name}</h2>
-                      {!conversation.isGroup && (
-                        <h3 className='ml-2 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"}
-                        </h3>
-                      )}
+                    <div>
+                      <div className="text-xl font-bold mb-2 text-black-600">
+                        {message.conversationName}
+                      </div>
+                      <p>{message.content}</p>
                     </div>
-                    <p>{conversation.lastMessage}</p>
+                  </div>
+                  <div className="text-right">
+                    <h2 className="text-sm font-semibold">{message.senderName}</h2>
+                    <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
                   </div>
                 </Link>
-                <div className="text-sm mr-12">
-                  <h2 className="font-semibold">{conversation.lastMessageSenderName}</h2>
-                  <p className="text-gray-500 ml-2">{new Date(conversation.lastMessageCreatedAt).toLocaleTimeString('pt-BR',{hour: '2-digit',minute: '2-digit',day: '2-digit', month: '2-digit'})}</p>
+              ))
+            ) : (
+              conversations.map(conversation => (
+                <div
+                  key={conversation.id}
+                  className="conversation-item bg-gray-200 p-4 mb-4 rounded cursor-pointer flex justify-between items-center relative"
+                  data-cy={"conversation-list-id-"+conversation.id}
+                >
+                  <Link
+                    to={`/user/${loggedId}/conversation/${conversation.id}`}
+                    data-cy={`conversation-item-${conversation.id}`}
+                    className="conversation-link flex-1 flex items-center"
+                  >
+                    {conversation.isGroup ? (
+                      <FaUsers className="text-gray-500 mr-4 text-4xl" />
+                    ) : (
+                      <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
+                    )}
+                    <div>
+                      <div className='flex items-center'>
+                      <h2 className="text-xl font-semibold" data-cy={"conversation-list-name-" + conversation.name}>{conversation.name}</h2>
+                        {!conversation.isGroup && (
+                          <h3 className='ml-2 text-gray-500' data-cy={"conversation-list-username-"+conversation.username}> {"("+conversation.username+")"}
+                          </h3>
+                        )}
+                      </div>
+                      <p>{conversation.lastMessage}</p>
+                    </div>
+                  </Link>
+                  <div className="text-sm mr-12">
+                    <h2 className="font-semibold">{conversation.lastMessageSenderName}</h2>
+                    <p className="text-gray-500 ml-2">{new Date(conversation.lastMessageCreatedAt).toLocaleTimeString('pt-BR',{hour: '2-digit',minute: '2-digit',day: '2-digit', month: '2-digit'})}</p>
+                  </div>
+                  <FaStar
+                    className={`cursor-pointer absolute top-[45%] transform -translate-y-1/2 right-4 text-3xl ${conversation.favorited ? 'text-yellow-500' : 'text-gray-400'}`}
+                    onClick={() => toggleFavorite(String(conversation.id))}
+                    data-cy={`conversation-favorited-${conversation.id}`}
+                  />
                 </div>
-                <FaStar
-                  className={`cursor-pointer absolute top-[45%] transform -translate-y-1/2 right-4 text-3xl ${conversation.favorited ? 'text-yellow-500' : 'text-gray-400'}`}
-                  onClick={() => toggleFavorite(String(conversation.id))}
-                  data-cy={`conversation-favorited-${conversation.id}`}
-                />
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+          <div
+            className={
+              "fixed flex flex-col top-[127px] h-[calc(100vh-180px)] w-[400px] bg-white z-10 duration-300" +
+              (showProfile
+                ? " right-[1.5rem] border border-gray-300"
+                : " right-[-100%]")
+            }
+          >
+            <p>
+              LUAN
+            </p>
+          </div>
       </div>
 
       {showFriendListModal && (

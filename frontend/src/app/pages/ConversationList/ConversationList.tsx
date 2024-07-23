@@ -107,7 +107,7 @@ function ConversationList() {
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowFriendListModal(true)}
-              data-cy={""}
+              data-cy={"new-converastion-button"}
             >
               <BsChatLeftFill/>
             </button>

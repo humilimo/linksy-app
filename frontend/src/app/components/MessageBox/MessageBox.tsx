@@ -1,21 +1,28 @@
+import { forwardRef } from "react";
 import { format, isToday, Locale } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 import { FaUserCircle } from 'react-icons/fa';
 import useMessageBox from "./MessageBoxController";
 const ptBRLocale = ptBR as unknown as Locale;
 
-const MessageBox: React.FC<MessageBoxModel> = ({
-  message,
-  senderInfo,
-  isOwnMessage,
-}) => {
+const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
+  {
+    message,
+    senderInfo,
+    isOwnMessage
+  }, 
+  ref
+
+) => {
   const { messageDate, formattedTime, formattedDateTime } = useMessageBox({
     message,
     senderInfo,
     isOwnMessage,
   });
+
   return (
     <div
+      ref={ref} // Define o ref diretamente no elemento
       className={`flex mb-4 ${isOwnMessage ? "justify-end" : "justify-start"} ${
         message.senderId == "0" ? "justify-center" : null
       }`}
@@ -61,6 +68,6 @@ const MessageBox: React.FC<MessageBoxModel> = ({
       </div>
     </div>
   );
-};
+});
 
 export default MessageBox;

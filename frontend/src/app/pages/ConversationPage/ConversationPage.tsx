@@ -20,6 +20,10 @@ const ConversationPage = () => {
     noResults,
     error,
     searchedMessages,
+    scrollFlag,
+    messageRefs,
+    setScrollFlag,
+    setMessageId,
   } = useConversationPage({
     conversation: { name: "", picture: "" },
     messages: [],
@@ -46,12 +50,16 @@ const ConversationPage = () => {
             className="px-[30px] pt-[90px] overflow-y-auto scrollbar-hide"
             style={{ height: "calc(100vh - 61px)" }} 
           >
-            {searchedMessages.length > 0 ? (
-              searchedMessages.map((message, index) => (
+            {searchedMessages.length > 0 && !scrollFlag? (
+              searchedMessages.map((message) => (
                 <div
-                  key={index}
+                  key={message.id}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
                   data-cy={`searched-message-${message.content}`}
+                  onClick={() => {
+                    setScrollFlag(true);
+                    setMessageId(message.id);
+                  }}
                 >
                   <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
@@ -70,15 +78,16 @@ const ConversationPage = () => {
               ))
             ) : (
             messages?.length > 0
-              ? messages.map((msg, index) => (
+              ? messages.map((msg) => (
                   <MessageBox
-                    key={index}
+                    key={msg.message.id}
                     message={msg.message}
                     senderInfo={msg.senderInfo}
                     isOwnMessage={
                       loggedId?.toString() === msg.message.senderId?.toString()
                     }
                     data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
+                    ref={el => (messageRefs.current[msg.message.id] = el)}
                   />
                 ))
               : null)}

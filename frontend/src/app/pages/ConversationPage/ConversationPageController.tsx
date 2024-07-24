@@ -19,7 +19,10 @@ const useConversationPage = (model: ConversationPageModel) => {
   const [showProfile, setShowProfile] = useState(false);
   const messageContainerRef = useRef<HTMLDivElement | null>(null);
   const [useEffectFlag, setUseEffectFlag] = useState(0);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
+  const [scrollFlag, setScrollFlag] = useState(false);
+  const [messageId, setMessageId] = useState<number | null>(null);
+  const messageRefs = useRef({});
 
   const fetchConversationMessages = async () => {
     if (loggedId && conversationId) {
@@ -67,6 +70,7 @@ const useConversationPage = (model: ConversationPageModel) => {
   const loopSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
+    setScrollFlag(false);
     if (value.trim() === '') {
       setSearchedMessages([]);
       setNoResults(false);
@@ -83,6 +87,12 @@ const useConversationPage = (model: ConversationPageModel) => {
       }, 100);
     }
   }, [useEffectFlag]);
+
+  useEffect(() => {
+    if (scrollFlag && messageId && messageRefs.current[messageId] && messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = messageRefs.current[messageId].getBoundingClientRect().top - messageRefs.current[messageId].scrollHeight;
+    }
+  }, [scrollFlag]);
 
   const scrollToBottom = () => {
     if (messageContainerRef.current) {
@@ -110,7 +120,11 @@ const useConversationPage = (model: ConversationPageModel) => {
     setShowProfile,
     messageContainerRef,
     updateMessageArray,
-    scrollToBottom
+    scrollToBottom,
+    scrollFlag,
+    messageRefs,
+    setScrollFlag,
+    setMessageId,
   };
 };
 

@@ -38,7 +38,13 @@ function EditNameModal(props) {
 						{/* <p className="mb-1 text-blueGray-500 text-lg leading-relaxed text-center">
 							Para confirmar a deleção do grupo, escreva abaixo <br /> o nome do grupo e clique em 'Deletar' 
 						</p> */}
-						<input name='name' id='name' onChange={(e)=>{setName(e.target.value)}} type="text" className='rounded shadow border border-gray-200 px-1 py-2 mt-3 w-full' />
+						<input
+						name='name'
+						id='name'
+						onChange={(e)=>{setName(e.target.value)}}
+						type="text"
+						className='rounded shadow border border-gray-200 px-1 py-2 mt-3 w-full'
+						data-cy={"edit-name"}/>
 					</div>
 					{/* FOOTER */}
 					<div className="flex items-center justify-between p-6 border-t border-solid border-blueGray-200 rounded-b">
@@ -49,7 +55,10 @@ function EditNameModal(props) {
 						}}>
 							Cancelar
 						</button>
-						<button className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="submit">
+						<button
+							className="bg-green-600 text-white active:bg-emerald-600 font-bold uppercase text-sm px-6 py-3 rounded shadow hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+							type="submit"
+							data-cy={"confirm-name-button"}>
 							Confirmar
 						</button>
 					</div>

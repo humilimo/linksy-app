@@ -13,7 +13,7 @@ Feature: Create Conversation
     Then o usuário deve estar na pagina da conversa criada de id "10"
     And devem existir "1" grupos de nome "Novo Grupo com Caio e Luis" na lista de conversas do usuário
 
-	Scenario: Criar uma nova conversa
+  Scenario: Criar uma nova conversa
     Given o usuário está logado com o usuário de id "1", username "man2" e senha "mateus12345"
     And o usuário está na página da lista de conversas
     And a conversa com o usuário de username "crc" não está aparecendo na lista de conversas do usuário
@@ -21,7 +21,7 @@ Feature: Create Conversation
     And o usuário clica no usuário de username "crc" da lista de amigos
     Then o usuário deve estar na pagina da conversa criada de id "11"
 
-	Scenario: Retornar para uma conversa já existente
+  Scenario: Retornar para uma conversa já existente
     Given o usuário está logado com o usuário de id "1", username "man2" e senha "mateus12345"
     And o usuário está na página da lista de conversas
     And a conversa com o usuário de username "lfoc" não está aparecendo na lista de conversas do usuário

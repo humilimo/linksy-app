@@ -121,7 +121,7 @@ function ConversationList() {
  
             <div className="flex items-center justify-center">
             <div className=" cursor-pointer w-12 h-full bg-gray-600 hover:bg-gray-500 rounded-2xl flex items-center justify-center hover:shadow-lg focus:outline-none ease-linear transition-all duration-150">
-              <FaUserCircle className="text-white text-3xl" onClick={() => handleShowProfile()} data-cy={"profile-button"}/>
+              <FaUserCircle className="text-white text-3xl" onClick={() => handleShowProfile()}data-cy={"profile-button"}/>
             </div>
             </div>
           </div>

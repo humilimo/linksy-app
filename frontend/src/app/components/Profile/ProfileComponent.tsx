@@ -47,13 +47,23 @@ const ConversationMenuProfileComponent = (props) => {
                     ) : (
                     <FaUserCircle className="null text-gray-500 w-40 h-40"/>
                     )}
-                    <button className='mt-2 hover:text-gray-500 text-[18px]' onClick={() => setShowEditNameModal(true)}>
+                    <button 
+                        className='mt-2 hover:text-gray-500 text-[18px]'
+                        onClick={() => setShowEditNameModal(true)}
+                        data-cy={"edit-picture-button"}>
                         <BsPencilSquare />
                     </button>
                 </div>
                 <div className='flex pt-6'>
-                    <p className="text-2xl text-center font-bold">{user.name}</p>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditNameModal(true)}>
+                    <p 
+                        className="text-2xl text-center font-bold"
+                        data-cy={"profile-name"}>
+                        {user.name}
+                    </p>
+                    <button
+                        className='ml-4 hover:text-gray-500 text-[18px]'
+                        onClick={() => setShowEditNameModal(true)}
+                        data-cy={"edit-name-button"}>
                         <BsPencilSquare />
                     </button>
                     {showEditNameModal ? (
@@ -62,7 +72,10 @@ const ConversationMenuProfileComponent = (props) => {
                 </div>
                 <div className='flex pt-2'>
                     <p className="text-md text-center font-bold">({user.username})</p>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditUsernameModal(true)}>
+                    <button
+                        className='ml-4 hover:text-gray-500 text-[18px]'
+                        onClick={() => setShowEditUsernameModal(true)}
+                        data-cy={"edit-username-button"}>
                         <BsPencilSquare />
                     </button>
                     {showEditUsernameModal ? (
@@ -74,7 +87,10 @@ const ConversationMenuProfileComponent = (props) => {
             <div className='ps-8 pb-2'>
                 <div className='flex'>
                     <h2 className="text-2xl font-semibold">Bio:</h2>
-                    <button className='ml-4 hover:text-gray-500 text-[18px]' onClick={() => setShowEditBioModal(true)}>
+                    <button
+                        className='ml-4 hover:text-gray-500 text-[18px]'
+                        onClick={() => setShowEditBioModal(true)}
+                        data-cy={"edit-bio-button"}>
                         <BsPencilSquare />
                     </button>
                     {showEditBioModal ? (

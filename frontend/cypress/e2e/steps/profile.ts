@@ -4,6 +4,8 @@ import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 Given("o usuário está logado com o usuário de id {string}, username {string} e senha {string}", (userId, userUsername: string, userPassword: string) => {
     cy.login(userUsername, userPassword);
     cy.wait(500);
+    cy.visit("/user/"+userId+"/conversation");
+    cy.wait(500);
 });
 
 When("o usuário clica em Perfil", () => {
@@ -45,7 +47,7 @@ When("o usuário preenche o nome com {string}", (name: string) => {
     .type(name);
 });
 
-When("o usuário clica em Confirmar", () => {
+When("o usuário clica em Confirmar Nome", () => {
     cy.get('[data-cy="confirm-name-button"]')
     .click();
 });
@@ -67,7 +69,7 @@ When("o usuário preenche o campo com {string}", (username: string) => {
     .type(username);
 });
 
-When("o usuário clica em Confirmar", () => {
+When("o usuário clica em Confirmar Username", () => {
     cy.get('[data-cy="confirm-username-button"]')
     .click();
 });

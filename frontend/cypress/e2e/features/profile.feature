@@ -12,7 +12,7 @@ Feature: Profile
         When o usuário clica em Perfil
         And o usuário clica em Editar Nome
         And o usuário preenche o nome com "Luan Coelho"
-        And o usuário clica em Confirmar
+        And o usuário clica em Confirmar Nome
         Then o usuário tem o nome "Luan Coelho"
 
     Scenario: Edição de username sem sucesso
@@ -20,5 +20,5 @@ Feature: Profile
         When o usuário clica em Perfil
         And o usuário clica em Editar Usuário
         And o usuário preenche o campo com "lfoc"
-        And o usuário clica em Confirmar
+        And o usuário clica em Confirmar Username
         Then deve existir a mensagem de erro

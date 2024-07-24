@@ -19,7 +19,7 @@ function AccountCreationPage() {
 
     const handleNext = () => {
         if (!formData.name || !formData.email || !formData.username) {
-            setError1('Please fill in all fields.');
+            setError1('Por favor, preencha todos os campos');
         }
         else{
             setError1('');
@@ -43,42 +43,43 @@ function AccountCreationPage() {
         
         e.preventDefault();        
         if (!formData.password || !formData.passConfirmation) {
-            setError2('Please fill in both password fields.');
+            setError2('Por favor, preencha todos os campos');
         } 
         else if (formData.password.length < 8){
-            setError2('Your password is less than 8 characters long');
+            setError2('Sua senha tem menos de 8 caracteres');
         }
-        else if (formData.password !== formData.passConfirmation) {
-            setError2('Passwords do not match.');
+        else if (formData.password != formData.passConfirmation) {
+            setError2('A confirmação está diferente da senha');
         }
         else {
             setError2('');
             // Handle form submission (e.g., send data to the server)
-        }
-        try {
-            const user = await axiosAuthInstance.post(
-                `/user/register`,
-                {
-                    name: formData.name,
-                    username: formData.username,
-                    email: formData.email,   
-                    password: formData.password
+            try {
+                const user = await axiosAuthInstance.post(
+                    `/user/register`,
+                    {
+                        name: formData.name,
+                        username: formData.username,
+                        email: formData.email,   
+                        password: formData.password
+                    }
+                );
+        
+                const response = await axiosAuthInstance.post(`/user/login`, { username:user.data.username, password:user.data.password });
+                if (response.data ) { 
+                    localStorage.setItem('token', response.data.token);
+                    navigate(`/user/${response.data.loggedId}/conversation`) 
                 }
-            );
-    
-            const response = await axiosAuthInstance.post(`/user/login`, { username:user.data.username, password:user.data.password });
-            if (response.data ) { 
-                localStorage.setItem('token', response.data.token);
-                navigate(`/user/${response.data.loggedId}/conversation`) 
+            }
+            catch(error){
+                console.error("Error sending message:", error);
             }
         }
-        catch(error){
-            console.error("Error sending message:", error);
-        }
+    
     };
 
     return (
-        <div className="flex w-full h-screen bg-gradient-to-t from-blue-950 to-blue-200">
+        <div className="flex w-full h-screen bg-gray-100">
             <div className="w-full flex items-center justify-center">
                 <form onSubmit={handleSubmit}>
                     {step === 1 && (

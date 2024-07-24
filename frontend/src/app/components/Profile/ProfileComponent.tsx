@@ -1,17 +1,16 @@
 import { useEffect, useState } from 'react';
 
 import { BsPencilSquare } from "react-icons/bs";
-import { FaUserCircle, FaUsers } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
 
 
 import {UserProps} from './ConversationProfileModel'
 import axiosAuthInstance from '../../../API/axiosAuthInstance';
 import EditNameModal from './EditNameModal';
-import EditUsernameModal from './EditUsernameModal';
+import EditUsernameModal from './EditUsernameModal'; 
 import EditBioModal from './EditBioModal';
 
 const ConversationMenuProfileComponent = (props) => {
-  const [showLeaveConversationModal, setShowLeaveConversationModal] = useState(false);
   const [user, setUser] = useState<UserProps | null>(null);
   const [showEditNameModal, setShowEditNameModal] = useState(false);
   const [showEditBioModal, setShowEditBioModal] = useState(false);
@@ -88,8 +87,12 @@ const ConversationMenuProfileComponent = (props) => {
                 <p className="text-gray-700" >{user.bio}</p>
             </div>
 
-            <div className='pb-[40px] pt-6 flex justify-center'>
-            <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => {localStorage.removeItem('token'); props.navigate(`/`)}}>
+            <div className='pt-6 flex justify-end'>
+            <button 
+                className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
+                type="button" 
+                onClick={() => {localStorage.removeItem('token'); props.navigate(`/`)}}
+                data-cy={"logout-button"}>
                 Sair
             </button>
             {/* {showLeaveConversationModal ? (

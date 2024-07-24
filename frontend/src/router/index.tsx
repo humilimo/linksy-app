@@ -13,7 +13,7 @@ export function Router() {
           <Route path="/" element={<Login/>} />
           <Route path="/user/:loggedId/conversation" element={<ConversationList />} />
           <Route path="/user/:loggedId/conversation/:conversationId" element={<ConversationPage />} />
-          <Route path="/signOn" element={<AccountCreationPage />} />
+          <Route path="/signUp" element={<AccountCreationPage />} />
         </Routes>
       </BrowserRouter>
     );

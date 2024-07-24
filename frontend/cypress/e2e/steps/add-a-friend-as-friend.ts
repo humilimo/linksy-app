@@ -12,7 +12,7 @@ Given('eu estou na pagina da lista de conversas', () => {
 });
 
 When('eu abro o modal da lista de amigos', () => {
-    cy.get('[data-cy="new-converastion-button"]').click(); // Seletor do botão que abre o modal
+    cy.get('[data-cy="new-conversation-button"]').click(); // Seletor do botão que abre o modal
 });
 
 When('o usuário de nome {string} está na lista de amigos', (name: string) => {

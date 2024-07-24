@@ -84,6 +84,7 @@ export class MessageService {
           content:true,
           createdAt:true,
           senderId:true,
+          id: true,
         },
         where:{
           conversationId: conversationId,
@@ -115,6 +116,7 @@ export class MessageService {
           createdAt: messages[i].createdAt,
           senderId: messages[i].senderId,
           senderName: `${sender.name} (${sender.username})`,
+          id: messages[i].id,
         })
     }
       return Messages;
@@ -135,6 +137,7 @@ export class MessageService {
         createdAt: true,
         conversationId: true,
         senderId: true,
+        id: true,
       },
       where: {
         conversationId: {
@@ -198,6 +201,7 @@ export class MessageService {
           senderId: message.senderId,
           conversationName: conversation.name,
           senderName: `${sender.name} (${sender.username})`,
+          id: message.id,
         });
       }
     }

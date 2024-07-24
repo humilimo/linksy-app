@@ -11,8 +11,12 @@ Given('eu estou na pagina da lista de conversas', () => {
     cy.visit("/user/"+userId+"/conversation");
 });
 
+When('eu clico no botão de informações de usuário', () => {
+    cy.get('[data-cy="profile-button"]').click(); 
+});
+
 When('eu clico no botão de logout', () => {
-    cy.get('[data-cy="logout-button"]').click(); // Seletor do botão de confirmar adição de amigo
+    cy.get('[data-cy="logout-button"]').click(); 
 });
 
 Then('eu sou redirecionado para a página de login', () => {

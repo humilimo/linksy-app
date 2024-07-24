@@ -78,4 +78,63 @@ defineFeature(feature, (test) => {
       
     });
   });
+
+  //teste de apagar para si
+
+  test('Mensagem excluída para o usuario apenas', ({ given, then, when, and }) => {
+    given(/^o grupo grupoMari de id "(.*)" está na lista de conversa de Mari de id "(.*)"$/, async (chatId, userId) => {
+      const userConversation = await prismaService.userConversation.findUnique({
+        where: {
+          userId_conversationId: {
+            userId: Number(userId),
+            conversationId: Number(chatId),
+          },
+        },
+      });
+      expect(userConversation).not.toBeNull();
+    });
+
+    and(/^o grupoMari de id "(.*)" está na lista de conversa de Lucas de id "(.*)"$/, async (chatId, userId) => {
+      const userConversation = await prismaService.userConversation.findUnique({
+        where: {
+          userId_conversationId: {
+            userId: Number(userId),
+            conversationId: Number(chatId),
+          },
+        },
+      });
+      expect(userConversation).not.toBeNull();
+    });
+
+    when(/^Mari de id "(.*)" seleciona “excluir para mim” na mensagem de id "(.*)" na coversa de id "(.*)"$/, async (userId,messageId, chatId) => {
+      response = await request(app.getHttpServer())
+        .post(`/user/${userId}/conversation/${chatId}/deleteForMe/${messageId}`)
+        .send();
+      expect(response.status).toBe(201);
+    });
+
+    then(/^a mensagem de id "(.*)" é excluída para Mari de id "(.*)" no grupoMari de id "(.*)"$/, async (messageId,userId,chatId) => {
+      const erasedMessage = await prismaService.erasedMessages.findUnique({
+        where: {
+          erasedById_conversationId_messageId:{
+
+            erasedById: Number(userId),
+            conversationId: Number(chatId),
+            messageId: Number(messageId),
+          }
+        },
+      });
+      expect(erasedMessage).not.toBeNull();
+      
+    });
+    and(/^a mensagem de id "(.*)" é mantida para Lucas de id "(.*)" no grupoMari de id "(.*)"$/, async (messageId, userId,chatId) => {
+      const maintanedMessage = await prismaService.message.findUnique({
+        where: {
+          id: Number(messageId),
+        },
+      });
+      expect(maintanedMessage).not.toBeNull();
+    });
+  });
+
 });

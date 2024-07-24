@@ -1,4 +1,3 @@
-import { useState, useRef, useEffect } from "react";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import ConversationMenuProfileComponent from "../../components/ConversationProfile/ConversationMenuProfileComponent";
 import ConversationMenuComponent from "../../components/ConversationPage/ConversationMenuComponent";
@@ -44,12 +43,14 @@ const ConversationPage = () => {
       />
       <div className="bg-gray-100 flex flex-col flex-1">
         <div
-          className={`duration-300 flex flex-col ${showProfile ? "mr-[400px]" : ""} flex-1`}
+          className={`duration-300 flex flex-col ${
+            showProfile ? "mr-[400px]" : ""
+          } flex-1`}
         >
           <div
             ref={messageContainerRef}
             className="px-[30px] pt-[90px] overflow-y-auto scrollbar-hide"
-            style={{ height: "calc(100vh - 61px)" }} 
+            style={{ height: "calc(100vh - 61px)" }}
           >
             {searchedMessages.length > 0 && !scrollFlag? (
               searchedMessages.map((message) => (
@@ -91,7 +92,7 @@ const ConversationPage = () => {
                     ref={el => (messageRefs.current[msg.message.id] = el)}
                   />
                 ))
-              : null)}
+              : null}
           </div>
           <div
             className={

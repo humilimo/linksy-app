@@ -1,95 +1,37 @@
-import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { FaStar, FaUserCircle, FaUsers, FaSearch, FaSignOutAlt } from 'react-icons/fa';
+import { useEffect, useState} from 'react';
+import { Link } from 'react-router-dom';
+import { FaStar, FaUserCircle, FaUsers, FaSearch} from 'react-icons/fa';
 import { BsChatLeftFill } from "react-icons/bs";
 import FriendListModal from '../../components/FriendsList/FriendListModal';
-import { ConversationProps } from '../../components/ConversationProfile/ConversationProfileModel';
-import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
-import { useNavigate } from "react-router-dom";
-import axiosAuthInstance from '../../../API/axiosAuthInstance';
 import ProfileComponent from '../../components/Profile/ProfileComponent';
+import  useConversationList  from './ConversationListController'
 
 function ConversationList() {
-  const { loggedId } = useParams<{ loggedId: string }>();
-  const [conversations, setConversations] = useState<ConversationProps[]>([]);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    loggedId,
+    conversations,
+    error,
+    searchTerm,
+    messages,
+    noResults,
+    fetchConversations,
+    toggleFavorite,
+    loopSearch,
+    authenticated,
+    navigate,
+  } = useConversationList();
+
   const [showFriendListModal, setShowFriendListModal] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [messages, setMessages] = useState<MessageProps[]>([]);
-  const [noResults, setNoResults] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
-  const navigate = useNavigate();
   const [showProfile, setShowProfile] = useState(false);
+
+  const handleShowProfile = () => {
+    setShowProfile(!showProfile)
+  };
 
   useEffect(() => {
     fetchConversations();
   }, [loggedId]);
 
-  const fetchConversations = async () => {
-    try {
-      const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation`);
-      if (response.data) {
-        setConversations(response.data);
-        setAuthenticated(true)
-      }
-    } catch (error) {
-      setError('Error fetching conversations');
-      console.error(error);
-      navigate(`/`)
-    }
-  };
-
-  const searchMessages = async (targetWord: string) => {
-    try {
-      const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation/search`, {
-        params: { targetWord },
-      });
-     
-      if (response.data && response.data.length > 0) {
-        setMessages(response.data);
-        setNoResults(false);
-      }
-      else{
-        setMessages([]);
-        setNoResults(true); 
-      }
-    } catch (error) {
-      setError('Error searching messages');
-      console.error(error);
-    }
-  };
-
-  const loopSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
-    if (value.trim() === '') {
-      setMessages([]);
-      setNoResults(false);
-    } else {
-      searchMessages(value);
-    }
-  };
-
-  const toggleFavorite = async (conversationId: string) => {
-    try {
-      await axiosAuthInstance.patch(`/user/${loggedId}/conversation/${conversationId}/favoritar`);
-      setConversations(prevConversations =>
-        prevConversations.map(conversation =>
-          conversation.id === Number(conversationId)
-            ? { ...conversation, favorited: !conversation.favorited }
-            : conversation
-        )
-      );
-      fetchConversations();
-    } catch (error) {
-      setError('Error toggling favorite');
-      console.error('Error toggling favorite:', error);
-    }
-  };
-
-  const handleShowProfile = () => {
-    setShowProfile(!showProfile)
-  }
 
   return (
     authenticated &&
@@ -114,7 +56,7 @@ function ConversationList() {
               className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={() => setShowFriendListModal(true)}
-              data-cy={"new-converastion-button"}
+              data-cy={"new-conversation-button"}
             >
               <BsChatLeftFill/>
             </button>

@@ -25,7 +25,7 @@ Given("existem {string} grupos de nome {string} aparecendo na lista de conversas
 
 
 When("o usuário clica em Nova Conversa", () => {
-  cy.get('[data-cy="new-converastion-button"]')
+  cy.get('[data-cy="new-conversation-button"]')
     .click();
 });
 

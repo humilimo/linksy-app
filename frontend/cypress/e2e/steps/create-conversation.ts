@@ -74,7 +74,7 @@ Given("a conversa com o usuário de username {string} não está aparecendo na l
   cy.get('[data-cy="conversation-list-username-'+username+'"]')
     .should(
       'not.exist'
-    );
+  );
 });
 
 When("o usuário clica no usuário de username {string} da lista de amigos", (username) => {

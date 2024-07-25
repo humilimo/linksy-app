@@ -31,7 +31,7 @@ function Login() {
         <div className="flex items-center justify-between pb-8">
           <h1 className="text-4xl font-bold">Linksy | Log in!</h1>
         </div>
-        {error && <p className="text-red-500">Credencias inválidas, tente novamente.</p>}
+        {error && <p className="text-red-500">Credenciais inválidas, tente novamente.</p>}
         <div className="conversation-list-container overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
             <div>
             <div className="mb-4 ml-4">

@@ -5,4 +5,4 @@ Feature: Login de usuário
     When eu preencho o input de username com "man2" 
     When eu preencho o input de password com "mateus1234"
     And eu clico no botão de entrar
-    Then uma mensagem de erro "Credencias inválidas, tente novamente." é exibida
+    Then uma mensagem de erro "Credenciais inválidas, tente novamente." é exibida

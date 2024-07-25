@@ -42,7 +42,6 @@ const useConversationPage = (model: ConversationPageModel) => {
         console.error("Error fetching conversation messages:", error);
         navigate(`/`);
       }
-      setUseEffectFlag(1);
     }
   };
 
@@ -81,14 +80,14 @@ const useConversationPage = (model: ConversationPageModel) => {
   };
 
   useEffect(() => {
-    if (!useEffectFlag) {
+    setTimeout(() => {
       fetchConversationMessages();
-      setTimeout(() => {
+    }, 3000);
+      if (!useEffectFlag) {
         scrollToBottom();
-      }, 100);
+        setUseEffectFlag(1);
     }
-    
-  }, [useEffectFlag]);
+  }, [conversation]);
 
   useEffect(() => {
     console.log(messageContainerRef.current);

@@ -1,4 +1,3 @@
-import ptBR from "date-fns/locale/pt-BR";
 import axiosAuthInstance from "../../../API/axiosAuthInstance";
 import { useState } from "react";
 

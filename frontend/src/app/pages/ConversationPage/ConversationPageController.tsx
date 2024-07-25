@@ -24,7 +24,6 @@ const useConversationPage = (model: ConversationPageModel) => {
   const [messageId, setMessageId] = useState<number | null>(null);
   const messageRefs = useRef({});
   let location = useLocation();
-  const [globalScrollFlag,setGlobalScrollFlag] = useState(0);
 
   const fetchConversationMessages = async () => {
     if (loggedId && conversationId) {
@@ -88,12 +87,6 @@ const useConversationPage = (model: ConversationPageModel) => {
         scrollToBottom();
       }, 100);
     }
-
-    else if(location.state && location.state.scrollFlag && globalScrollFlag == 0){
-      setScrollFlag(true);
-      setMessageId(location.state.messageId);
-      setGlobalScrollFlag(1);
-    }
     
   }, [useEffectFlag]);
 
@@ -106,10 +99,13 @@ const useConversationPage = (model: ConversationPageModel) => {
   }, [scrollFlag]);
 
   const scrollToBottom = () => {
-    if (messageContainerRef.current && globalScrollFlag != 0) {
+    if (messageContainerRef.current) {
       messageContainerRef.current.scrollTop =
       messageContainerRef.current.scrollHeight;
-      setGlobalScrollFlag(1);
+      if(location.state && location.state.messageId && location.state.scrollFlag){
+        setScrollFlag(true);
+        setMessageId(location.state.messageId);
+      }
     }
   };
 

@@ -23,7 +23,6 @@ function ConversationList() {
 
   const [showFriendListModal, setShowFriendListModal] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
-  const [scrollFlag,setScrollFlag] = useState(false);
 
   const handleShowProfile = () => {
     setShowProfile(!showProfile)

@@ -13,6 +13,8 @@ const useConversationList = () => {
   const [noResults, setNoResults] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const navigate = useNavigate()
+  const [scrollFlag, setScrollFlag] = useState(false);
+  const [messageId, setMessageId] = useState<number | null>(null);
 
   const fetchConversations = async () => {
     try {
@@ -89,6 +91,10 @@ const useConversationList = () => {
     toggleFavorite,
     loopSearch,
     navigate,
+    scrollFlag,
+    setScrollFlag,
+    messageId,
+    setMessageId,
   };
 
 };

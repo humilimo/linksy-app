@@ -23,6 +23,7 @@ function ConversationList() {
 
   const [showFriendListModal, setShowFriendListModal] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [scrollFlag,setScrollFlag] = useState(false);
 
   const handleShowProfile = () => {
     setShowProfile(!showProfile)
@@ -74,10 +75,12 @@ function ConversationList() {
             className={`duration-300 bg-white conversation-list-container overflow-y-auto h-[calc(100vh-180px)] ${showProfile ? "mr-[400px]" : ""}`}
           > 
             {messages.length > 0 ? (
-              messages.map((message, index) => (
-                <Link
-                  key={index}
-                  to = {`/user/${loggedId}/conversation/${message.conversationId}`}
+              messages.map((message) => (
+                <div
+                  key={message.id}
+                  onClick={() => {
+                    navigate(`/user/${loggedId}/conversation/${message.conversationId}`,{state: {scrollFlag:true,messageId: message.id}})
+                  }}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
                   data-cy={"searched-message-all-conversation-"+message.content}
                 >
@@ -94,7 +97,7 @@ function ConversationList() {
                     <h2 className="text-sm font-semibold">{message.senderName}</h2>
                     <p className="text-sm text-gray-500">{new Date(message.createdAt).toLocaleString()}</p>
                   </div>
-                </Link>
+                </div>
               ))
             ) : (
               conversations.map(conversation => (

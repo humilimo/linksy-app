@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import axiosAuthInstance from "../../../API/axiosAuthInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { MessageProps } from "../../components/SearchMessage/SearchMessageGlobalModel";
-
+import { useLocation } from 'react-router-dom';
 const useConversationPage = (model: ConversationPageModel) => {
   const [conversation, setConversation] = useState<ConversationPageModel>(
     model || {}
@@ -23,6 +23,8 @@ const useConversationPage = (model: ConversationPageModel) => {
   const [scrollFlag, setScrollFlag] = useState(false);
   const [messageId, setMessageId] = useState<number | null>(null);
   const messageRefs = useRef({});
+  let location = useLocation();
+  const [globalScrollFlag,setGlobalScrollFlag] = useState(0);
 
   const fetchConversationMessages = async () => {
     if (loggedId && conversationId) {
@@ -86,18 +88,28 @@ const useConversationPage = (model: ConversationPageModel) => {
         scrollToBottom();
       }, 100);
     }
+
+    else if(location.state && location.state.scrollFlag && globalScrollFlag == 0){
+      setScrollFlag(true);
+      setMessageId(location.state.messageId);
+      setGlobalScrollFlag(1);
+    }
+    
   }, [useEffectFlag]);
 
   useEffect(() => {
+    console.log(messageContainerRef.current);
     if (scrollFlag && messageId && messageRefs.current[messageId] && messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = - messageContainerRef.current.scrollHeight
       messageContainerRef.current.scrollTop = messageRefs.current[messageId].getBoundingClientRect().top - messageRefs.current[messageId].scrollHeight;
     }
   }, [scrollFlag]);
 
   const scrollToBottom = () => {
-    if (messageContainerRef.current) {
+    if (messageContainerRef.current && globalScrollFlag != 0) {
       messageContainerRef.current.scrollTop =
       messageContainerRef.current.scrollHeight;
+      setGlobalScrollFlag(1);
     }
   };
 

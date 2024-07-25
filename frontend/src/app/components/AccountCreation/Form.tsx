@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface FormStep1Props {
     formData: {
@@ -12,6 +13,7 @@ interface FormStep1Props {
   }
 
 const Form: React.FC<FormStep1Props> = ({formData, handleChange, handleNext, error1 }) => {
+    const navigate = useNavigate();
     return (
         <div> 
             <div className='bg-white px-10 py-10 rounded-3xl shadow-lg'>
@@ -72,7 +74,11 @@ const Form: React.FC<FormStep1Props> = ({formData, handleChange, handleNext, err
                     </div>
                     <div className='mt-8 flex justify-center items-center'>
                         <p className='font-medium text-base'>Já tem uma conta?</p>
-                        <button className='hover:underline text-blue-500 text-base font-medium ml-2'>Entre aqui!</button>
+                        <button 
+                            className='hover:underline text-blue-500 text-base font-medium ml-2'
+                            onClick={() => navigate(`/`)}>
+                            Entre aqui!
+                        </button>
                     </div>
                 </div>
             </div>

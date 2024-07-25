@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface FormStep2Props {
     formData: {
@@ -12,9 +13,10 @@ interface FormStep2Props {
   }
 
 const Form2: React.FC<FormStep2Props> = ({ formData, handleChange, handlePrev, handleSubmit, error2}) => {
+    const navigate = useNavigate();
     return (
         <div> 
-            <div className='bg-white px-10 py-10 rounded-3xl border-2 border-gray-200'>
+            <div className='bg-white px-10 py-10 rounded-3xl shadow-lg'>
                 <h1 className='text-5xl font-semibold'>Linksy</h1>
                 <h3 className='text-2xl font-semibold mt-3'>Cadastro</h3>
                 <p className='font-medium text-lg text-gray-500 mt-4'>Crie uma senha de até 8 caracteres</p>
@@ -66,7 +68,11 @@ const Form2: React.FC<FormStep2Props> = ({ formData, handleChange, handlePrev, h
                     </div>
                     <div className='mt-8 flex justify-center items-center'>
                         <p className='font-medium text-base'>Já tem uma conta?</p>
-                        <button className='hover:underline text-blue-500 text-base font-medium ml-2'>Entre aqui!</button>
+                        <button 
+                            className='hover:underline text-blue-500 text-base font-medium ml-2'
+                            onClick={() => navigate(`/`)}>
+                            Entre aqui!
+                        </button>
                     </div>
                 </div>
             </div>

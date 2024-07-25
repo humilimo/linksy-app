@@ -62,6 +62,14 @@ function Login() {
             >
               Enter
             </button>
+            <div className='mt-8 flex'>
+                        <p className='font-medium text-base'>Não tem uma conta?</p>
+                        <button 
+                            className='hover:underline text-blue-500 text-base font-medium ml-2'
+                            onClick={() => navigate(`/signUp`)}>
+                            Inscreva-se aqui!
+                        </button>
+                    </div>
             </div>
         </div>
       </div>

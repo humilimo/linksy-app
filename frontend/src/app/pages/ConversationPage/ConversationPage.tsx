@@ -92,7 +92,7 @@ const ConversationPage = () => {
                     ref={el => (messageRefs.current[msg.message.id] = el)}
                   />
                 ))
-              : null}
+              : null)}
           </div>
           <div
             className={

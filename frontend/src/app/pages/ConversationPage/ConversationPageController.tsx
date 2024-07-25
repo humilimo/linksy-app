@@ -82,15 +82,16 @@ const useConversationPage = (model: ConversationPageModel) => {
   useEffect(() => {
     setTimeout(() => {
       fetchConversationMessages();
-    }, 3000);
-      if (!useEffectFlag) {
-        scrollToBottom();
+    }, 2000);
+    if (!useEffectFlag) {
+        setTimeout(() => {
+          scrollToBottom();
+        }, 2100);
         setUseEffectFlag(1);
     }
   }, [conversation]);
 
   useEffect(() => {
-    console.log(messageContainerRef.current);
     if (scrollFlag && messageId && messageRefs.current[messageId] && messageContainerRef.current) {
       messageContainerRef.current.scrollTop = - messageContainerRef.current.scrollHeight
       messageContainerRef.current.scrollTop = messageRefs.current[messageId].getBoundingClientRect().top - messageRefs.current[messageId].scrollHeight;

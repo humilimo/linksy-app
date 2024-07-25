@@ -82,11 +82,11 @@ const useConversationPage = (model: ConversationPageModel) => {
   useEffect(() => {
     setTimeout(() => {
       fetchConversationMessages();
-    }, 2000);
+    }, 1000);
     if (!useEffectFlag) {
         setTimeout(() => {
           scrollToBottom();
-        }, 2100);
+        }, 1100);
         setUseEffectFlag(1);
     }
   }, [conversation]);

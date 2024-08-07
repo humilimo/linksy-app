@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { FaUserCircle, FaSearch, FaTrash } from 'react-icons/fa';
 import { useNavigate } from "react-router-dom";
 import CreateGroupModal from '../../components/ConversationList/CreateGroupModal';
@@ -19,7 +18,7 @@ function FriendListModal(props) {
 
   useEffect(() => {
     fetchFriends();
-  }, [props.loggedId,friendList]);
+  }, [props.loggedId]);
 
   const fetchFriends = async () => {
     try {
@@ -30,22 +29,24 @@ function FriendListModal(props) {
       }
     } catch (error) {
       console.error('Error fetching friends: ', error);
-      navigate(`/user/login`)
+      navigate(`/`)
     }
   };
 
   const searchFriends = async (username: string) => {
     try {
-      const response = await axiosAuthInstance.get(`/user/${props.loggedId}/friend/search?username=${username}`);
+      const response = await axiosAuthInstance.get(`/user/${props.loggedId}/friend/search?username=${username+" "+props.loggedId}`);
       if (response.data && response.data[0].username) {
         setFriends(response.data);
-        setNoResults(false); 
+        setNoResults(false);
       } else {
         setFriends([]);
         setNoResults(true); 
       }
     } catch (error) {
       console.error('Error searching friends: ', error);
+      setNoResults(true);
+      setFriends([]);
     }
   };
 
@@ -116,6 +117,7 @@ function FriendListModal(props) {
             <div className="relative">
               <input
                 type="text"
+                data-cy={"search-friend-input"}
                 placeholder="Pesquisar Amigos..."
                 value={searchTerm}
                 onChange={loopSearch}
@@ -128,6 +130,7 @@ function FriendListModal(props) {
             className="text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg duration-150"
             type="button"
             onClick={() => setShowAddFriendModal(true)}
+            data-cy={"add-friend-modal-button"}
           >
             Adicionar amigo
           </button>
@@ -144,17 +147,18 @@ function FriendListModal(props) {
           <div
             className="friend-list-container overflow-y-auto"
             style={{ maxHeight: 'calc(100vh - 250px)' }}
+            data-cy={"friends-list"}
           >
-            {friends.length > 0 ? (
-              friends.map((friend, index) => (
+            {(friends.length ? friends : friendList).map((friend, index) => (
               <div
-                key={friend.id}
+                key={friend.name}
                 className={"friend-item bg-gray-200 hover:bg-gray-300 hover:shadow-lg p-4 rounded cursor-pointer flex justify-between items-center relative duration-150" + (index == 0 ? ""  : " mt-4")}
-                data-cy={"friend-id-"+friend.id}
+                data-cy={"friends-list-"+friend.name}
               >
                 <button
                   onClick={() => handleCreateSimpleConversation(friend.id)}
                   className="friend-link flex-1 flex items-center"
+                  data-cy={"friend-list-button-"+friend.username}
                 >
                   {<FaUserCircle className="text-gray-500 mr-4 text-4xl" />}
                   <div className='flex items-center'>
@@ -168,37 +172,12 @@ function FriendListModal(props) {
                 </button>
                 <FaTrash
                     className={"text-3xl text-red-600 hover:text-red-500 hover:shadow-lg duration-150"}
-                    onClick={() => deleteFriend(String(friend.username))}
+                    onClick={() => {deleteFriend(String(friend.username))}}
+                    data-cy={"friends-list-delete-icon"+friend.name}
                 />
               </div>
-              ))
-            ) : (
-            friendList.map((friend,index) => (
-              <div
-                key={friend.id}
-                className={"friend-item bg-gray-200 hover:bg-gray-300 hover:shadow-lg p-4 rounded cursor-pointer flex justify-between items-center relative duration-150" + (index == 0 ? ""  : " mt-4")}
-                data-cy={"friend-id-"+friend.id}
-              >
-                <button
-                  onClick={() => handleCreateSimpleConversation(friend.id)}
-                  className="friend-link flex-1 flex items-center"
-                >
-                  {<FaUserCircle className="text-gray-500 mr-4 text-4xl" />}
-                  <div className='flex items-center'>
-                    <div className='flex items-center'>
-
-                    <p className='text-xl font-semibold pe-4'>{friend.name}</p>
-                    <p>({friend.username})</p>
-                     
-                    </div>
-                  </div>
-                </button>
-                <FaTrash
-                    className={"text-3xl text-red-600 hover:text-red-500 hover:shadow-lg duration-150"}
-                    onClick={() => deleteFriend(String(friend.username))}
-                />
-            </div>
-          )))}
+              )
+            )}
         </div>
         </div>
       </div>
@@ -209,6 +188,7 @@ function FriendListModal(props) {
         <AddFriendModal
           loggedId={props.loggedId}
           setShowAddFriendModal={setShowAddFriendModal}
+          fetchFriends={fetchFriends}
         />
       )}
 

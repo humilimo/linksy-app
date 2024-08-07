@@ -57,7 +57,7 @@ const ConversationMenuProfileComponent = (props) => {
     <>
     {/* GROUP CONVERSATION */}
       {(conversation && participants) ? (
-        <div className='flex flex-col h-screen' data-cy={"conversation-profile-menu"}>
+        <div className='flex flex-col h-full' data-cy={"conversation-profile-menu"}>
         {/* PICTURE AND NAME */}
           <div className='p-6 flex flex-col items-center'>
             {conversation.picture ? (
@@ -147,7 +147,7 @@ const ConversationMenuProfileComponent = (props) => {
 
     // SIMPLE CONVERSATION
       ) : user ? (
-        <div className='flex flex-col h-screen'>
+        <div className='flex flex-col h-full'>
           <div className='p-6 flex flex-col items-center'>
             {user.picture ? (
               <img src={user.picture} className="w-16 h-16 rounded-full" data-cy={"conversation-profile-user-picture"}/>
@@ -168,7 +168,7 @@ const ConversationMenuProfileComponent = (props) => {
             <p className="text-gray-700" data-cy={"conversation-profile-user-bio"}>{user.bio}</p>
           </div>
 
-          <div className='pb-[50px] pt-6 flex justify-end'>
+          <div className='pb-[20px] pt-6 flex justify-end'>
             <button className="text-center text-white py-2 px-5 mr-8 rounded-2xl bg-red-600 hover:bg-red-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150" type="button" onClick={() => setShowLeaveConversationModal(true)} data-cy={"conversation-profile-delete-conversation-button"}>
               Excluir Conversa
             </button>

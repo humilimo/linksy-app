@@ -1,18 +1,32 @@
 import { Given, When, Then } from "@badeball/cypress-cucumber-preprocessor";
 
-var userIdG, groupNameG;
+var userIdG, groupNameG, qtyG;
 
-Given("o usuário de id {string} está na página da lista de conversas", (userId) => {
+Given("o usuário está logado com o usuário de id {string}, username {string} e senha {string}", (userId, userUsername: string, userPassword: string) => {
   userIdG = userId;
-  cy.visit("/user/"+userId+"/conversation");
+  cy.login(userUsername, userPassword);
   cy.wait(500);
 });
 
-Given("o grupo de nome {string} não deve estar aparecendo na lista de conversas do usuário", (groupName) => {
-  cy.get('[data-cy="conversation-list-name-'+groupName+'"]')
-    .should(
-      'not.exist'
-    );
+Given("o usuário está na página da lista de conversas", () => {
+  cy.visit("/user/"+userIdG+"/conversation");
+  cy.wait(500);
+});
+
+Given("existem {string} grupos de nome {string} aparecendo na lista de conversas do usuário", (qty, groupName) => {
+  cy.get('body').then((body) => {
+    if (body.find(`[data-cy="conversation-list-name-${groupName}"]`).length === 0) {
+      expect(0).to.equal(+qty);
+    } else {
+      cy.get(`[data-cy="conversation-list-name-${groupName}"]`).should('have.length', +qty);
+    }
+  });
+});
+
+
+When("o usuário clica em Nova Conversa", () => {
+  cy.get('[data-cy="new-conversation-button"]')
+    .click();
 });
 
 When("o usuário clica em Novo Grupo", () => {
@@ -26,51 +40,41 @@ When("o usuário preenche o nome do grupo com {string}", (groupName: string) => 
   .type(groupName);
 });
 
-When("o usuário digita {string}", (groupName: string) => {
-  cy.get('[data-cy="delete-group-modal-group-name-input"]')
-  .type(groupName);
-});
-
 When("o usuário seleciona da lista de amigos o usuário de username {string}", (username) => {
   cy.get('[data-cy="friend-list-checkbox-'+username+'"]')
     .click();
 });
 
-When("o usuário clica em Criar", (username) => {
+When("o usuário clica em Criar", () => {
   cy.get('[data-cy="craete-group-modal-confirm-button"]')
     .click();
 });
 
-// Then("o usuário deve estar na pagina da conversa criada", () => {
-//   cy.get('[data-cy="conversation-profile-group-name"]')
-//     .should(
-//       'have.text',
-//       groupNameG
-//     );
-// });
-
-Then("o grupo de nome {string} deve estar aparecendo na lista de conversas do usuário", (conversationName) => {
-  cy.visit("/user/"+userIdG+"/conversation");
-  cy.wait(500);
-  cy.get('[data-cy="conversation-list-name-'+conversationName+'"]')
-    .should(
-      'exist'
-    );
+Then("o usuário deve estar na pagina da conversa criada de id {string}", (id) => {
+  cy.url().should(
+    'include',
+    "/user/"+userIdG+"/conversation/"+id
+  );
 });
 
+Then("devem existir {string} grupos de nome {string} na lista de conversas do usuário", (qty, conversationName) => {
+  cy.visit("/user/"+userIdG+"/conversation");
+  cy.wait(500);
 
-// ==================================================================
+  cy.get('body').then((body) => {
+    if (body.find(`[data-cy="conversation-list-name-${conversationName}"]`).length === 0) {
+      expect(0).to.equal(+qty);
+    } else {
+      cy.get(`[data-cy="conversation-list-name-${conversationName}"]`).should('have.length', +qty);
+    }
+  });
+});
 
-Given("a conversa com o usuário de username {string} não deve existir na lista de conversas do usuário", (username) => {
+Given("a conversa com o usuário de username {string} não está aparecendo na lista de conversas do usuário", (username) => {
   cy.get('[data-cy="conversation-list-username-'+username+'"]')
     .should(
       'not.exist'
-    );
-});
-
-When("o usuário clica em Nova Conversa", () => {
-  cy.get('[data-cy="new-conversation-button"]')
-    .click();
+  );
 });
 
 When("o usuário clica no usuário de username {string} da lista de amigos", (username) => {
@@ -78,11 +82,9 @@ When("o usuário clica no usuário de username {string} da lista de amigos", (us
     .click();
 });
 
-Then("a conversa com o usuário de username {string} deve existir na lista de conversas do usuário", (username) => {
-  cy.visit("/user/"+userIdG+"/conversation");
-  cy.wait(500);
-  cy.get('[data-cy="conversation-list-username-'+username+'"]')
-    .should(
-      'exist'
-    );
+Then("o usuário deve estar na pagina da conversa de id {string} ao qual ele retornou", (id) => {
+  cy.url().should(
+    'include',
+    "/user/"+userIdG+"/conversation/"+id
+  );
 });

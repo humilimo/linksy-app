@@ -8,10 +8,10 @@ import { Public } from 'src/public.decorator';
 export class UserController {
   constructor(private readonly userService: UserService) {}
   
+  @Public()
   @Post('register')
   create(@Body() createUserDto: CreateUserDto) {
     try{
-
       return this.userService.create(createUserDto);
 
     }

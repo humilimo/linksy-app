@@ -5,4 +5,5 @@ export interface MessageProps {
     senderID: number;
     conversationName: string;
     senderName: string;
+    id: number;
   }

@@ -1,7 +1,15 @@
 import { Given, When, Then, Before } from "@badeball/cypress-cucumber-preprocessor";
 
-Given("o usuário de id {string} está na página da conversa de id {string}", (userId, conversationId) => {
-  cy.visit("/user/"+userId+"/conversation/"+conversationId);
+var userIdG, conversationIdG;
+
+Given("o usuário está logado com o usuário de id {string}, username {string} e senha {string}", (userId, userUsername: string, userPassword: string) => {
+  userIdG = userId;
+  cy.login(userUsername, userPassword);
+  cy.wait(500);
+});
+
+Given("o usuário está na página da conversa de id {string}", (conversationId) => {
+  cy.visit("/user/"+userIdG+"/conversation/"+conversationId);
   cy.wait(500);
 });
 

@@ -2,7 +2,7 @@ Feature: edit group name
 
     Scenario: dono do grupo altera o nome do grupo
         Given estou na página da conversa de id "8"
-        And estou logado no usuário de id "1"
+        And estou logado no usuário de username "man2", senha "mateus12345" e id "1"
         And o nome do grupo é "grupo ess"
         When abro o perfil do grupo
         And clico no botão editar nome do grupo

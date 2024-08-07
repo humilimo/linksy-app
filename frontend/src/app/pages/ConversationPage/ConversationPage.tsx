@@ -1,65 +1,67 @@
-import React, { useState } from "react";
 import MessageBox from "../../components/MessageBox/MessageBox";
 import ConversationMenuProfileComponent from "../../components/ConversationProfile/ConversationMenuProfileComponent";
 import ConversationMenuComponent from "../../components/ConversationPage/ConversationMenuComponent";
 import useConversationPage from "./ConversationPageController";
 import MessageInput from "../../components/MessageInput/MessageInput";
-import { FaSearch, FaUserCircle } from "react-icons/fa";
+import { FaUserCircle } from "react-icons/fa";
+
 
 const ConversationPage = () => {
   const {
-    conversation,
     messages,
     loggedId,
     conversationId,
-    noResults,
-    loopSearch,
+    showProfile,
+    setShowProfile,
+    messageContainerRef,
+    updateMessageArray,
     searchTerm,
+    loopSearch,
+    noResults,
     error,
     searchedMessages,
+    scrollFlag,
+    messageRefs,
+    setScrollFlag,
+    setMessageId,
   } = useConversationPage({
     conversation: { name: "", picture: "" },
     messages: [],
   });
-  
-  const [showProfile, setShowProfile] = useState(false);
 
   return (
-    <div className="flex-col h-screen">
+    <div className="flex flex-col h-screen">
       <ConversationMenuComponent
         loggedId={loggedId}
         conversationId={conversationId}
         showProfile={showProfile}
         setShowProfile={setShowProfile}
+        searchTerm={searchTerm}
+        loopSearch={loopSearch}
+        noResults={noResults}
+        error={error}
       />
-      <div className="bg-gray-100 flex flex-col justify-center">
-        <div className={`duration-300 ${showProfile ? "mr-[400px]" : ""}`}>
-          <div className="px-[30px] py-[80px] justify-center scrollbar-hide">
-            <div className="relative mb-4 flex justify-end">
-              <input
-                type="text"
-                placeholder="Search messages..."
-                value={searchTerm}
-                onChange={loopSearch}
-                className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600 w-full"
-              />
-              <FaSearch className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
-              {noResults && (
-                <p className="text-red-500 absolute left-4 top-full mt-1">
-                  Mensagem não encontrada
-                </p>
-              )}
-              {error && (
-                <p className="text-red-500 absolute left-4 top-full mt-1">
-                  {error}
-                </p>
-              )}
-            </div>
-            {searchedMessages.length > 0 ? (
-              searchedMessages.map((message, index) => (
+      <div className="bg-gray-100 flex flex-col flex-1">
+        <div
+          className={`duration-300 flex flex-col ${
+            showProfile ? "mr-[400px]" : ""
+          } flex-1`}
+        >
+          <div
+            ref={messageContainerRef}
+            className="px-[30px] pt-[90px] overflow-y-auto scrollbar-hide"
+            style={{ height: "calc(100vh - 61px)" }}
+          >
+            {searchedMessages.length > 0 && !scrollFlag? (
+              searchedMessages.map((message) => (
                 <div
-                  key={index}
+                  key={message.id}
                   className="conversation-item bg-gray-200 p-4 mb-4 rounded flex justify-between"
+                  data-cy={`searched-message-${message.content}`}
+                  onClick={() => {
+                    setScrollFlag(true);
+                    setMessageId(message.id);
+                  }}
                 >
                   <div className="flex items-center">
                     <FaUserCircle className="text-gray-500 mr-4 text-4xl" />
@@ -77,25 +79,26 @@ const ConversationPage = () => {
                 </div>
               ))
             ) : (
-              messages?.length > 0
-                ? messages.map((msg, index) => (
-                    <MessageBox
-                      key={index}
-                      message={msg.message}
-                      senderInfo={msg.senderInfo}
-                      isOwnMessage={
-                        loggedId?.toString() === msg.message.senderId?.toString()
-                      } // Ajuste esta linha conforme necessário
-                    />
-                  ))
-                : null
-            )}
+            messages?.length > 0
+              ? messages.map((msg) => (
+                  <MessageBox
+                    key={msg.message.id}
+                    message={msg.message}
+                    senderInfo={msg.senderInfo}
+                    isOwnMessage={
+                      loggedId?.toString() === msg.message.senderId?.toString()
+                    }
+                    data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
+                    ref={el => (messageRefs.current[msg.message.id] = el)}
+                  />
+                ))
+              : null)}
           </div>
           <div
             className={
-              "fixed flex flex-col top-[69px] h-[calc(100%-127px)] w-[400px] bg-white z-10 duration-300" +
+              "fixed flex flex-col top-[75px] h-[calc(100%-133px)] w-[400px] bg-white z-30 duration-300" +
               (showProfile
-                ? " right-0  border border-gray-300"
+                ? " right-0 border border-gray-300"
                 : " right-[-100%]")
             }
           >
@@ -108,7 +111,9 @@ const ConversationPage = () => {
         </div>
       </div>
       <MessageInput
-        onMessageSent={(message) => console.log(message)}
+        onMessageSent={() => {
+          updateMessageArray();
+        }}
         loggedId={loggedId?.toString() || ""}
         conversationId={conversationId?.toString() || ""}
       />

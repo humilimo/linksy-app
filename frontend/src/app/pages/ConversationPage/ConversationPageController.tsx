@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axiosAuthInstance from "../../../API/axiosAuthInstance";
-import { useParams } from "react-router-dom";
-import { MessageProps } from '../../components/SearchMessage/SearchMessageGlobalModel';
-
+import { useNavigate, useParams } from "react-router-dom";
+import { MessageProps } from "../../components/SearchMessage/SearchMessageGlobalModel";
+import { useLocation } from 'react-router-dom';
 const useConversationPage = (model: ConversationPageModel) => {
   const [conversation, setConversation] = useState<ConversationPageModel>(
     model || {}
@@ -12,10 +12,18 @@ const useConversationPage = (model: ConversationPageModel) => {
     conversationId: string;
   }>();
 
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [searchedMessages, setSearchedMessages] = useState<MessageProps[]>([]);
   const [noResults, setNoResults] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showProfile, setShowProfile] = useState(false);
+  const messageContainerRef = useRef<HTMLDivElement | null>(null);
+  const [useEffectFlag, setUseEffectFlag] = useState(0);
+  const navigate = useNavigate(); 
+  const [scrollFlag, setScrollFlag] = useState(false);
+  const [messageId, setMessageId] = useState<number | null>(null);
+  const messageRefs = useRef({});
+  let location = useLocation();
 
   const fetchConversationMessages = async () => {
     if (loggedId && conversationId) {
@@ -32,15 +40,19 @@ const useConversationPage = (model: ConversationPageModel) => {
         });
       } catch (error) {
         console.error("Error fetching conversation messages:", error);
+        navigate(`/`);
       }
     }
   };
 
   const searchMessages = async (targetWord: string) => {
     try {
-      const response = await axiosAuthInstance.get(`/user/${loggedId}/conversation/${conversationId}/search`, {
-        params: { targetWord },
-      });
+      const response = await axiosAuthInstance.get(
+        `/user/${loggedId}/conversation/${conversationId}/search`,
+        {
+          params: { targetWord },
+        }
+      );
 
       if (response.data && response.data.length > 0) {
         setSearchedMessages(response.data);
@@ -50,7 +62,7 @@ const useConversationPage = (model: ConversationPageModel) => {
         setNoResults(true);
       }
     } catch (error) {
-      setError('Error searching messages');
+      setError("Error searching messages");
       console.error(error);
     }
   };
@@ -58,6 +70,7 @@ const useConversationPage = (model: ConversationPageModel) => {
   const loopSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
+    setScrollFlag(false);
     if (value.trim() === '') {
       setSearchedMessages([]);
       setNoResults(false);
@@ -67,8 +80,38 @@ const useConversationPage = (model: ConversationPageModel) => {
   };
 
   useEffect(() => {
-    fetchConversationMessages();
-  }, [loggedId, conversationId, conversation]);
+    setTimeout(() => {
+      fetchConversationMessages();
+    }, 1000);
+    if (!useEffectFlag) {
+        setTimeout(() => {
+          scrollToBottom();
+        }, 1100);
+        setUseEffectFlag(1);
+    }
+  }, [conversation]);
+
+  useEffect(() => {
+    if (scrollFlag && messageId && messageRefs.current[messageId] && messageContainerRef.current) {
+      messageContainerRef.current.scrollTop = - messageContainerRef.current.scrollHeight
+      messageContainerRef.current.scrollTop = messageRefs.current[messageId].getBoundingClientRect().top - messageRefs.current[messageId].scrollHeight;
+    }
+  }, [scrollFlag]);
+
+  const scrollToBottom = () => {
+    if (messageContainerRef.current) {
+      messageContainerRef.current.scrollTop =
+      messageContainerRef.current.scrollHeight;
+      if(location.state && location.state.messageId && location.state.scrollFlag){
+        setScrollFlag(true);
+        setMessageId(location.state.messageId);
+      }
+    }
+  };
+
+  const updateMessageArray = () => {
+    setUseEffectFlag(0);
+  };
 
   return {
     conversation: conversation.conversation,
@@ -81,6 +124,15 @@ const useConversationPage = (model: ConversationPageModel) => {
     error,
     searchMessages,
     searchedMessages,
+    showProfile,
+    setShowProfile,
+    messageContainerRef,
+    updateMessageArray,
+    scrollToBottom,
+    scrollFlag,
+    messageRefs,
+    setScrollFlag,
+    setMessageId,
   };
 };
 

@@ -12,8 +12,9 @@ Given(
 );
 
 Given(
-    'estou logado no usuário de id {string}',
-    (id: string) => {
+    'estou logado no usuário de username {string}, senha {string} e id {string}',
+    (username: string, password: string, id: string) => {
+        cy.login(username, password);
         loggedId = id;
         cy.visit("/user/"+loggedId+"/conversation/"+conversationId);
     }

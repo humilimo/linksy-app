@@ -31,7 +31,7 @@ function Login() {
         <div className="flex items-center justify-between pb-8">
           <h1 className="text-4xl font-bold">Linksy | Log in!</h1>
         </div>
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500">Credenciais inválidas, tente novamente.</p>}
         <div className="conversation-list-container overflow-y-auto" style={{ maxHeight: 'calc(100vh - 250px)' }}>
             <div>
             <div className="mb-4 ml-4">
@@ -40,6 +40,7 @@ function Login() {
                 placeholder="Your Username"
                 onChange={(e)=>{setUsername(e.target.value)}}
                 className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
+                data-cy={"username-input"}
               />
             </div> 
             <div className="mb-6 ml-4">
@@ -48,6 +49,7 @@ function Login() {
               type="password"
               placeholder="Your Password"
               onChange={(e)=>{setPassword(e.target.value)}}
+              data-cy={"password-input"}
               className="py-2 px-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-600"
               onKeyPress={handleKeyPress}
             />
@@ -56,6 +58,7 @@ function Login() {
               className="ml-5 text-center text-white py-2 px-5 rounded-2xl bg-green-600 hover:bg-green-500 hover:shadow-lg outline-none focus:outline-none ease-linear transition-all duration-150"
               type="button"
               onClick={logIn}
+              data-cy={"login-button"}
             >
               Enter
             </button>

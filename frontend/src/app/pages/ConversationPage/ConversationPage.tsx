@@ -24,6 +24,8 @@ const ConversationPage = () => {
     messageRefs,
     setScrollFlag,
     setMessageId,
+    handleDeleteForMe,    
+    handleDeleteForAll,   
   } = useConversationPage({
     conversation: { name: "", picture: "" },
     messages: [],
@@ -90,6 +92,10 @@ const ConversationPage = () => {
                     }
                     data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
                     ref={el => (messageRefs.current[msg.message.id] = el)}
+                    onDeleteForMe={handleDeleteForMe}    // Passando a função
+                    onDeleteForAll={handleDeleteForAll}  // Passando a função
+
+                    
                   />
                 ))
               : null)}

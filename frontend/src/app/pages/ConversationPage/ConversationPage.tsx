@@ -4,6 +4,9 @@ import ConversationMenuComponent from "../../components/ConversationPage/Convers
 import useConversationPage from "./ConversationPageController";
 import MessageInput from "../../components/MessageInput/MessageInput";
 import { FaUserCircle } from "react-icons/fa";
+import axiosAuthInstance from '../../../API/axiosAuthInstance'; 
+import React, { useEffect } from 'react';
+
 
 
 const ConversationPage = () => {
@@ -23,13 +26,30 @@ const ConversationPage = () => {
     scrollFlag,
     messageRefs,
     setScrollFlag,
-    setMessageId,
-    handleDeleteForMe,    
-    handleDeleteForAll,   
+    setMessageId,//new
+    handleDeleteForMe, //new   
+    handleDeleteForAll,  //new 
   } = useConversationPage({
     conversation: { name: "", picture: "" },
     messages: [],
   });
+
+ 
+
+
+  useEffect(() => {
+    const fetchErasedMessages = async () => {
+      try {
+        const erasedMessages = await axiosAuthInstance.get(`user/${loggedId}/conversation/${conversationId}/getErasedMessages`);
+        console.log(erasedMessages);
+      } catch (error) {
+        console.error("Erro ao buscar mensagens apagadas:", error);
+      }
+    };
+
+    fetchErasedMessages();
+  }, [loggedId, conversationId]);
+   
 
   return (
     <div className="flex flex-col h-screen">
@@ -82,7 +102,8 @@ const ConversationPage = () => {
               ))
             ) : (
             messages?.length > 0
-              ? messages.map((msg) => (
+              ? messages.map((msg ) => (
+                
                   <MessageBox
                     key={msg.message.id}
                     message={msg.message}
@@ -90,10 +111,15 @@ const ConversationPage = () => {
                     isOwnMessage={
                       loggedId?.toString() === msg.message.senderId?.toString()
                     }
-                    data-cy={`conversation-id-${conversationId}-message-${msg.message.content}`}
+                    //data-cy={`message-${msg.message.content}`}
                     ref={el => (messageRefs.current[msg.message.id] = el)}
                     onDeleteForMe={handleDeleteForMe}    // Passando a função
                     onDeleteForAll={handleDeleteForAll}  // Passando a função
+                    loggedId = {loggedId}//new
+                    chatId = {conversationId}//new
+                    mensagemId = {msg}//new
+                   
+                    
 
                     
                   />

@@ -80,13 +80,50 @@ export class ErasedMessageService {
   }
 
 
-  async removeMessageFromConversationToMe(userId: number, messageId: number, chatId: number) {
+  async getErasedMessages(erasedById: number, conversationId: number) {//new
+    const mensagensApagadas = await this.prisma.erasedMessages.findMany({
+      where: {
+        conversationId: conversationId,  // Use the variable instead of hardcoded value
+        erasedById: erasedById,          // Ensure erasedById is passed correctly
+      },
+      select: {
+        erasedById: true,
+        conversationId: true,
+        messageId: true,
+      },
+    });
   
-  
-    // Add the message to the erasedMessages table
-    return await this.create(userId, chatId,messageId);
+    return mensagensApagadas;
   }
+  
 
+
+  async removeMessageFromConversationToMe(userId: number, messageId: number, chatId: number) {
+    try {
+      // Salvar a mensagem apagada na tabela erasedMessages
+      await this.create(userId,chatId,messageId);
+  
+      // Buscar todas as mensagens apagadas pelo usuário no chat específico
+      const mensagensApagadas = await this.prisma.erasedMessages.findMany({
+        where: {
+          erasedById: userId,
+          conversationId: chatId,
+        },
+        select: {
+          erasedById: true,     // selecionar o campo userId
+          conversationId: true,     // selecionar o campo chatId
+          messageId: true,  // selecionar o campo messageId
+        },
+      });
+  
+      return mensagensApagadas;
+    } catch (error) {
+      console.error('Erro ao remover mensagem para o usuário:', error);
+      throw new Error('Não foi possível remover a mensagem.');
+    }
+  }
+  
+  
   async getparticipantsIds(conversationId: number) {
     const conversationInfo = await this.prisma.conversation.findUnique({
       where: { id: conversationId },

@@ -6,6 +6,8 @@ import classNames from "classnames";
 import useMessageBox from "./MessageBoxController";
 import axios from 'axios'; 
 import { useNavigate } from 'react-router-dom'; 
+import useEffect from "react"
+import axiosAuthInstance from '../../../API/axiosAuthInstance';
 
 const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
   {
@@ -15,7 +17,10 @@ const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
     setMessageRef,
     onDeleteForMe,
     onDeleteForAll,
-    conversationId
+    conversationId,
+    loggedId,
+    chatId,
+    mensagemId
   }, 
   ref
 ) => {
@@ -31,33 +36,46 @@ const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
 
   const handleDeleteClick = () => {
     setShowDeleteOptions(true);
+    console.log(senderInfo);
+    console.log(message);
   };
 
   const handleDeleteForMe = async () => {
     try {
-      const response = await axios.post(`http://127.0.0.1:3002/user/${senderInfo.id}/conversation/${conversationId}/deleteForMe/${message.id}`);
-      if (response.data.postMessage) {
-        onDeleteForMe(message.id); // Chama a função do pai para atualizar o estado das mensagens
-        console.log("Mensagem apagada para mim");
-      }
+      const response = await axiosAuthInstance.post(`/user/${loggedId}/conversation/${chatId}/deleteForMe/${mensagemId.message.id}`);
+      console.log(response);
+      // if (response.data.postMessage) {
+        
+      //   onDeleteForMe(message.id); // Chama a função do pai para atualizar o estado das mensagens
+      //   console.log("Mensagem apagada para mim");
+      // }
     } catch (error) {
       console.error("Erro ao apagar a mensagem para mim:", error);
     }
+
+ 
     setShowDeleteOptions(false);
   };
 
-  const handleDeleteForAll = async () => {
+  const handleDeleteForAll = async (messageId: number) => {
+    // if (!loggedId || !conversationId) {
+    //   console.error("loggedId ou conversationId está indefinido.");
+    //   console.error(senderInfo.id);
+    //   console.error(conversationId);
+    //   return;
+    // }
+    console.error(mensagemId);
     try {
-      const response = await axios.delete(`http://127.0.0.1:3002/user/${senderInfo.id}/conversation/${conversationId}/deleteForAll/${message.id}`);
-      if (response.data.destroyMessage) {
-        onDeleteForAll(message.id); // Chama a função do pai para atualizar o estado das mensagens
-        console.log("Mensagem apagada para todos");
-      }
+      await axiosAuthInstance.delete(`/user/${loggedId}/conversation/${chatId}/deleteForAll/${mensagemId.message.id}`);
+      // setConversation((prev) => ({
+      //   ...prev,
+      //   messages: prev.messages.filter((msg) => msg.message.id !== messageId),
+      // }));
     } catch (error) {
       console.error("Erro ao apagar a mensagem para todos:", error);
     }
-    setShowDeleteOptions(false);
   };
+  
 
   const handleCancelDelete = () => {
     setShowDeleteOptions(false);
@@ -79,7 +97,7 @@ const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
             <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleDeleteForMe}>
               Apagar para mim
             </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleDeleteForAll}>
+            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleDeleteForAll} data-cy= {`apagar`}>
               Apagar para todos
             </button>
             <button className="bg-gray-300 px-4 py-2 rounded" onClick={handleCancelDelete}>
@@ -108,7 +126,7 @@ const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
                 <FaUserCircle className="text-gray-500 w-8 h-8" />
               )}
               <p className={classNames("font-bold", { "flex-grow": !isOwnMessage })}>
-                {senderInfo.name}
+                {senderInfo.name } 
               </p>
             </>
           )}
@@ -120,8 +138,14 @@ const MessageBox = forwardRef<HTMLDivElement, MessageBoxModel>((
             {isToday(messageDate) ? formattedTime : formattedDateTime}
           </p>
           {isOwnMessage && (
-            <button onClick={handleDeleteClick} className="ml-2 text-red-500">
-              <AiFillDelete />
+            <button >
+              
+              <AiFillDelete
+              onClick={handleDeleteClick} 
+              className="ml-2 text-red-500" 
+              data-cy = {`trash-icon-${message.content}-${message.id}`}
+              
+              />
             </button>
           )}
         </div>

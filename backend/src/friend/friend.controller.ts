@@ -26,4 +26,6 @@ export class FriendController {
   remove(@Param('loggedId') loggedId: string,  @Body() username: {username : string}) {
     return this.friendService.remove(+loggedId, username);
   }
+
+  
 }

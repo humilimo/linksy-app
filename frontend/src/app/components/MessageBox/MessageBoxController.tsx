@@ -14,6 +14,8 @@ const useMessageBox = ({ message, senderInfo, isOwnMessage }) => {
     formattedTime,
     formattedDateTime,
   };
+
+  
 };
 
 export default useMessageBox;

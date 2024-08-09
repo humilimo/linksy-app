@@ -3,6 +3,7 @@ import axiosAuthInstance from "../../../API/axiosAuthInstance";
 import { useNavigate, useParams } from "react-router-dom";
 import { MessageProps } from "../../components/SearchMessage/SearchMessageGlobalModel";
 import { useLocation } from 'react-router-dom';
+import { MessageBox } from "../../components/MessageBox/MessageBox";
 
 interface MessageBoxModel {
   message: {
@@ -90,7 +91,9 @@ const useConversationPage = (model: ConversationPageModel) => {
   };
 
   useEffect(() => {
-    setTimeout(() => {
+
+    console.log(conversation);
+    setTimeout(() => {//
       fetchConversationMessages();
     }, 1000);
     if (!useEffectFlag) {
@@ -121,14 +124,14 @@ const useConversationPage = (model: ConversationPageModel) => {
     setUseEffectFlag(0);
   };
 
-  const handleDeleteMessageForMe = (messageId: number) => {
+  const handleDeleteMessageForMe = (messageId: number) => {//new
     setConversation((prev) => ({
       ...prev,
       messages: prev.messages.filter((msg) => msg.message.id !== messageId),
     }));
   };
 
-  const handleDeleteMessageForAll = async (messageId: number) => {
+  const handleDeleteMessageForAll = async (messageId: number) => {//new
     if (!loggedId || !conversationId) {
       console.error("loggedId ou conversationId está indefinido.");
       return;

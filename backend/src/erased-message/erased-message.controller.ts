@@ -26,4 +26,13 @@ export class ErasedMessageController {
     //const userIds = await this.erasedMessageService.getparticipantsIds(+conversationId);
     return this.erasedMessageService.removeMessageFromConversationToAll( +messageId, +conversationId);
   }
+
+  @Get('getErasedMessages')
+  getErasedMessages(
+    @Param('erasedById') erasedById: number,
+     @Param('conversationId') conversationId: number
+    )
+     {
+    return this.erasedMessageService.getErasedMessages(+erasedById, +conversationId);
+  }
 }
